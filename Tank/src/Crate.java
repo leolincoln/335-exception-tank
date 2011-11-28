@@ -2,7 +2,7 @@ import java.util.Observable;
 
 import rectangles.CrateRectangle;
 
-// Ryan creatd it
+
 public class Crate extends Observable implements Obstacle{
 	
 	private int health;
