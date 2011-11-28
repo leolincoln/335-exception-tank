@@ -9,7 +9,10 @@ public class Crate extends Observable implements Obstacle{
 	private CrateRectangle rect;
 	private Point location;
 	
-	
+	/**
+	 * 
+	 * @Point p
+	 */
 	
 	public Crate(Point p) {
 		location = p;
