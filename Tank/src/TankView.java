@@ -1,5 +1,7 @@
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -19,7 +21,6 @@ public class TankView extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel panel;
-
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
@@ -40,6 +41,7 @@ public class TankView extends JFrame implements Observer {
 		player.addObserver(this);
 		crate.addObserver(this);
 		panel = new JPanel();
+		
 		add(panel);
 		addKeyListener(new moveAndShootListener());
 
