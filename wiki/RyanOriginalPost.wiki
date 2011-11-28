@@ -1,0 +1,27 @@
+#labels Phase-Design,Phase-Requirements
+Sorry for the wall of text just want to make sure I make everything clear.
+
+Hey guys so after I meeting last night I realized that our design
+was pretty flawed and was going to need a lot of overhaul in order
+to get all these complex algorithms we have to do to work out
+smoothly. I though about it lot since then and I think I've come up
+with a pretty solid design concept that we could use to get everything
+running asap. Basically the idea has a lot to do with the 
+geometry class that Rohit was suggesting to use. The main change here
+is going to be that the tile class is completely gone. Instead of the base code functioning on a grid based system, its actually going to function as a hidden gui that is running everything in the backgroun. So we will need to add a new package to the project called rectangles. Rectangles will have a parent and then a subclass for every object, tank type, item type,and projectile type as well. That means for every figure that is on the map there will be a rectangle that is associated with it and that rectangle will be an object of a class associated with that type of unit. For example, say in our map we want to create a new fireRing, we will than construct a new fireRingRectangle and place it on the hidden gui at whatever point the map calls is to be placed as. The thread running the entire system will check every time anything moves to see if any of the rectangles have collided. If any two rectangles touch we can see what type of rectangles have collided and then complete the appropriate action. For example, if a player moves and his rectangle intersects with another rectangle a method will then be called to see what type of rectangle the tank has collided with, if it was a projectile rectangle in this case then the tank dies and the game ends.
+
+I feel like this idea is pretty strong although it does mean even MORE
+GUI then the original amount we though, as the entire project will 
+essentially function as a GUI both in the background and on the facade.
+The nice thing though is we can set all our rectangles to different dimensions so that when we overlay the actual GUI with all the texture and stuff, it should be super easy to implement as all the dimensions and animations will already be written for the background part. So if we can get a really simple plain version of this working then the hard part will be done, so I think that should be our aim first rather than anyone working on the artistic side of it just yet. There are several difficult algorithms in this and I have a plan for the next few days that hopefully plays to everyones strengths. The sooner we start thinking about these difficult algorithms the less likely we are to end up cramming the hard stuff in at the very end. So here is a basic plan I though up for the next five days or so until we all meet.
+
+Christian: I was hoping you could possibly get started on seeing how AI is going to work. For now create a blank JFrame with a single rectangle in it. Try to make it so that when you open the JFrame the thread starts and the rectangle will move on its own accord, and possibly shoot if you have the time to go that far. Also you can implement the pause method here as well, make sure the tank stops moving when you hit pause. If we can get this down the rest of the threading from here shouldn't be too much more difficult.
+
+Andreko: Since you really wanted to work on the animation and GUI side 
+of stuff more so I thought you could be the one to learn how affine transformation works. Basically for now you could just try creating a blank JFrame and placing two rectangles in the middle of it. One rectangle would be the cannon and the other as the body of the tank and you could of course size them accordingly. See if you can get affine transformation to work with mouse and keylisteners in order to spin the cannon rectangle when you move the mouse and move the body rectangle appropriately when you use the keys. 
+
+Liu: You said you really wanted to get working on the networking aspect so I have an idea for learning how to implement the difficult networking. Create a blank JFrame and create two rectangles, one in the bottom corner and another in one of the top corners. Just do a very basic animation like say maybe they cycle through colors or move in a very simple way. But see if you can get the animation to play on both screens using networking. If we can figure out how to send the most basic animations then it shouldn't be too much more difficult from there to figure out the rest
+
+Myself: I'll work on how all the rectangles are going to work, and just work on general design for the hidden GUI. Mainly just figuring out all the different algorithms for the sizes and collisions and movements and threading and all that nonsense.
+
+I just want to make a note that this is just an IDEA that I have and in no way is me trying to take control of the project. If you guys have changes or suggestions or even a whole different design idea I'm totally up for changing whatever to make this run more smoothly. I just felt like we needed direction for the project and hopefully this will help some if no one objects. Like I said though if this sounds like garbage or you hate the role I've assigned just let me know and we'll figuring something else out.
