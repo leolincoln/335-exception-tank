@@ -7,6 +7,7 @@ public class FireRing extends Observable implements Obstacle {
 	private FireRingRectangle rect;// shape for crate controlling collisions
 	private Point location;// location of fire ring
 
+
 	/**
 	 * Class constructor
 	 * 
@@ -64,6 +65,7 @@ public class FireRing extends Observable implements Obstacle {
 	public Point getLocation() {
 		return this.location;
 	}
+	
 
 	/**
 	 * @return CrateRectangle returns the rectangle object that will represent
@@ -90,8 +92,14 @@ public class FireRing extends Observable implements Obstacle {
 	 */
 	public boolean move(Point p) {
 
-		return (false);
-
+		// if within the window
+		if (p.row <= 25 || p.row >= 985 || p.col <= 25 || p.col >= 985) {
+			this.location = p;
+			notifyObservers(this);
+			setChanged();
+			return true;
+		}
+		return false;
 	}
 
 	/**
