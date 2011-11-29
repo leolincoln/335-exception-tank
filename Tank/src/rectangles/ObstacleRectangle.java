@@ -17,9 +17,6 @@ public abstract class ObstacleRectangle extends Rectangle {
 		this.y = y;
 		this.w = 50;
 		this.h = 50;
-	
-		
-		
 	}
 	
 	public int xCoord() {

@@ -12,7 +12,7 @@ public class SpikePitRectangle extends ObstacleRectangle {
 	}
 	
 	public Color setColor() {
-		return Color.black;
+		return Color.orange;
 	}
 
 }
