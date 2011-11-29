@@ -1,11 +1,7 @@
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -13,9 +9,22 @@ import java.util.Observer;
 import javax.swing.*;
 
 import rectangles.CrateRectangle;
+import rectangles.FireRingRectangle;
+import rectangles.ImmovableBlockRectangle;
 import rectangles.ProjectileRectangle;
+import rectangles.SpikePitRectangle;
+import rectangles.TNTRectangle;
 import rectangles.TankRectangle;
 
+/**
+ * 
+ * @author Team Exception
+ * 
+ *         This class is the primary battle view in which the player controls a
+ *         single tank that can move through the arrow keys and shoot through
+ *         the mouse.
+ * 
+ */
 public class TankView extends JFrame implements Observer {
 
 	private static final long serialVersionUID = 1L;
@@ -25,28 +34,57 @@ public class TankView extends JFrame implements Observer {
 	private Graphics dbg;
 	private PlayerTank player;
 	private Crate crate;
+	private ImmovableBlock immovableBlock;
+	private FireRing fireRing;
+	private SpikePit spikePit;
+	private TNT tnt;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
 
+	/**
+	 * Class constructor
+	 */
 	public TankView() {
 		super("Tank Test Game");
 		player = new PlayerTank(new Point(100, 100));
-		crate = new Crate(new Point(600, 400));
 		obstacleList = new LinkedList<Obstacle>();
+		
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
 		tankList.add(player);
-		obstacleList.add(crate);
 		player.addObserver(this);
-		crate.addObserver(this);
-		panel = new JPanel();
 		
+		//remove later!!!!
+		crate = new Crate(new Point(600, 400));
+		immovableBlock = new ImmovableBlock((new Point(650, 400)));
+		fireRing = new FireRing((new Point(300, 400)));
+		spikePit = new SpikePit((new Point(100, 200)));
+		tnt = new TNT((new Point(650, 600)));
+		obstacleList.add(crate);
+		obstacleList.add(immovableBlock);
+		obstacleList.add(fireRing);
+		obstacleList.add(spikePit);
+		obstacleList.add(tnt);
+		crate.addObserver(this);
+		immovableBlock.addObserver(this);
+		fireRing.addObserver(this);
+		spikePit.addObserver(this);
+		tnt.addObserver(this);
+		
+		
+		
+		panel = new JPanel();
+
 		add(panel);
-		addKeyListener(new moveAndShootListener());
+		addKeyListener(new moveAndShootListener());// adding the movement and
+													// shooting listener
 
 	}
 
+	/**
+	 * This method paints the TankView graphics when called.
+	 */
 	public void paint(Graphics g) {
 		dbImage = createImage(getWidth(), getHeight());
 		dbg = dbImage.getGraphics();
@@ -54,6 +92,11 @@ public class TankView extends JFrame implements Observer {
 		g.drawImage(dbImage, 0, 0, this);
 	}
 
+	/**
+	 * 
+	 * @param g
+	 *            graphics component that java uses to paint components
+	 */
 	public void paintComponent(Graphics g) {
 		for (Projectile p : projectileList) {
 			ProjectileRectangle rect = p.getRectangle();
@@ -61,21 +104,60 @@ public class TankView extends JFrame implements Observer {
 			g.fillRect(rect.xCoord(), rect.yCoord(), rect.width, rect.height);
 		}
 		for (PlayerTank p : tankList) {
-		TankRectangle tRect = p.getRectangle();
-		g.setColor(tRect.setColor());
-		g.fillRect(tRect.xCoord(), tRect.yCoord(), tRect.width, tRect.height);
+			TankRectangle tRect = p.getRectangle();
+			g.setColor(tRect.setColor());
+			g.fillRect(tRect.xCoord(), tRect.yCoord(), tRect.width,
+					tRect.height);
 		}
 		for (Obstacle p : obstacleList) {
-		if(p instanceof Crate) {
-			Crate c = (Crate)p;
-			CrateRectangle cRect = c.getRectangle();
-			g.setColor(cRect.setColor());
-			g.fillRect(cRect.xCoord(), cRect.yCoord(), cRect.width, cRect.height);
-		}
-		
+			if (p instanceof Crate) {// for instance of crate
+				Crate c = (Crate) p;
+				CrateRectangle cRect = c.getRectangle();
+				g.setColor(cRect.setColor());
+				g.fillRect(cRect.xCoord(), cRect.yCoord(), cRect.width,
+						cRect.height);
+			}
+			if (p instanceof ImmovableBlock) {// for instance of immovableBlock
+				ImmovableBlock ib = (ImmovableBlock) p;
+				ImmovableBlockRectangle ibRect = ib.getRectangle();
+				g.setColor(ibRect.setColor());
+				g.fillRect(ibRect.xCoord(), ibRect.yCoord(), ibRect.width,
+						ibRect.height);
+			}
+			if (p instanceof SpikePit) {// for instance of SpikePit
+				SpikePit sp = (SpikePit) p;
+				SpikePitRectangle spRect = sp.getRectangle();
+				g.setColor(spRect.setColor());
+				g.fillRect(spRect.xCoord(), spRect.yCoord(), spRect.width,
+						spRect.height);
+			}
+			if (p instanceof FireRing) {// for instance of fireRing
+				FireRing fr = (FireRing) p;
+				FireRingRectangle frRect = fr.getRectangle();
+				g.setColor(frRect.setColor());
+				g.fillRect(frRect.xCoord(), frRect.yCoord(), frRect.width,
+						frRect.height);
+			}
+			if (p instanceof TNT) {// for instance of TNT
+				TNT tnt = (TNT) p;
+				TNTRectangle tntRect = tnt.getRectangle();
+				g.setColor(tntRect.setColor());
+				g.fillRect(tntRect.xCoord(), tntRect.yCoord(), tntRect.width,
+						tntRect.height);
+			}
+
 		}
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This private inner class controls the player controlled tank
+	 *         allowing it to move via key listeners and shoot through the mouse
+	 *         lister. The tank will move on key pressed.
+	 * 
+	 */
 	private class moveAndShootListener implements KeyListener {
 
 		@Override
@@ -111,12 +193,22 @@ public class TankView extends JFrame implements Observer {
 
 	}
 
+	/**
+	 * This method will be notified when the observed are called and will either
+	 * remove dead obstacles and repaint the projectiles.
+	 */
 	@Override
 	public void update(Observable v, Object o) {
-		if(o instanceof String) {
-			String s = (String)o;
-			if(s.equals("CrateDead")) {
+		if (o instanceof String) {
+			String s = (String) o;
+			if (s.equals("CrateDead")) {// removing crate
 				obstacleList.remove(crate);
+			}
+			if (s.equals("FireRingDead")) {// removing fire ring
+				obstacleList.remove(fireRing);
+			}
+			if (s.equals("TNTDead")) {// removing tnt
+				obstacleList.remove(tnt);
 			}
 		}
 		if (o instanceof Projectile) {
@@ -134,6 +226,18 @@ public class TankView extends JFrame implements Observer {
 					p.collided();
 					projectileList.remove(p);
 					crate.recieveDamage(1);
+					repaint();
+				}
+				if (fireRing.getRectangle().intersects(p.getRectangle())) {
+					p.collided();
+					projectileList.remove(p);
+					fireRing.recieveDamage(1);
+					repaint();
+				}
+				if (tnt.getRectangle().intersects(p.getRectangle())) {
+					p.collided();
+					projectileList.remove(p);
+					tnt.recieveDamage(1);
 					repaint();
 				}
 
