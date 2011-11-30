@@ -1,6 +1,8 @@
 package map;
 
 public interface Terrain {
-public void modefyVelocity();
+
+
+public void modifyVelocity();
 
 }
