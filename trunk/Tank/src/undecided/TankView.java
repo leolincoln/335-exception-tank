@@ -12,6 +12,9 @@ import java.util.Observer;
 
 import javax.swing.*;
 
+import View.MasterView;
+import View.MasterViewPanel;
+
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
 import rectangles.ImmovableBlockRectangle;
@@ -29,7 +32,7 @@ import rectangles.TankRectangle;
  *         the mouse.
  * 
  */
-public class TankView extends JFrame implements Observer {
+public class TankView extends MasterViewPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,10 +52,10 @@ public class TankView extends JFrame implements Observer {
 	/**
 	 * Class constructor
 	 */
-	public TankView() {
-		super("Tank Test Game");
+	public TankView(MasterView m) {
+		super(m);
 
-		player = new PlayerTank(new Point(100, 100));
+		player = new PlayerTank(new Point(0, 0));
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
@@ -61,11 +64,7 @@ public class TankView extends JFrame implements Observer {
 		panel = new JPanel();
 		add(panel);
 		addKeyListener(new moveAndShootListener());// adding the movement and
-		Dimension screen = Toolkit.getDefaultToolkit()
-				.getScreenSize();										// shooting listener
-
-		this.setSize(screen);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		this.buildMap();
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);

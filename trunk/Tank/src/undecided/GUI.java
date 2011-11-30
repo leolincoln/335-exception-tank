@@ -21,9 +21,8 @@ public class GUI {
 			.getScreenSize();
 
 	public static void main(String[] args) {
-		TankView t = new TankView();
-		t.setSize(screen);
-		//t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		TankView t = new TankView(new MasterView());
+		
 		
 	}
 
