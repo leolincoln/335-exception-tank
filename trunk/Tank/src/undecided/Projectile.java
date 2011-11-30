@@ -18,6 +18,7 @@ public class Projectile extends Observable {
 
 	private Point p;// location of the projectile
 	private int speed;// speed of the projectile
+	public int xspeed, yspeed;// x and y speeds of projectile
 	boolean exists;// determines whether the projectile is in the field
 	private Direction d;// direction of movement of the projectile
 	private ProjectileRectangle rect;// rectangle of the projectile that will be
@@ -43,7 +44,26 @@ public class Projectile extends Observable {
 											// projectile's movement
 		pt.start();// beginning the projectile's movement
 	}
+	
+	
+	// NEW OVERLOADING CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!
+	public Projectile(Point p, int x, int y) {
+		this.p = p;
+		speed = 10;
+		this.xspeed = x;
+		this.yspeed= y;
+		rect = new ProjectileRectangle(p.col - 3, p.row - 3);// creating new projectile rectangle
+		exists = true;
+		thisMissle = this;
+		
+		
+		Thread pt = new ProjectileThread();// creating new thread for the
+											// projectile's movement
+		pt.start();// beginning the projectile's movement
+	}
 
+	
+	
 	/**
 	 * 
 	 * @return Point returns the current location of the projectile
@@ -99,7 +119,7 @@ public class Projectile extends Observable {
 	 * @author Team Exception
 	 * 
 	 *         This private inner class controls the projectile's movement
-	 *         through a seperate thread.
+	 *         through a separate thread.
 	 * 
 	 */
 	private class ProjectileThread extends Thread {
@@ -107,22 +127,30 @@ public class Projectile extends Observable {
 		public synchronized void run() {
 			while (exists) {
 
-				if (d == Direction.EAST) {
-					p = new Point(p.row, p.col + 3);
-					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
-				}
-				if (d == Direction.WEST) {
-					p = new Point(p.row, p.col - 3);
-					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
-				}
-				if (d == Direction.NORTH) {
-					p = new Point(p.row - 3, p.col);
-					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
-				}
-				if (d == Direction.SOUTH) {
-					p = new Point(p.row + 3, p.col);
-					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
-				}
+				int x = p.col;
+				int y = p.row;
+				x = x + xspeed;// incrementing location of new point!!!
+				y = y + yspeed;
+				
+				p = new Point(y, x);// new calculated point
+				rect = new ProjectileRectangle(p.col - 3, p.row - 3);// new projectile rectangle at new location
+				
+//				if (d == Direction.EAST) {
+//					p = new Point(p.row, p.col + 3);
+//					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
+//				}
+//				if (d == Direction.WEST) {
+//					p = new Point(p.row, p.col - 3);
+//					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
+//				}
+//				if (d == Direction.NORTH) {
+//					p = new Point(p.row - 3, p.col);
+//					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
+//				}
+//				if (d == Direction.SOUTH) {
+//					p = new Point(p.row + 3, p.col);
+//					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
+//				}
 				exists();
 				notifyObservers(thisMissle);
 				setChanged();
