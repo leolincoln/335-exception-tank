@@ -2,6 +2,7 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -18,7 +19,7 @@ import undecided.TankView;
 public class MasterView extends JFrame {
 	JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-
+	JFrame m;
 	/**
 	 * 
 	 */
@@ -29,6 +30,7 @@ public class MasterView extends JFrame {
 		buildMenu();
 		setDefaultPane();
 		this.setVisible(true);
+		m = this;
 	}
 
 	public void buildFrame() {
@@ -36,15 +38,25 @@ public class MasterView extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocation(50, 50);
 		this.setSize(640, 400);
-
+		this.setBackground(Color.black);
 	}
 
 	public void buildMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu file = new JMenu("File");
-		JMenuItem newGameMen = new JMenuItem("New Game");
+		
+		JMenuItem titleMen = new JMenuItem("MAINMENU");
+		titleMen.addActionListener(new titleMenListener());
+		file.add(titleMen);
+		
+		JMenuItem newGameMen = new JMenuItem("SINGLEGAME");
 		newGameMen.addActionListener(new newGameMenListener());
 		file.add(newGameMen);
+		
+		JMenuItem lanGameMen = new JMenuItem("LAN");
+		lanGameMen.addActionListener(new lanGameMenListener());
+		file.add(lanGameMen);
+			
 		JMenuItem exitMen = new JMenuItem("Exit");
 		exitMen.addActionListener(new exitMenListener());
 		file.add(exitMen);
@@ -69,17 +81,16 @@ public class MasterView extends JFrame {
 			body.removeAll();
 			body.add(currentPane, "LAN");
 			this.setLocation(50, 50);
-			this.setSize(650,400);
-			
+			this.setSize(650, 400);
+
 			break;
 
 		case PREVIOUS:
 			JPanel temp = previousPane;
-			previousPane = 
-			currentPane = temp;
+			previousPane = currentPane = temp;
 			body.removeAll();
-			body.add(currentPane,v.name());
-			if(currentPane instanceof TitleView){
+			body.add(currentPane, v.name());
+			if (currentPane instanceof TitleView) {
 				this.setLocation(50, 50);
 				this.setSize(640, 400);
 			}
@@ -88,6 +99,20 @@ public class MasterView extends JFrame {
 		case NEWGAME:
 			previousPane = currentPane;
 			currentPane = new TankView(this);
+			body.removeAll();
+			body.add(currentPane, "NEWGAME");
+			currentPane.requestFocus();
+			this.setLocation(0, 0);
+			this.setExtendedState(this.MAXIMIZED_BOTH);
+			
+			break;
+		case TITLE:
+			previousPane = currentPane;
+			body.removeAll();
+			currentPane = new TitleView(this);
+			body.add(currentPane, "TITLE");
+			this.setSize(640,400);
+			repaint();
 		}
 
 	}
@@ -101,7 +126,9 @@ public class MasterView extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			m.setSize(400, 600);
 			changeView(Views.NEWGAME);
+
 		}
 
 	}
@@ -115,4 +142,24 @@ public class MasterView extends JFrame {
 
 	}
 
+	private class lanGameMenListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			m.setSize(400, 600);
+			changeView(Views.LAN);
+		}
+
+	}
+
+	private class titleMenListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			m.setSize(400, 600);
+			changeView(Views.TITLE);
+			
+		}
+		
+	}
 }
