@@ -1,11 +1,12 @@
 package undecided;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -48,6 +49,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
+	java.util.Vector<Projectile> pVector; //a vector of projectiles
 
 	/**
 	 * Class constructor
@@ -65,12 +67,74 @@ public class TankView extends MasterViewPanel implements Observer {
 		add(panel);
 		addKeyListener(new moveAndShootListener());// adding the movement and
 		
+		Handlerclass handler = new Handlerclass();// creating the mouse handler class
+		this.addMouseListener(handler);// adding mouse actions to be detected on the java panel
+		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
+		
+		
 		this.buildMap();
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
 		
 	}
 
+	
+	private class Handlerclass implements MouseListener, MouseMotionListener{
+
+		@Override
+		public void mouseDragged(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseClicked(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent arg0) {
+		
+			// finding difference in player and target location
+			int xdiff = arg0.getX()-player.getLocation().col;
+			int ydiff = arg0.getY()-player.getLocation().row;
+			
+			//calculating the distance between the player and the mouse
+			double length = Math.sqrt(xdiff*xdiff+ydiff*ydiff);
+			
+			//create a new shot, with position relative to location of tank, the speed in the x and y directions
+			player.shoot(new Point(player.getLocation().row, player.getLocation().col), (int)(xdiff*(5/length)), (int)(ydiff*(5/length)));
+
+			//player.shoot();
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 	/**
 	 * This method paints the TankView graphics when called.
 	 */
@@ -138,6 +202,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		}
 	}
 
+	
 	/**
 	 * 
 	 * @author Team Exception

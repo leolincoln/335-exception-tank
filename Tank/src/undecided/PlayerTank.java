@@ -180,6 +180,9 @@ public class PlayerTank extends Observable {
 	 * animated projectile in the appropriate direction
 	 */
 	public void shoot() {
+		
+		
+		
 		if (d == Direction.EAST) {
 			Projectile missle = new Projectile(new Point(p.row, p.col),
 					Direction.EAST);
@@ -206,6 +209,18 @@ public class PlayerTank extends Observable {
 
 		}
 	}
+	
+	
+	// new version!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public void shoot(Point p, int x, int y) {
+		
+		Projectile missle = new Projectile(p, x, y);
+			notifyObservers(missle);
+			setChanged();
+	
+	}
+	
+	
 
 	/**
 	 * 
