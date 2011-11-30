@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * 
  * @author Team Exception
@@ -5,7 +7,7 @@
  * This interface is implemented by all the non user controlled objects on the field: crate, fireball, barrier, spike pit, and TNT box.
  *
  */
-public interface Obstacle {
+public interface Obstacle extends Serializable {
 	
 	/**
 	 * The method receiveDamage will modify the health of this object
