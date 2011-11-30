@@ -61,11 +61,11 @@ public class MasterView extends JFrame {
 
 	public void changeView(Views v) {
 		switch (v) {
-		case NEWGAME:
+		case LAN:
 			previousPane = currentPane;
-			currentPane = new NewGameView(this);
+			currentPane = new LanView(this);
 			body.removeAll();
-			body.add(currentPane, "NEWGAME");
+			body.add(currentPane, "LAN");
 			this.setLocation(50, 50);
 			this.setSize(650,400);
 			

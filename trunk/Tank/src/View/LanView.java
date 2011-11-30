@@ -11,7 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
-public class NewGameView extends MasterViewPanel {
+public class LanView extends MasterViewPanel{
+
+	
 	/**
 	 * 
 	 */
@@ -21,7 +23,7 @@ public class NewGameView extends MasterViewPanel {
 	private JLabel hosts, ping;
 	private JList hostList, pingList;
 
-	public NewGameView(MasterView m) {
+	public LanView(MasterView m) {
 		super(m);
 		setupPane();
 		buildButtons();
@@ -91,4 +93,5 @@ private class joinListener implements ActionListener{
 	}
 	
 }
+
 }
