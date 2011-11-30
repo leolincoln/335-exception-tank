@@ -1,8 +1,11 @@
+package undecided;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+
+import View.MasterView;
 
 /**
  * 
@@ -20,10 +23,8 @@ public class GUI {
 	public static void main(String[] args) {
 		TankView t = new TankView();
 		t.setSize(screen);
-		t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		t.buildMap();
-		t.setBackground(Color.BLACK);
-		t.setVisible(true);
+		//t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 	}
 
 }

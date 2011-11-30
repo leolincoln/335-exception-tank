@@ -13,6 +13,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import undecided.TankView;
+
 public class MasterView extends JFrame {
 	JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
@@ -83,6 +85,9 @@ public class MasterView extends JFrame {
 			}
 			repaint();
 			break;
+		case NEWGAME:
+			previousPane = currentPane;
+			currentPane = new TankView(this);
 		}
 
 	}
