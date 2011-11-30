@@ -3,7 +3,7 @@ package map;
 public class Grass implements Terrain{
 
 	@Override
-	public void modefyVelocity() {
+	public void modifyVelocity() {
 		// TODO Auto-generated method stub
 		
 	}
