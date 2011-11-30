@@ -55,22 +55,7 @@ public class TankView extends JFrame implements Observer {
 		tankList.add(player);
 		player.addObserver(this);
 		
-		//remove later!!!!
-		crate = new Crate(new Point(600, 400));
-		immovableBlock = new ImmovableBlock((new Point(650, 400)));
-		fireRing = new FireRing((new Point(300, 400)));
-		spikePit = new SpikePit((new Point(100, 200)));
-		tnt = new TNT((new Point(650, 600)));
-		obstacleList.add(crate);
-		obstacleList.add(immovableBlock);
-		obstacleList.add(fireRing);
-		obstacleList.add(spikePit);
-		obstacleList.add(tnt);
-		crate.addObserver(this);
-		immovableBlock.addObserver(this);
-		fireRing.addObserver(this);
-		spikePit.addObserver(this);
-		tnt.addObserver(this);
+	
 		
 		
 		
@@ -251,5 +236,25 @@ public class TankView extends JFrame implements Observer {
 			repaint();
 		}
 
+	}
+//for building the map. 
+	public void buildMap() {
+		//remove later!!!!
+		crate = new Crate(new Point(600, 400));
+		immovableBlock = new ImmovableBlock((new Point(650, 400)));
+		fireRing = new FireRing((new Point(300, 400)));
+		spikePit = new SpikePit((new Point(100, 200)));
+		tnt = new TNT((new Point(650, 600)));
+		obstacleList.add(crate);
+		obstacleList.add(immovableBlock);
+		obstacleList.add(fireRing);
+		obstacleList.add(spikePit);
+		obstacleList.add(tnt);
+		crate.addObserver(this);
+		immovableBlock.addObserver(this);
+		fireRing.addObserver(this);
+		spikePit.addObserver(this);
+		tnt.addObserver(this);
+		
 	}
 }

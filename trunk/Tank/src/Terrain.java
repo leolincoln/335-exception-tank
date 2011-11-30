@@ -1,4 +1,6 @@
+import java.io.Serializable;
 
-public interface Terrain {
+
+public interface Terrain extends Serializable{
 
 }

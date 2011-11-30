@@ -13,7 +13,7 @@ public class TitleView extends MasterViewPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	JPanel title;
-	JButton newGame, option, exit;
+	JButton newGame, lan,option, exit;
 	JPanel empty1 = new JPanel();
 	JPanel empty2 = new JPanel();
 	
@@ -36,14 +36,17 @@ public class TitleView extends MasterViewPanel {
 		this.add(empty1);
 	}
 	public void setupTitle(){
-		title=new JPanel(new GridLayout(3,1));
-		newGame = new JButton("Start a new game");
+		title=new JPanel(new GridLayout(4,1));
+		newGame = new JButton("SINGLEPLAYER");
 		newGame.addActionListener(new newGameListener());
-		option = new JButton("Options");
+		lan = new JButton("LAN");
+		lan.addActionListener(new lanListener());
+		option = new JButton("OPTIONS");
 		option.addActionListener(new optionListener());
-		exit = new JButton("Exit");
+		exit = new JButton("EXIT");
 		exit.addActionListener(new exitListener());
 		title.add(newGame);
+		title.add(lan);
 		title.add(option);
 		title.add(exit);
 		this.add(title);
@@ -55,7 +58,7 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.changeView(Views.NEWGAME);
+			
 			
 		}
 		
@@ -75,6 +78,15 @@ public class TitleView extends MasterViewPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			System.exit(0);
+			
+		}
+		
+	}
+	private class lanListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			m.changeView(Views.NEWGAME);
 			
 		}
 		

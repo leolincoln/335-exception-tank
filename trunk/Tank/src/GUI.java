@@ -21,6 +21,7 @@ public class GUI {
 		TankView t = new TankView();
 		t.setSize(screen);
 		t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		t.buildMap();
 		t.setBackground(Color.BLACK);
 		t.setVisible(true);
 	}
