@@ -1,5 +1,8 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
@@ -47,24 +50,25 @@ public class TankView extends JFrame implements Observer {
 	 */
 	public TankView() {
 		super("Tank Test Game");
+
 		player = new PlayerTank(new Point(100, 100));
 		obstacleList = new LinkedList<Obstacle>();
-		
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
 		tankList.add(player);
 		player.addObserver(this);
-		
-	
-		
-		
-		
 		panel = new JPanel();
-
 		add(panel);
 		addKeyListener(new moveAndShootListener());// adding the movement and
-													// shooting listener
+		Dimension screen = Toolkit.getDefaultToolkit()
+				.getScreenSize();										// shooting listener
 
+		this.setSize(screen);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.buildMap();
+		this.setBackground(Color.BLACK);
+		this.setVisible(true);
+		
 	}
 
 	/**
