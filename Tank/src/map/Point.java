@@ -1,18 +1,20 @@
 package map;
+/**
+ * 
+ * @author Team Exception
+ * 
+ *         This class is a point (overriding Java's Point class) that will be
+ *         used to determine the location of tanks and obstacles
+ * 
+ */
+public class Point {
 
-import java.io.Serializable;
+	public final int row;
+	public final int col;
 
-public class Point implements Serializable{
-private int row;
-private int col;
-public Point(int r, int c){
-	this.row = r;
-	this.col=c;
-}
-public int getRow(){
-	return row;
-}
-public int getCol(){
-	return col;
-}
+	public Point(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+
 }

@@ -1,8 +1,7 @@
 package map;
+import java.io.Serializable;
 
-public interface Terrain {
 
-
-public void modifyVelocity();
+public interface Terrain extends Serializable{
 
 }

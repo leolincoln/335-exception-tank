@@ -58,7 +58,7 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			m.changeView(Views.NEWGAME);
 			
 		}
 		
