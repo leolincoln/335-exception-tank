@@ -1,4 +1,5 @@
 package undecided;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Observable;
 
@@ -36,8 +37,7 @@ public class TNT extends Observable implements Obstacle {
 	public void recieveDamage(int dmg) {
 		health = health - dmg;
 		if (this.removeObstacle()) {
-			rect = new TNTRectangle(-1, -1);// removing off field
-			TankView.obstacleList.remove(this);
+			rect = new TNTRectangle(-100, -100);// removing off field
 			BlastRadiusRectangle b = new BlastRadiusRectangle(location.col - 50, location.row - 50);
 			LinkedList<Obstacle> obs = TankView.obstacleList;
 			LinkedList<PlayerTank> tank = TankView.tankList;
@@ -45,14 +45,18 @@ public class TNT extends Observable implements Obstacle {
 				Obstacle o = obs.get(i);
 				if(o instanceof Crate) {
 					Crate c = (Crate)o;
-					if(c.getRectangle().intersects(b)) {
+					if(b.intersects(c.getRectangle())) {
 						c.recieveDamage(1);
+						i = 0;
 					}
 				}
 				if(o instanceof TNT) {
-					TNT c = (TNT)o;
+					if(o != this) {
+					TNT c = (TNT)o;  
 					if(c.getRectangle().intersects(b)) {
 						c.recieveDamage(1);
+					
+					}
 					}
 				}
 			}
@@ -65,6 +69,7 @@ public class TNT extends Observable implements Obstacle {
 			
 
 		}
+		TankView.obstacleList.remove(this);
 	}
 	public boolean move(Direction d) {
 		LinkedList<Obstacle> obs = TankView.obstacleList;

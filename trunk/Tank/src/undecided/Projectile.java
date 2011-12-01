@@ -109,8 +109,7 @@ public class Projectile extends Observable {
 			exists = false;
 			p = new Point(-1, -1);
 			rect = new ProjectileRectangle(-100, -100);
-			notifyObservers(this);
-			setChanged();
+			
 		}
 	}
 
@@ -152,8 +151,12 @@ public class Projectile extends Observable {
 //					rect = new ProjectileRectangle(p.col - 3, p.row - 3);
 //				}
 				exists();
+				try {
 				notifyObservers(thisMissle);
 				setChanged();
+				} catch(NullPointerException e) {
+					TankView.projectileList.remove(this);
+				}
 				try {
 					sleep(speed);
 				} catch (InterruptedException e) {
