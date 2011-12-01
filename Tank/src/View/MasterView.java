@@ -26,6 +26,7 @@ public class MasterView extends JFrame {
 	private static final long serialVersionUID = 5104052475766337179L;
 
 	public MasterView() {
+
 		buildFrame();
 		buildMenu();
 		setDefaultPane();
@@ -36,9 +37,9 @@ public class MasterView extends JFrame {
 	public void buildFrame() {
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setLocation(0, 0);
 		this.setSize(640, 400);
 		this.setBackground(Color.black);
+		this.setLocationRelativeTo(null);
 	}
 
 	public void buildMenu() {
@@ -81,7 +82,7 @@ public class MasterView extends JFrame {
 			currentPane = new LanView(this);
 			body.removeAll();
 			body.add(currentPane, "LAN");
-			this.setLocation(0, 0);
+			this.setLocationRelativeTo(null);
 			this.setSize(650, 400);
 
 			break;
@@ -114,7 +115,7 @@ public class MasterView extends JFrame {
 			body.removeAll();
 			body.add(currentPane, "TANKVIEW");
 			currentPane.requestFocus();
-			this.setLocation(0, 0);
+			this.setLocationRelativeTo(null);
 //			this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;
@@ -125,6 +126,7 @@ public class MasterView extends JFrame {
 			currentPane = new TitleView(this);
 			body.add(currentPane, "TITLE");
 			this.setSize(640, 400);
+			this.setLocationRelativeTo(null);
 			repaint();
 		}
 
@@ -140,6 +142,7 @@ public class MasterView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			m.setSize(400, 600);
+			m.setLocationRelativeTo(null);
 			changeView(Views.TANKVIEW);
 
 		}
@@ -160,6 +163,7 @@ public class MasterView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			m.setSize(400, 600);
+			m.setLocationRelativeTo(null);
 			changeView(Views.LAN);
 		}
 
@@ -170,6 +174,7 @@ public class MasterView extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			m.setSize(400, 600);
+			m.setLocationRelativeTo(null);
 			changeView(Views.TITLE);
 
 		}
