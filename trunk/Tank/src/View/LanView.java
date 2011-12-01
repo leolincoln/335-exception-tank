@@ -23,7 +23,7 @@ public class LanView extends MasterViewPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel northPane, buttonPane, centerPane;
-	private JButton back, create, join;
+	private JButton back, create, join,search;
 	private JLabel hosts, ping;
 	private JList hostList, pingList;
 
@@ -51,7 +51,7 @@ public class LanView extends MasterViewPanel {
 		northPane = new JPanel(new GridLayout(1, 2));
 		hosts = new JLabel("Hosts");
 		northPane.add(hosts, 0);
-
+		
 		ping = new JLabel("ping");
 		northPane.add(ping, 1);
 		this.add(northPane, BorderLayout.NORTH);
@@ -74,12 +74,18 @@ public class LanView extends MasterViewPanel {
 
 		back = new JButton("back");
 		back.addActionListener(new backListener());
-		create = new JButton("Create");
+		
+		create = new JButton("HostGame");
 		create.addActionListener(new createListener());
-		join = new JButton("Join");
+		
+		search = new JButton("SearchForHosts");
+		search.addActionListener(new searchListener());
+		
+		join = new JButton("JoinGame");
 		join.addActionListener(new joinListener());
 
 		buttonPane.add(back);
+		buttonPane.add(search);
 		buttonPane.add(create);
 		buttonPane.add(join);
 		this.add(buttonPane, BorderLayout.SOUTH);
@@ -137,6 +143,15 @@ public class LanView extends MasterViewPanel {
 
 		}
 
+	}
+	private class searchListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+		JButton i = (JButton) arg0.getSource();
+		i.set
+		}
+		
 	}
 
 }
