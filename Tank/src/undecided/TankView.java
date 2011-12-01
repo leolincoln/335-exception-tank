@@ -68,7 +68,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	public TankView(MasterView m) {
 		super(m);
 
-		player = new PlayerTank(new Point(100, 100));
+		player = new PlayerTank(new Point(450, 475));
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
@@ -165,14 +165,14 @@ public class TankView extends MasterViewPanel implements Observer {
 	
 		for (Projectile p : projectileList) {
 			ProjectileRectangle rect = p.getRectangle();
-			g.setColor(rect.setColor());
-			g.fillRect(rect.xCoord(), rect.yCoord(), rect.width, rect.height);
+			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 		}
 		for (PlayerTank p : tankList) {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
-		for (Obstacle p : obstacleList) {
+		for (int i = 0; i < obstacleList.size(); i++) {
+			Obstacle p = obstacleList.get(i);
 			if (p instanceof Crate) {// for instance of crate
 				Crate c = (Crate) p;
 				CrateRectangle cRect = c.getRectangle();
@@ -252,7 +252,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	 * remove dead obstacles and repaint the projectiles.
 	 */
 	@Override
-	public void update(Observable v, Object o) {
+	public synchronized void update(Observable v, Object o) {
 		if (o instanceof String) {
 			String s = (String) o;
 			if(s.equals("moveCrate")) {
@@ -369,6 +369,10 @@ public class TankView extends MasterViewPanel implements Observer {
 			}
 			repaint();
 		}
+		if(o instanceof Crate) {
+			Crate c = (Crate)o;
+			c.recieveDamage(1);
+		}
 		
 
 	}
@@ -396,26 +400,74 @@ public class TankView extends MasterViewPanel implements Observer {
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
-		crate = new Crate(new Point(600, 400));
-		for(int i = 664; i < 900; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(i, 400));
+
+		for(int i = 350; i < 650; i = i + 50) {
+			for(int j = 350; j < 650; j = j + 50) {
+				if(i == 350 || j == 350 || j == 600) {
+				ImmovableBlock b = new ImmovableBlock(new Point(i, j));
+				obstacleList.add(b);
+				b.addObserver(this);
+				}
+				if(i == 600 && j != 350 && j != 600) {
+					Crate c = new Crate(new Point(i, j));
+					obstacleList.add(c);
+					c.addObserver(this);
+				}
+			}
+		}
+		for(int i = 450; i < 550; i = i + 50) {
+			for(int j = 800; j < 950; j = j + 50) {
+				ImmovableBlock b = new ImmovableBlock(new Point(i, j + 8));
+				obstacleList.add(b);
+				b.addObserver(this);
+				
+			}
+		}
+		FireRing fr = new FireRing(new Point(100, 100));
+		obstacleList.add(fr);
+		fr.addObserver(this);
+		FireRing fr2 = new FireRing(new Point(350, 800));
+		obstacleList.add(fr2);
+		fr2.addObserver(this);
+		for(int i = 400; i < 600; i = i + 50) {
+		SpikePit sp = new SpikePit(new Point(400, i));
+		obstacleList.add(sp);
+		sp.addObserver(this);
+		}
+		for(int i = 75; i < 280; i = i + 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(800, i));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
+		for(int i = 75; i < 280; i = i + 50) {
+			TNT b = new TNT(new Point(860, i));
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
 		
-		fireRing = new FireRing((new Point(300, 400)));
-		spikePit = new SpikePit((new Point(100, 200)));
-		tnt = new TNT((new Point(650, 600)));
-		obstacleList.add(crate);
 		
-		obstacleList.add(fireRing);
-		obstacleList.add(spikePit);
-		obstacleList.add(tnt);
-		crate.addObserver(this);
-	
-		fireRing.addObserver(this);
-		spikePit.addObserver(this);
-		tnt.addObserver(this);
+		for(int i = 200; i < 300; i = i + 50) {
+			for(int j = 350; j < 650; j = j + 50) {
+				TNT t = new TNT(new Point(i, j));
+				obstacleList.add(t);
+				t.addObserver(this);
+			}
+		}
+		for(int i = 665; i < 915; i = i + 50) {
+			for(int j = 760; j < 960; j = j + 50) {
+				if(i == 665 || j == 760) {
+				Crate c = new Crate(new Point(i, j));
+				obstacleList.add(c);
+				c.addObserver(this);
+				}
+				if(i == 715 && j == 810) {
+					TNT b = new TNT(new Point(i, j));
+					obstacleList.add(b);
+					b.addObserver(this);
+				}
+			}
+		}
+		
 
 	}
 }

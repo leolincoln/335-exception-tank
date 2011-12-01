@@ -2,7 +2,10 @@ package rectangles;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
 
 public class ProjectileRectangle extends Rectangle{
 	
@@ -54,6 +57,11 @@ public class ProjectileRectangle extends Rectangle{
 	
 
 }
+	public Image getImage() {
+		Image p = new ImageIcon("images/projectile.png").getImage();
+		return p;
+	}
+
 
 
 }
