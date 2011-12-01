@@ -12,8 +12,9 @@ import javax.swing.JPanel;
  * 
  * @author Team Exception
  * 
- * This class creates the TitleView that is the first panel that the user sees.
- *
+ *         This class creates the TitleView that is the first panel that the
+ *         user sees.
+ * 
  */
 public class TitleView extends MasterViewPanel {
 
@@ -25,36 +26,38 @@ public class TitleView extends MasterViewPanel {
 	/**
 	 * Class constructor
 	 * 
-	 * @param m this is the masterview object
+	 * @param m
+	 *            this is the masterview object
 	 */
 	public TitleView(MasterView m) {
-	
+
 		super(m);
 		setupPanel();
 		setupTop();
 		setupTitle();
 		setupBot();
 		this.setVisible(true);
-		
+
 	}
 
 	/**
-	 * This method sets up the format for the panel itself particularly the layout.
+	 * This method sets up the format for the panel itself particularly the
+	 * layout.
 	 */
 	public void setupPanel() {
 
 		this.setLayout(new GridLayout(3, 1));
-		//this.setBackground(Color.black);
-		
+		// this.setBackground(Color.black);
+
 	}
 
 	/**
-	 * This method sets up the left side of the title view
+	 * This method sets up the top banner for tittle view
 	 */
 	public void setupTop() {
 		JLabel banner = new JLabel(new ImageIcon("images/diamondPlate.png"));
 		this.add(banner);
-		//this.add(empty1);
+		// this.add(empty1);
 	}
 
 	/**
@@ -62,7 +65,7 @@ public class TitleView extends MasterViewPanel {
 	 * a new game, lan, exit, and option button.
 	 */
 	public void setupTitle() {
-		
+
 		title = new JPanel(new GridLayout(1, 4));
 		newGame = new JButton("SINGLEPLAYER");
 		newGame.addActionListener(new newGameListener());
@@ -78,14 +81,24 @@ public class TitleView extends MasterViewPanel {
 		title.add(exit);
 		this.add(title);
 	}
-	
+
+	/**
+	 * This method sets up the bottom banner for the tittle view.
+	 */
 	public void setupBot() {
 		JLabel banner = new JLabel(new ImageIcon("images/diamondPlate.png"));
 		this.add(banner);
-		//this.add(empty1);
+		// this.add(empty1);
 	}
 
-
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This private class allows the listener to go to the tank view
+	 *         when clicked (single player)
+	 * 
+	 */
 	private class newGameListener implements ActionListener {
 
 		@Override
@@ -96,6 +109,13 @@ public class TitleView extends MasterViewPanel {
 
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This allows the user to go the options panel when it is pressed.
+	 * 
+	 */
 	private class optionListener implements ActionListener {
 
 		@Override
@@ -106,6 +126,14 @@ public class TitleView extends MasterViewPanel {
 
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This allows the user to exit the application when the exit button
+	 *         is pressed.
+	 * 
+	 */
 	private class exitListener implements ActionListener {
 
 		@Override
@@ -116,6 +144,14 @@ public class TitleView extends MasterViewPanel {
 
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This allows the user to open up the LAN view for multiplayer when
+	 *         the LAN button is pressed.
+	 * 
+	 */
 	private class lanListener implements ActionListener {
 
 		@Override

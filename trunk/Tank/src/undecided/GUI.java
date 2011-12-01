@@ -1,4 +1,5 @@
 package undecided;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -21,7 +22,8 @@ public class GUI {
 			.getScreenSize();
 
 	/**
-	 * Main Thread
+	 * Main Thread to begin the entire program. It begins by creating a new
+	 * masterview and new tankview.
 	 * 
 	 * @param args
 	 */
@@ -30,7 +32,7 @@ public class GUI {
 		MasterView m = new MasterView();
 		m.setLocationRelativeTo(null);
 		TankView t = new TankView(m);
-		
+
 	}
 
 }
