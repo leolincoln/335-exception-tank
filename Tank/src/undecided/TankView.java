@@ -82,7 +82,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		this.addMouseMotionListener(handler);// adding mouse motion to be
 												// detected on the java panel
 
-		this.buildMap();
+		this.buildMap(null);
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
 
@@ -301,7 +301,6 @@ public class TankView extends MasterViewPanel implements Observer {
 			} else {
 				if (p.getRectangle().xCoord() == -1) {
 					projectileList.remove(p);
-
 				}
 				for (Obstacle obs : obstacleList) {
 					if (obs instanceof Crate) {
@@ -312,7 +311,6 @@ public class TankView extends MasterViewPanel implements Observer {
 							c.recieveDamage(p.getDamage());
 							repaint();
 							break;
-
 						}
 					}
 					if (obs instanceof TNT) {
@@ -396,7 +394,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	/**
 	 * This method will dynamically build the map.
 	 */
-	public void buildMap() {
+	public void buildMap(String mapFile) {
 		// remove later!!!!
 		for (int i = 0; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 25));

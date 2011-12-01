@@ -38,7 +38,6 @@ public class LanView extends MasterViewPanel {
 		setupPane();
 		buildButtons();
 		this.setVisible(true);
-
 	}
 
 	/**
