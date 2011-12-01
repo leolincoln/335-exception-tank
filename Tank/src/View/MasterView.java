@@ -115,6 +115,19 @@ public class MasterView extends JFrame {
 	 */
 	public void changeView(Views v) {
 		switch (v) {
+		case HOST:
+			this.setBackground(Color.white);
+			System.out.println("HostviewWorking");
+			previousPane = currentPane;
+			currentPane = new HostView(this);
+			body.removeAll();
+			body.add(currentPane, "HOST");
+			this.setLocationRelativeTo(null);
+			this.setLocation(50, 50);
+			this.setSize(600, 400);
+
+			
+			break;
 		case LAN:
 			this.setBackground(Color.white);
 			previousPane = currentPane;
