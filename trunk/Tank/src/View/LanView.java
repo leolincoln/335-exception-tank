@@ -23,9 +23,9 @@ public class LanView extends MasterViewPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel northPane, buttonPane, centerPane;
-	private JButton back, create, join,search;
+	public JButton back, create, join,search;
 	private JLabel hosts, ping;
-	private JList hostList, pingList;
+	public JList hostList, pingList;
 
 	/**
 	 * Class constructor
@@ -148,8 +148,8 @@ public class LanView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-		JButton i = (JButton) arg0.getSource();
-		i.set
+		
+		
 		}
 		
 	}
