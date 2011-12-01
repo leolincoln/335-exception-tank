@@ -1,4 +1,5 @@
 package View;
+
 //package there?
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -16,15 +17,34 @@ import javax.swing.JPanel;
 
 import undecided.TankView;
 
+/**
+ * 
+ * @author Team Exception
+ * 
+ *         This class extends JFrame and is the view which will contain all the
+ *         panels of all the views for this tanks game.
+ * 
+ */
 public class MasterView extends JFrame {
+
 	JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame m;
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5104052475766337179L;
 
+	/**
+	 * Main thread
+	 * 
+	 * @param args
+	 */
+	public static void main(String args[]) {
+		new MasterView();
+
+	}
+
+	/**
+	 * Class constructor
+	 */
 	public MasterView() {
 
 		buildFrame();
@@ -34,6 +54,10 @@ public class MasterView extends JFrame {
 		m = this;
 	}
 
+	/**
+	 * This is the method that builds and locates the frame of the tanks
+	 * application which holds all the sub views.
+	 */
 	public void buildFrame() {
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -42,6 +66,10 @@ public class MasterView extends JFrame {
 		this.setLocationRelativeTo(null);
 	}
 
+	/**
+	 * This method creates all the JMenu items and the JMenu bar for all the
+	 * items. The items include main menu, single game, LAN, and exit.
+	 */
 	public void buildMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu file = new JMenu("File");
@@ -65,6 +93,10 @@ public class MasterView extends JFrame {
 		this.add(menuBar, BorderLayout.NORTH);
 	}
 
+	/**
+	 * This method simply sets the default pane for the JFrame masterview which
+	 * is titleview.
+	 */
 	public void setDefaultPane() {
 		body = new JPanel();
 		body.setLayout(new CardLayout());
@@ -74,6 +106,13 @@ public class MasterView extends JFrame {
 		repaint();
 	}
 
+	/**
+	 * This method controls all the calls to change view whether it be LAN,
+	 * previous, tank, or title view.
+	 * 
+	 * @param v
+	 *            this is the view that is to be switched to.
+	 */
 	public void changeView(Views v) {
 		switch (v) {
 		case LAN:
@@ -116,7 +155,7 @@ public class MasterView extends JFrame {
 			body.add(currentPane, "TANKVIEW");
 			currentPane.requestFocus();
 			this.setLocationRelativeTo(null);
-//			this.setExtendedState(this.MAXIMIZED_BOTH);
+			// this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;
 		case TITLE:
@@ -132,11 +171,14 @@ public class MasterView extends JFrame {
 
 	}
 
-	public static void main(String args[]) {
-		new MasterView();
-
-	}
-
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This private class creates the action listener that causes the
+	 *         tanks view to show up when the user clicks on new game.
+	 * 
+	 */
 	private class newGameMenListener implements ActionListener {
 
 		@Override
@@ -149,6 +191,14 @@ public class MasterView extends JFrame {
 
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This private class allows the user to close the application when
+	 *         the exit button is pressed.
+	 * 
+	 */
 	private class exitMenListener implements ActionListener {
 
 		@Override
@@ -158,6 +208,14 @@ public class MasterView extends JFrame {
 
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This private class allos the LAN view to show up when the LAN
+	 *         button is pressed.
+	 * 
+	 */
 	private class lanGameMenListener implements ActionListener {
 
 		@Override
@@ -169,6 +227,14 @@ public class MasterView extends JFrame {
 
 	}
 
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This private class allows the title view to show up when the
+	 *         title view button is pressed
+	 * 
+	 */
 	private class titleMenListener implements ActionListener {
 
 		@Override

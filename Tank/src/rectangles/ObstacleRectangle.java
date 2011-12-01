@@ -4,6 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
+/**
+ * 
+ * @author Team Exception
+ * 
+ * This class contains the rectangles for the obstacles that will be used for collisions.
+ *
+ */
 public abstract class ObstacleRectangle extends Rectangle {
 
 	private static final long serialVersionUID = 1L;
