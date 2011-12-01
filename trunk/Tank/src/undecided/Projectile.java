@@ -105,10 +105,10 @@ public class Projectile extends Observable {
 	 * with other objects on the field
 	 */
 	public void exists() {
-		if (p.row <= 40 || p.row >= 985 || p.col <= 15 || p.col >= 985) {
+		if (p.row <= 15 || p.row >= 915 || p.col <= 15 || p.col >= 975) {
 			exists = false;
 			p = new Point(-1, -1);
-			rect = new ProjectileRectangle(-1, -1);
+			rect = new ProjectileRectangle(-100, -100);
 			notifyObservers(this);
 			setChanged();
 		}

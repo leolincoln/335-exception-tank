@@ -1,12 +1,22 @@
 package undecided;
+
+
 import java.awt.Color;
+
 import java.awt.Graphics;
 import java.awt.Image;
+
+
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
@@ -16,6 +26,7 @@ import javax.swing.*;
 import View.MasterView;
 import View.MasterViewPanel;
 
+import rectangles.BlastRadiusRectangle;
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
 import rectangles.ImmovableBlockRectangle;
@@ -46,9 +57,9 @@ public class TankView extends MasterViewPanel implements Observer {
 	private FireRing fireRing;
 	private SpikePit spikePit;
 	private TNT tnt;
-	private LinkedList<Projectile> projectileList;
-	private LinkedList<Obstacle> obstacleList;
-	private LinkedList<PlayerTank> tankList;
+	public static LinkedList<Projectile> projectileList;
+	public static LinkedList<Obstacle> obstacleList;
+	public static LinkedList<PlayerTank> tankList;
 	java.util.Vector<Projectile> pVector; //a vector of projectiles
 
 	/**
@@ -57,7 +68,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	public TankView(MasterView m) {
 		super(m);
 
-		player = new PlayerTank(new Point(0, 0));
+		player = new PlayerTank(new Point(100, 100));
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
@@ -66,7 +77,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		panel = new JPanel();
 		add(panel);
 		addKeyListener(new moveAndShootListener());// adding the movement and
-		
+
 		Handlerclass handler = new Handlerclass();// creating the mouse handler class
 		this.addMouseListener(handler);// adding mouse actions to be detected on the java panel
 		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
@@ -75,7 +86,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		this.buildMap();
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
-		
+
 	}
 
 	
@@ -151,6 +162,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	 *            graphics component that java uses to paint components
 	 */
 	public void paintComponent(Graphics g) {
+	
 		for (Projectile p : projectileList) {
 			ProjectileRectangle rect = p.getRectangle();
 			g.setColor(rect.setColor());
@@ -158,45 +170,36 @@ public class TankView extends MasterViewPanel implements Observer {
 		}
 		for (PlayerTank p : tankList) {
 			TankRectangle tRect = p.getRectangle();
-			g.setColor(tRect.setColor());
-			g.fillRect(tRect.xCoord(), tRect.yCoord(), tRect.width,
-					tRect.height);
+			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
 		for (Obstacle p : obstacleList) {
 			if (p instanceof Crate) {// for instance of crate
 				Crate c = (Crate) p;
 				CrateRectangle cRect = c.getRectangle();
-				g.setColor(cRect.setColor());
-				g.fillRect(cRect.xCoord(), cRect.yCoord(), cRect.width,
-						cRect.height);
+				g.drawImage(cRect.getImage(), cRect.xCoord(), cRect.yCoord(), null);
+				
+				
 			}
 			if (p instanceof ImmovableBlock) {// for instance of immovableBlock
 				ImmovableBlock ib = (ImmovableBlock) p;
 				ImmovableBlockRectangle ibRect = ib.getRectangle();
-				g.setColor(ibRect.setColor());
-				g.fillRect(ibRect.xCoord(), ibRect.yCoord(), ibRect.width,
-						ibRect.height);
+				g.drawImage(ibRect.getImage(), ibRect.xCoord(), ibRect.yCoord(), null);
 			}
 			if (p instanceof SpikePit) {// for instance of SpikePit
 				SpikePit sp = (SpikePit) p;
 				SpikePitRectangle spRect = sp.getRectangle();
-				g.setColor(spRect.setColor());
-				g.fillRect(spRect.xCoord(), spRect.yCoord(), spRect.width,
-						spRect.height);
+				g.drawImage(spRect.getImage(), spRect.xCoord(), spRect.yCoord(), null);
 			}
 			if (p instanceof FireRing) {// for instance of fireRing
 				FireRing fr = (FireRing) p;
 				FireRingRectangle frRect = fr.getRectangle();
 				g.setColor(frRect.setColor());
-				g.fillRect(frRect.xCoord(), frRect.yCoord(), frRect.width,
-						frRect.height);
+				g.drawImage(frRect.getImage(), frRect.xCoord(), frRect.yCoord(), null);
 			}
 			if (p instanceof TNT) {// for instance of TNT
 				TNT tnt = (TNT) p;
 				TNTRectangle tntRect = tnt.getRectangle();
-				g.setColor(tntRect.setColor());
-				g.fillRect(tntRect.xCoord(), tntRect.yCoord(), tntRect.width,
-						tntRect.height);
+				g.drawImage(tntRect.getImage(), tntRect.xCoord(), tntRect.yCoord(), null);
 			}
 
 		}
@@ -217,16 +220,16 @@ public class TankView extends MasterViewPanel implements Observer {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int keyEvent = e.getKeyCode();
-			if (keyEvent == KeyEvent.VK_UP) {
+			if (keyEvent == KeyEvent.VK_W) {
 				player.moveUp();
 			}
-			if (keyEvent == KeyEvent.VK_DOWN) {
+			if (keyEvent == KeyEvent.VK_S) {
 				player.moveDown();
 			}
-			if (keyEvent == KeyEvent.VK_LEFT) {
+			if (keyEvent == KeyEvent.VK_A) {
 				player.moveLeft();
 			}
-			if (keyEvent == KeyEvent.VK_RIGHT) {
+			if (keyEvent == KeyEvent.VK_D) {
 				player.moveRight();
 			}
 
@@ -234,10 +237,7 @@ public class TankView extends MasterViewPanel implements Observer {
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			int keyEvent = e.getKeyCode();
-			if (keyEvent == KeyEvent.VK_SPACE) {
-				player.shoot();
-			}
+			
 		}
 
 		@Override
@@ -255,75 +255,167 @@ public class TankView extends MasterViewPanel implements Observer {
 	public void update(Observable v, Object o) {
 		if (o instanceof String) {
 			String s = (String) o;
-			if (s.equals("CrateDead")) {// removing crate
-				obstacleList.remove(crate);
+			if(s.equals("moveCrate")) {
+				repaint();
 			}
-			if (s.equals("FireRingDead")) {// removing fire ring
-				obstacleList.remove(fireRing);
-			}
-			if (s.equals("TNTDead")) {// removing tnt
-				obstacleList.remove(tnt);
-			}
+			
 		}
+		if(o instanceof FireRing) {
+			FireRing fr = (FireRing)o;
+			for(int i = 0; i < tankList.size(); i++) {
+				PlayerTank t = tankList.get(i);
+				if(t.getRectangle().intersects(fr.getRectangle())) {
+				t.recieveDamage(1);
+				repaint();
+				break;
+				}
+			}
+			repaint();
+		}
+
 		if (o instanceof Projectile) {
+		
 			Projectile p = (Projectile) o;
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
-				repaint();
+
 			} else {
 				if (p.getRectangle().xCoord() == -1) {
 					projectileList.remove(p);
-					repaint();
+
 				}
-				if (crate.getRectangle().intersects(p.getRectangle())) {
-					p.collided();
-					projectileList.remove(p);
-					crate.recieveDamage(1);
-					repaint();
-				}
-				if (fireRing.getRectangle().intersects(p.getRectangle())) {
-					p.collided();
-					projectileList.remove(p);
-					fireRing.recieveDamage(1);
-					repaint();
-				}
-				if (tnt.getRectangle().intersects(p.getRectangle())) {
-					p.collided();
-					projectileList.remove(p);
-					tnt.recieveDamage(1);
-					repaint();
+				for (Obstacle obs : obstacleList) {
+					if (obs instanceof Crate) {
+						Crate c = (Crate) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+
+						}
+					}
+					if (obs instanceof TNT) {
+						TNT c = (TNT) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+						}
+					}
+					if (obs instanceof ImmovableBlock) {
+						ImmovableBlock c = (ImmovableBlock) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+
+						}
+					}
+					if (obs instanceof FireRing) {
+						FireRing c = (FireRing) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+
+						}
+					}
+					
+					
 				}
 
-				else {
-					repaint();
-				}
+				repaint();
+
 			}
 
 		}
-		if (o instanceof TankRectangle) {
+		if (o instanceof PlayerTank) {
+			PlayerTank p = (PlayerTank)o;
+			TankRectangle rect = p.getRectangle();
+			for(Obstacle obs: obstacleList) {
+				if(obs instanceof Crate) {
+					Crate c = (Crate)obs;
+					if(rect.intersects(c.getRectangle())) {
+					c.move(player.getDirection());
+					}
+				}
+				if(obs instanceof TNT) {
+					TNT c = (TNT)obs;
+					if(rect.intersects(c.getRectangle())) {
+					c.move(player.getDirection());
+					}
+				}
+				if(obs instanceof FireRing) {
+					FireRing c = (FireRing)obs;
+					if(rect.intersects(c.getRectangle())) {
+						p.recieveDamage(1);
+					}
+				}
+				if(obs instanceof SpikePit) {
+					SpikePit c = (SpikePit)obs;
+					if(rect.intersects(c.getRectangle())) {
+						p.recieveDamage(1);
+					}
+				}
+			}
 			repaint();
 		}
+		
 
 	}
-//for building the map. 
+
+	// for building the map.
 	public void buildMap() {
-		//remove later!!!!
+		// remove later!!!!
+		for(int i = 0; i < 1000; i = i + 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(i, 25));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
+		for(int i = 30; i < 1000; i = i + 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(915 , i));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
+		for(int i = 10; i < 1000; i = i + 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(i, 960));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
+		for(int i = 60; i < 1000; i = i + 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(25, i));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
 		crate = new Crate(new Point(600, 400));
-		immovableBlock = new ImmovableBlock((new Point(650, 400)));
+		for(int i = 664; i < 900; i = i + 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(i, 400));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
+		
 		fireRing = new FireRing((new Point(300, 400)));
 		spikePit = new SpikePit((new Point(100, 200)));
 		tnt = new TNT((new Point(650, 600)));
 		obstacleList.add(crate);
-		obstacleList.add(immovableBlock);
+		
 		obstacleList.add(fireRing);
 		obstacleList.add(spikePit);
 		obstacleList.add(tnt);
 		crate.addObserver(this);
-		immovableBlock.addObserver(this);
+	
 		fireRing.addObserver(this);
 		spikePit.addObserver(this);
 		tnt.addObserver(this);
-		
+
 	}
 }

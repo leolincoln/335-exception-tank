@@ -1,8 +1,11 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
 
-public class ImmovableBlockRectangle extends ObstacleRectangle{
+import javax.swing.ImageIcon;
+
+public class ImmovableBlockRectangle extends ObstacleRectangle {
 
 	private static final long serialVersionUID = 1L;
 
@@ -12,7 +15,12 @@ public class ImmovableBlockRectangle extends ObstacleRectangle{
 	}
 	
 	public Color setColor() {
-		return Color.white;
+		return Color.gray;
 	}
-	
+	public Image getImage() {
+		Image blockImage = new ImageIcon("images/block.png").getImage();
+		return blockImage;
+	}
+ 
+
 }

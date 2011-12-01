@@ -2,7 +2,10 @@ package rectangles;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Rectangle;
+
+import javax.swing.ImageIcon;
 
 public class TankRectangle extends Rectangle{
 	
@@ -54,6 +57,10 @@ public class TankRectangle extends Rectangle{
 	
 
 }
+	public Image getImage() {
+		Image t = new ImageIcon("images/tank.png").getImage();
+		return t;
+	}
 
 
 }

@@ -108,13 +108,14 @@ public class MasterView extends JFrame {
 			break;
 		case TANKVIEW:
 			this.setBackground(Color.black);
+			this.setSize(1000, 1000);
 			previousPane = currentPane;
 			currentPane = new TankView(this);
 			body.removeAll();
 			body.add(currentPane, "TANKVIEW");
 			currentPane.requestFocus();
 			this.setLocation(0, 0);
-			this.setExtendedState(this.MAXIMIZED_BOTH);
+//			this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;
 		case TITLE:
