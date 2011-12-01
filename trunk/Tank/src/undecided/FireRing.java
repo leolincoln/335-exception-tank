@@ -198,6 +198,16 @@ public class FireRing extends Observable implements Obstacle {
 						return false;
 					}
 				}
+				if(o instanceof FireRing) {
+					if(o != this) {
+					if(((FireRing) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row - 1, location.col);
+						rect = new FireRingRectangle(location.col - 25, location.row - 25);
+						moveable = false;
+						return false;
+					}
+					}
+				}
 			
 			}
 			if (location.row < 30) {
@@ -239,9 +249,19 @@ public class FireRing extends Observable implements Obstacle {
 						return false;
 					}
 				}
+				if(o instanceof FireRing) {
+					if(o != this) {
+					if(((FireRing) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row - 1, location.col);
+						rect = new FireRingRectangle(location.col - 25, location.row - 25);
+						moveable = false;
+						return false;
+					}
+				}
+				}
 				
 			}
-			if (location.row > 905) {
+			if (location.row > 665) {
 				location = new Point(location.row - 1, location.col);
 				rect = new FireRingRectangle(location.col - 25, location.row - 25);
 				moveable = false;
