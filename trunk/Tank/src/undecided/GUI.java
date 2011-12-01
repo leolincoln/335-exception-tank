@@ -20,9 +20,16 @@ public class GUI {
 	private static Dimension screen = Toolkit.getDefaultToolkit()
 			.getScreenSize();
 
+	/**
+	 * Main Thread
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		TankView t = new TankView(new MasterView());
-		
+
+		MasterView m = new MasterView();
+		m.setLocationRelativeTo(null);
+		TankView t = new TankView(m);
 		
 	}
 

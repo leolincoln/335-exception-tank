@@ -177,8 +177,6 @@ public class TankView extends MasterViewPanel implements Observer {
 				Crate c = (Crate) p;
 				CrateRectangle cRect = c.getRectangle();
 				g.drawImage(cRect.getImage(), cRect.xCoord(), cRect.yCoord(), null);
-				
-				
 			}
 			if (p instanceof ImmovableBlock) {// for instance of immovableBlock
 				ImmovableBlock ib = (ImmovableBlock) p;
