@@ -1,6 +1,9 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class FireRingRectangle extends ObstacleRectangle {
 
@@ -14,6 +17,9 @@ public class FireRingRectangle extends ObstacleRectangle {
 	public Color setColor() {
 		return Color.red;
 	}
- 
+	public Image getImage() {
+		Image fireImage = new ImageIcon("images/fireRing.png").getImage();
+		return fireImage;
+	}
 
 }

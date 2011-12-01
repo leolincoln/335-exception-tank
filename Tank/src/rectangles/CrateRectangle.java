@@ -1,6 +1,9 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class CrateRectangle extends ObstacleRectangle {
 
@@ -13,6 +16,10 @@ public class CrateRectangle extends ObstacleRectangle {
 	
 	public Color setColor() {
 		return Color.yellow;
+	}
+	public Image getImage() {
+		Image crate = new ImageIcon("images/crate.png").getImage();
+		return crate;
 	}
 
 }

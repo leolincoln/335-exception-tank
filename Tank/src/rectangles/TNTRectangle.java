@@ -1,6 +1,9 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class TNTRectangle extends ObstacleRectangle {
 	
@@ -13,6 +16,10 @@ public class TNTRectangle extends ObstacleRectangle {
 	@Override
 	public Color setColor() {
 		return Color.orange;
+	}
+	public Image getImage() {
+		Image t = new ImageIcon("images/tnt.png").getImage();
+		return t;
 	}
 
 }

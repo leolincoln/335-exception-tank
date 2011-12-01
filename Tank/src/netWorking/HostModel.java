@@ -12,24 +12,24 @@ public class HostModel {
 	
 	public HostModel() {
 		
-		host = new Socket(4000);
+//		host = new Socket(4000);
 		
 	}
 	
-	public void runHost() {
-		
-		try {
-			connectToServer();
-			getStreams();
-			processConnection();
-		}
-	}
-	
-	private void connectToServer() throws IOException {
-		
-	}
-	
-	
+//	public void runHost() {
+//		
+//		try {
+//			connectToServer();
+//			getStreams();
+//			processConnection();
+//		}
+//	}
+//	
+//	private void connectToServer() throws IOException {
+//		
+//	}
+//	
+//	
 	
 
 }

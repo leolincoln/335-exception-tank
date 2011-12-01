@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import undecided.Obstacle;
+
 
 
 public class Map implements Serializable{

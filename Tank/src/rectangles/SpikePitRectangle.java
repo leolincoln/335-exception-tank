@@ -1,6 +1,9 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 public class SpikePitRectangle extends ObstacleRectangle {
 
@@ -12,7 +15,11 @@ public class SpikePitRectangle extends ObstacleRectangle {
 	}
 	
 	public Color setColor() {
-		return Color.orange;
+		return Color.LIGHT_GRAY;
+	}
+	public Image getImage() {
+		Image s = new ImageIcon("images/spikePit.png").getImage();
+		return s;
 	}
 
 }

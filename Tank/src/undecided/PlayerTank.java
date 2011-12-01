@@ -1,5 +1,6 @@
 package undecided;
 
+import java.util.LinkedList;
 import java.util.Observable;
 
 import rectangles.TankRectangle;
@@ -109,34 +110,105 @@ public class PlayerTank extends Observable {
 	 * 
 	 * @return Point returns the point that is above the tank's current position
 	 */
-	public Point moveUp() {
+	public boolean moveUp() {
+		LinkedList<Obstacle> obs = TankView.obstacleList;
 		d = Direction.NORTH;
 		p = new Point(p.row - this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		if (p.row < 55) {
-			p = new Point(55, p.col);
-			t = new TankRectangle(p.col - 25, p.row - 25);
+		for (int i = 0; i < obs.size(); i++) {
+			Obstacle o = obs.get(i);
+			if (o instanceof ImmovableBlock) {
+				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row + this.speed, p.col);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					return false;
+				
+				}
+			}
+			if (o instanceof Crate) {
+				Crate c = (Crate) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row + this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+			if (o instanceof TNT) {
+				TNT c = (TNT) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row + this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+
 		}
-		notifyObservers(t);
+
+		if (p.row < 30) {
+			p = new Point(p.row + this.speed, p.col);
+			t = new TankRectangle(p.col - 25, p.row - 25);
+			return false;
+		}
+		notifyObservers(this);
 		setChanged();
-		return p;
+		return true;
 	}
 
 	/**
 	 * 
 	 * @return Point returns the point that is below the tank's current position
 	 */
-	public Point moveDown() {
+	public boolean moveDown() {
+		LinkedList<Obstacle> obs = TankView.obstacleList;
 		d = Direction.SOUTH;
 		p = new Point(p.row + this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		if (p.row > 965) {
-			p = new Point(965, p.col);
-			t = new TankRectangle(p.col - 25, p.row - 25);
+		for (int i = 0; i < obs.size(); i++) {
+			Obstacle o = obs.get(i);
+			if (o instanceof ImmovableBlock) {
+				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row - this.speed, p.col);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					return false;
+				}
+
+			}
+			if (o instanceof Crate) {
+				Crate c = (Crate) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row - this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+			if (o instanceof TNT) {
+				TNT c = (TNT) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row - this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
 		}
-		notifyObservers(t);
+
+		if (p.row > 905) {
+			p = new Point(p.row - this.speed, p.col);
+			t = new TankRectangle(p.col - 25, p.row - 25);
+			return false;
+		}
+		notifyObservers(this);
 		setChanged();
-		return p;
+		return true;
 	}
 
 	/**
@@ -144,17 +216,53 @@ public class PlayerTank extends Observable {
 	 * @return Point returns the point that is to the right of the tank's
 	 *         current position
 	 */
-	public Point moveRight() {
+	public boolean moveRight() {
+		LinkedList<Obstacle> obs = TankView.obstacleList;
 		d = Direction.EAST;
 		p = new Point(p.row, p.col + this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		if (p.col > 965) {
-			p = new Point(p.row, 965);
-			t = new TankRectangle(p.col - 25, p.row - 25);
+		for (int i = 0; i < obs.size(); i++) {
+			Obstacle o = obs.get(i);
+			if (o instanceof ImmovableBlock) {
+				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row, p.col - this.speed);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					return false;
+				}
+
+			}
+			if (o instanceof Crate) {
+				Crate c = (Crate) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row, p.col - this.speed);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+			if (o instanceof TNT) {
+				TNT c = (TNT) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row, p.col - this.speed);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+
 		}
-		notifyObservers(t);
+
+		if (p.col > 955) {
+			p = new Point(p.row, p.col - this.speed);
+			t = new TankRectangle(p.col - 25, p.row - 25);
+			return false;
+		}
+		notifyObservers(this);
 		setChanged();
-		return p;
+		return true;
 	}
 
 	/**
@@ -162,17 +270,53 @@ public class PlayerTank extends Observable {
 	 * @return Point returns the point that is to the left of the tank's current
 	 *         position
 	 */
-	public Point moveLeft() {
+	public boolean moveLeft() {
+		LinkedList<Obstacle> obs = TankView.obstacleList;
 		d = Direction.WEST;
 		p = new Point(p.row, p.col - this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		if (p.col < 35) {
-			p = new Point(p.row, 35);
-			t = new TankRectangle(p.col - 25, p.row - 25);
+		for (int i = 0; i < obs.size(); i++) {
+			Obstacle o = obs.get(i);
+			if (o instanceof ImmovableBlock) {
+				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row, p.col + this.speed);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					return false;
+				}
+
+			}
+			if (o instanceof Crate) {
+				Crate c = (Crate) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row, p.col + this.speed);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+			if (o instanceof TNT) {
+				TNT c = (TNT) o;
+				if(c.getRectangle().intersects(t)) {
+					if(!c.move(d)) {
+						p = new Point(p.row, p.col + this.speed);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						return false;
+					}
+				}
+			}
+
 		}
-		notifyObservers(t);
+
+		if (p.col < 30) {
+			p = new Point(p.row, p.col + this.speed);
+			t = new TankRectangle(p.col - 25, p.row - 25);
+			return false;
+		}
+		notifyObservers(this);
 		setChanged();
-		return p;
+		return true;
 	}
 
 	/**
@@ -231,10 +375,9 @@ public class PlayerTank extends Observable {
 	public void recieveDamage(int damage) {
 		health = health - damage;
 		if (this.isDead()) {
-			t = null;
-			p = null;
-			notifyObservers(this);
-			setChanged();
+			t = new TankRectangle(-100, -100);
+			p = new Point(-1, -1);
+			TankView.tankList.remove(this);
 		}
 
 	}

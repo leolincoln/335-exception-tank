@@ -1,4 +1,7 @@
 package undecided;
+
+
+import java.util.LinkedList;
 import java.util.Observable;
 import rectangles.CrateRectangle;
 
@@ -17,6 +20,7 @@ public class Crate extends Observable implements Obstacle {
 	private int health;// health of the crate (either 0 or 1)
 	private CrateRectangle rect;// shape for crate controlling collisions
 	private Point location;// location of crate
+
 
 	/**
 	 * Class Constructor
@@ -43,8 +47,7 @@ public class Crate extends Observable implements Obstacle {
 		health = health - dmg;
 		if (this.removeObstacle()) {
 			rect = new CrateRectangle(-1, -1);// removing off field
-			setChanged();
-			notifyObservers("CrateDead");
+			TankView.obstacleList.remove(this);
 		}
 
 	}
@@ -66,6 +69,192 @@ public class Crate extends Observable implements Obstacle {
 	 */
 	public int getHealth() {
 		return health;
+	}
+	
+	/**
+	 * @return moves the crate if it is being pushed by a tank
+	 */
+	public boolean move(Direction d) {
+		LinkedList<Obstacle> obs = TankView.obstacleList;
+		
+		if(d == Direction.EAST) {
+			location = new Point(location.row, location.col + 5);
+			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for (int i = 0; i < obs.size(); i++) {
+				Obstacle o = obs.get(i);
+				if(o instanceof ImmovableBlock) {
+					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row, location.col - 5);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof TNT) {
+					if(((TNT) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row, location.col - 5);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof Crate) {
+					if(o != this) {
+					if(((Crate) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row, location.col - 5);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+					}
+				}
+				if(o instanceof FireRing) {
+					if(((FireRing) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+						break;
+					}
+				}
+			}
+			if (location.col > 955) {
+				location = new Point(location.row, location.col - 5);
+				rect = new CrateRectangle(location.col - 25, location.row - 25);
+				return false;
+			}
+			notifyObservers("moveCrate");
+			setChanged();
+			
+		}
+		if(d == Direction.WEST) {
+			location = new Point(location.row, location.col - 5);
+			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for (int i = 0; i < obs.size(); i++) {
+				Obstacle o = obs.get(i);
+				if(o instanceof ImmovableBlock) {
+					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row, location.col + 5);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof TNT) {
+					if(((TNT) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row, location.col + 5);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof Crate) {
+					if(o != this) {
+					if(((Crate) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row, location.col + 5);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+					}
+				}
+				if(o instanceof FireRing) {
+					if(((FireRing) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+						break;
+					}
+				}
+			}
+			if (location.col < 30) {
+				location = new Point(location.row, location.col + 5);
+				rect = new CrateRectangle(location.col - 25, location.row - 25);
+				return false;
+			}
+			notifyObservers("moveCrate");
+			setChanged();
+			
+		}
+		if(d == Direction.NORTH) {
+			location = new Point(location.row - 5, location.col);
+			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for (int i = 0; i < obs.size(); i++) {
+				Obstacle o = obs.get(i);
+				if(o instanceof ImmovableBlock) {
+					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row + 5, location.col);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof TNT) {
+					if(((TNT) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row + 5, location.col);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof Crate) {
+					if(o != this) {
+					if(((Crate) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row + 5, location.col);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+					}
+				}
+				if(o instanceof FireRing) {
+					if(((FireRing) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+						break;
+					}
+				}
+			}
+			if (location.row < 30) {
+				location = new Point(location.row + 5, location.col);
+				rect = new CrateRectangle(location.col - 25, location.row - 25);
+				return false;
+			}
+			notifyObservers("moveCrate");
+			setChanged();
+	
+		}
+		if(d == Direction.SOUTH) {
+			location = new Point(location.row + 5, location.col);
+			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for (int i = 0; i < obs.size(); i++) {
+				Obstacle o = obs.get(i);
+				if(o instanceof ImmovableBlock) {
+					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row - 5, location.col);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof TNT) {
+					if(((TNT) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row - 5, location.col);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+				}
+				if(o instanceof Crate) {
+					if(o != this) {
+					if(((Crate) o).getRectangle().intersects(rect)) {
+						location = new Point(location.row - 5, location.col);
+						rect = new CrateRectangle(location.col - 25, location.row - 25);
+						return false;
+					}
+					}
+				}
+				if(o instanceof FireRing) {
+					if(((FireRing) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+						break;
+					}
+				}
+			}
+			if (location.row > 905) {
+				location = new Point(location.row - 5, location.col);
+				rect = new CrateRectangle(location.col - 25, location.row - 25);
+				return false;
+			}
+			notifyObservers("moveCrate");
+			setChanged();
+	
+		}
+		return true;
+
 	}
 
 	/**
