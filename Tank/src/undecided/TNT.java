@@ -55,6 +55,7 @@ public class TNT extends Observable implements Obstacle {
 					TNT c = (TNT)o;  
 					if(c.getRectangle().intersects(b)) {
 						c.recieveDamage(1);
+						i = 0;
 					
 					}
 					}
@@ -64,6 +65,7 @@ public class TNT extends Observable implements Obstacle {
 				PlayerTank t = tank.get(i);
 				if(t.getRectangle().intersects(b)) {
 					t.recieveDamage(1);
+					i = 0;
 				}
 			}
 			
@@ -249,7 +251,7 @@ public class TNT extends Observable implements Obstacle {
 					}
 				}
 			}
-			if (location.row > 905) {
+			if (location.row > 665) {
 				location = new Point(location.row - 5, location.col);
 				rect = new TNTRectangle(location.col - 25, location.row - 25);
 				return false;

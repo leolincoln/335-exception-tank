@@ -244,7 +244,7 @@ public class Crate extends Observable implements Obstacle {
 					}
 				}
 			}
-			if (location.row > 905) {
+			if (location.row > 665) {
 				location = new Point(location.row - 5, location.col);
 				rect = new CrateRectangle(location.col - 25, location.row - 25);
 				return false;

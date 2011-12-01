@@ -108,7 +108,7 @@ public class MasterView extends JFrame {
 			break;
 		case TANKVIEW:
 			this.setBackground(Color.black);
-			this.setSize(1000, 1000);
+			this.setSize(1000, 750);
 			previousPane = currentPane;
 			currentPane = new TankView(this);
 			body.removeAll();

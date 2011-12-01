@@ -201,7 +201,7 @@ public class PlayerTank extends Observable {
 			}
 		}
 
-		if (p.row > 905) {
+		if (p.row > 665) {
 			p = new Point(p.row - this.speed, p.col);
 			t = new TankRectangle(p.col - 25, p.row - 25);
 			return false;

@@ -68,7 +68,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	public TankView(MasterView m) {
 		super(m);
 
-		player = new PlayerTank(new Point(450, 475));
+		player = new PlayerTank(new Point(400, 125));
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
@@ -380,17 +380,17 @@ public class TankView extends MasterViewPanel implements Observer {
 	// for building the map.
 	public void buildMap() {
 		// remove later!!!!
-		for(int i = 0; i < 1000; i = i + 50) {
+		for(int i = 0; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 25));
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
 		for(int i = 30; i < 1000; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(915 , i));
+			ImmovableBlock b = new ImmovableBlock(new Point(665 , i));
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
-		for(int i = 10; i < 1000; i = i + 50) {
+		for(int i = 10; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 960));
 			obstacleList.add(b);
 			b.addObserver(this);
@@ -400,73 +400,93 @@ public class TankView extends MasterViewPanel implements Observer {
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
-
-		for(int i = 350; i < 650; i = i + 50) {
-			for(int j = 350; j < 650; j = j + 50) {
-				if(i == 350 || j == 350 || j == 600) {
-				ImmovableBlock b = new ImmovableBlock(new Point(i, j));
+		for(int i = 75; i < 275; i = i + 50) {
+			for(int j = 300; j < 550; j = j + 50) {
+				if(j == 300 || j == 500) {
+				ImmovableBlock b = new ImmovableBlock(new Point(j, i));
 				obstacleList.add(b);
 				b.addObserver(this);
 				}
-				if(i == 600 && j != 350 && j != 600) {
-					Crate c = new Crate(new Point(i, j));
+				if(j != 300 && j != 500 && i == 225) {
+					Crate c = new Crate(new Point(j, i));
 					obstacleList.add(c);
 					c.addObserver(this);
 				}
+				if(j != 300 && j != 500 && j != 400 && i == 75) {
+					SpikePit s = new SpikePit(new Point(j, i));
+					obstacleList.add(s);
+					s.addObserver(this);
+				}
 			}
 		}
-		for(int i = 450; i < 550; i = i + 50) {
-			for(int j = 800; j < 950; j = j + 50) {
-				ImmovableBlock b = new ImmovableBlock(new Point(i, j + 8));
-				obstacleList.add(b);
-				b.addObserver(this);
-				
+		for(int i = 555; i < 655; i = i + 50) {
+			for(int j = 75; j < 225; j = j + 50) {
+				if(i == 605 && j == 125) {
+					TNT t = new TNT(new Point(i, j));
+					obstacleList.add(t);
+					t.addObserver(this);
+				}
+				else {
+				Crate c = new Crate(new Point(i, j));
+				obstacleList.add(c);
+				c.addObserver(this);
+			}
 			}
 		}
-		FireRing fr = new FireRing(new Point(100, 100));
+		for(int i = 710; i < 1000; i += 50) {
+			ImmovableBlock b = new ImmovableBlock(new Point(125, i));
+			obstacleList.add(b);
+			b.addObserver(this);
+		}
+		FireRing fr = new FireRing(new Point(75, 910));
 		obstacleList.add(fr);
 		fr.addObserver(this);
-		FireRing fr2 = new FireRing(new Point(350, 800));
-		obstacleList.add(fr2);
-		fr2.addObserver(this);
-		for(int i = 400; i < 600; i = i + 50) {
-		SpikePit sp = new SpikePit(new Point(400, i));
-		obstacleList.add(sp);
-		sp.addObserver(this);
-		}
-		for(int i = 75; i < 280; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(800, i));
-			obstacleList.add(b);
-			b.addObserver(this);
-		}
-		for(int i = 75; i < 280; i = i + 50) {
-			TNT b = new TNT(new Point(860, i));
-			obstacleList.add(b);
-			b.addObserver(this);
-		}
 		
-		
-		for(int i = 200; i < 300; i = i + 50) {
-			for(int j = 350; j < 650; j = j + 50) {
+		for(int i = 60; i < 500; i += 50) {
+			for(int j = 460; j < 560; j += 50) {
+				ImmovableBlock b = new ImmovableBlock(new Point(i, j));
+				obstacleList.add(b);
+				b.addObserver(this);
+			}
+		}
+		for(int i = 513; i < 650; i += 50) {
+			Crate c = new Crate(new Point(i, 500));
+			obstacleList.add(c);
+			c.addObserver(this);
+		}
+		for(int i = 75; i < 275; i += 50) {
+			for(int j = 75; j < 275; j+= 50) {
 				TNT t = new TNT(new Point(i, j));
 				obstacleList.add(t);
 				t.addObserver(this);
 			}
 		}
-		for(int i = 665; i < 915; i = i + 50) {
-			for(int j = 760; j < 960; j = j + 50) {
-				if(i == 665 || j == 760) {
-				Crate c = new Crate(new Point(i, j));
-				obstacleList.add(c);
-				c.addObserver(this);
-				}
-				if(i == 715 && j == 810) {
-					TNT b = new TNT(new Point(i, j));
-					obstacleList.add(b);
-					b.addObserver(this);
-				}
+		for(int i = 560; i < 810; i+= 50) {
+			for(int j = 225; j < 325; j+=50) {
+				ImmovableBlock b = new ImmovableBlock(new Point(j, i));
+				obstacleList.add(b);
+				b.addObserver(this);
 			}
 		}
+		FireRing fr2 = new FireRing(new Point(600, 900));
+		obstacleList.add(fr2);
+		fr2.addObserver(this);
+		
+		for(int i = 490; i < 590; i+=50) {
+			for(int j = 700; j < 900; j+= 50) {
+				ImmovableBlock b = new ImmovableBlock(new Point(i, j));
+				obstacleList.add(b);
+				b.addObserver(this);
+			}
+		}
+		for(int i = 560; i < 660; i+= 50) {
+			for(int j = 325; j < 425; j+=50) {
+				TNT t = new TNT(new Point(j, i));
+				obstacleList.add(t);
+				t.addObserver(this);
+			}
+		}
+
 		
 
 	}
