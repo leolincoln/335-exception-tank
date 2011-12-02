@@ -3,10 +3,18 @@ package View;
 import java.util.Observable;
 import java.util.Observer;
 
-public class NetWorkTankView extends MasterViewPanel implements Observer{
+import map.Map;
 
-	public NetWorkTankView(MasterView m) {
+public class NetWorkTankView extends MasterViewPanel implements Observer{
+private int mapNumber;
+private Map map;
+
+	public NetWorkTankView(MasterView m, int num) {
 		super(m);
+		this.mapNumber = num;
+		readMap();
+		buildMap();
+		
 		// TODO Auto-generated constructor stub
 	}
 

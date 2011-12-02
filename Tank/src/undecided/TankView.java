@@ -413,6 +413,7 @@ public class TankView extends MasterViewPanel implements Observer {
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
+		
 		for (int i = 60; i < 1000; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(25, i));
 			obstacleList.add(b);
