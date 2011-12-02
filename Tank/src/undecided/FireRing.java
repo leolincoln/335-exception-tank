@@ -177,7 +177,6 @@ public class FireRing extends Observable implements Obstacle {
 					}
 					}
 				}
-			
 			}
 			if (location.col < 30) {
 				location = new Point(location.row, location.col + 1);
@@ -187,7 +186,6 @@ public class FireRing extends Observable implements Obstacle {
 			}
 			notifyObservers(this);
 			setChanged();
-			
 		}
 		if(d == Direction.NORTH) {
 			location = new Point(location.row - 1, location.col);
