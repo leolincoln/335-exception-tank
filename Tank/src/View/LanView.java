@@ -121,9 +121,7 @@ public class LanView extends MasterViewPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			m.changeView(Views.HOST);
-
 		}
-
 	}
 
 	/**
