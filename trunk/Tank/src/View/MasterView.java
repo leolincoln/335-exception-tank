@@ -123,11 +123,10 @@ public class MasterView extends JFrame {
 			body.removeAll();
 			body.add(currentPane, "HOST");
 			this.setLocationRelativeTo(null);
-			this.setLocation(50, 50);
 			this.setSize(600, 400);
-
-			
 			break;
+			
+			
 		case LAN:
 			this.setBackground(Color.white);
 			previousPane = currentPane;
