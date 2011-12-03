@@ -22,10 +22,12 @@ import View.MasterView;
 import View.MasterViewPanel;
 
 import rectangles.BlastRadiusRectangle;
+import rectangles.BubbleShieldRectangle;
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
 import rectangles.ImmovableBlockRectangle;
 import rectangles.ProjectileRectangle;
+import rectangles.SpeedBoostRectangle;
 import rectangles.SpikePitRectangle;
 import rectangles.TNTRectangle;
 import rectangles.TankRectangle;
@@ -55,6 +57,9 @@ public class TankView extends MasterViewPanel implements Observer {
 	public static LinkedList<Projectile> projectileList;
 	public static LinkedList<Obstacle> obstacleList;
 	public static LinkedList<PlayerTank> tankList;
+	public static LinkedList<Item> itemList;
+	private TankView thisView;
+	private ItemCreator creator;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 
 	/**
@@ -69,6 +74,9 @@ public class TankView extends MasterViewPanel implements Observer {
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
+		itemList = new LinkedList<Item>();
+		creator = new ItemCreator();
+		creator.start();
 		tankList.add(player);
 		player.addObserver(this);
 		panel = new JPanel();
@@ -85,6 +93,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		this.buildMap(null);
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
+		thisView = this;
 
 	}
 
@@ -189,7 +198,19 @@ public class TankView extends MasterViewPanel implements Observer {
 		
 		for (PlayerTank p : tankList) {
 			TankRectangle tRect = p.getRectangle();
+			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
+		for (Item p : itemList) {
+			if(p instanceof SpeedBoost) {
+			SpeedBoost s = (SpeedBoost)p;
+			SpeedBoostRectangle tRect = s.getRectangle();
 			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
+			if(p instanceof BubbleShield) {
+			BubbleShield s = (BubbleShield)p;
+			BubbleShieldRectangle tRect = s.getRectangle();
+			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+			}
 		}
 		for (int i = 0; i < obstacleList.size(); i++) {
 			Obstacle p = obstacleList.get(i);
@@ -274,6 +295,16 @@ public class TankView extends MasterViewPanel implements Observer {
 	 * remove dead obstacles and repaint the projectiles.
 	 */
 	public synchronized void update(Observable v, Object o) {
+		if(o instanceof BubbleShield) {
+			BubbleShield b = (BubbleShield)o;
+			itemList.add(b);
+			repaint();
+		}
+		if(o instanceof SpeedBoost) {
+			SpeedBoost b = (SpeedBoost)o;
+			itemList.add(b);
+			repaint();
+		}
 		if (o instanceof String) {
 			String s = (String) o;
 			if (s.equals("moveCrate")) {
@@ -304,6 +335,28 @@ public class TankView extends MasterViewPanel implements Observer {
 			} else {
 				if (p.getRectangle().xCoord() <=0) {
 					projectileList.remove(p);
+				}
+				for(Item i : itemList) {
+					if(i instanceof BubbleShield) {
+						BubbleShield c = (BubbleShield)i;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							itemList.remove(c);
+							repaint();
+							break;
+						}
+					}
+					if(i instanceof SpeedBoost) {
+						SpeedBoost c = (SpeedBoost)i;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							itemList.remove(c);
+							repaint();
+							break;
+						}
+					}
 				}
 				for (Obstacle obs : obstacleList) {
 					if (obs instanceof Crate) {
@@ -359,6 +412,26 @@ public class TankView extends MasterViewPanel implements Observer {
 		if (o instanceof PlayerTank) {
 			PlayerTank p = (PlayerTank) o;
 			TankRectangle rect = p.getRectangle();
+			for(Item i : itemList) {
+				if(i instanceof BubbleShield) {
+					BubbleShield c = (BubbleShield)i;
+					if (c.getRectangle().intersects(p.getRectangle())) {
+						c.activateEffect(p);
+						itemList.remove(c);
+						repaint();
+						break;
+					}
+				}
+				if(i instanceof SpeedBoost) {
+					SpeedBoost c = (SpeedBoost)i;
+					if (c.getRectangle().intersects(p.getRectangle())) {
+						c.activateEffect(p);
+						itemList.remove(c);
+						repaint();
+						break;
+					}
+				}
+			}
 			for (Obstacle obs : obstacleList) {
 				if (obs instanceof Crate) {
 					Crate c = (Crate) obs;
@@ -507,4 +580,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		}
 
 	}
+	
+	
 }
+

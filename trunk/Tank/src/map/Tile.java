@@ -1,6 +1,7 @@
 package map;
 
 import battleModel.Tank;
+import undecided.Item;
 import undecided.Obstacle;
 
 public class Tile {

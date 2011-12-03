@@ -1,7 +1,10 @@
 package undecided;
 
+import java.awt.Image;
 import java.util.LinkedList;
 import java.util.Observable;
+
+import javax.swing.ImageIcon;
 
 import rectangles.TankRectangle;
 
@@ -27,6 +30,7 @@ public class PlayerTank extends Observable {
 	private TankRectangle t;
 	private int health;
 	private Direction d;
+	private Image img;
 
 	/**
 	 * Class constructor
@@ -40,6 +44,7 @@ public class PlayerTank extends Observable {
 		health = 1;
 		d = Direction.EAST;
 		t = new TankRectangle(p.col - 25, p.row - 25);
+		img = new ImageIcon("images/tank.png").getImage();
 
 	}
 
@@ -67,6 +72,10 @@ public class PlayerTank extends Observable {
 	public Point getLocation() {
 		return p;
 	}
+	
+	public Image getImage() {
+		return img;
+	}
 
 	/**
 	 * 
@@ -75,6 +84,18 @@ public class PlayerTank extends Observable {
 	 */
 	public void setLocation(Point p) {
 		this.p = p;
+	}
+	
+	public int getHealth() {
+		return health;
+	}
+
+
+	public void setHealth(int x) {
+		if(x == 2) {
+			img = new ImageIcon("images/tankShield.png").getImage();
+		}
+		health = x;
 	}
 
 	/**
@@ -85,16 +106,8 @@ public class PlayerTank extends Observable {
 	 *            this is the terrain in which the tank is on whether grass,
 	 *            ice, or sand
 	 */
-	public void setSpeed(Terrain t) {
-		if (t instanceof Ice) {
-			speed = 7;
-		}
-		if (t instanceof Sand) {
-			speed = 3;
-		}
-		if (t instanceof Grass) {
-			speed = 5;
-		}
+	public void setSpeed(int x) {
+		speed = x;
 
 	}
 
@@ -379,9 +392,46 @@ public class PlayerTank extends Observable {
 			p = new Point(-1, -1);
 			TankView.tankList.remove(this);
 		}
+		else {
+			ImmuneThread it = new ImmuneThread();
+			it.start();
+		}
 
 	}
-
+	
+	private class ImmuneThread extends Thread {
+		private int timePassed;
+		
+		public ImmuneThread() {
+			timePassed = 0;
+		}
+		
+		@Override
+		public void run() {
+			while(timePassed < 17) {
+			if(timePassed < 16) {
+				health = 10000;
+			}
+			if(timePassed == 16) {
+				health = 1;
+			}
+			if(timePassed % 2 == 0) {
+				img = new ImageIcon("images/tank.png").getImage(); 
+			}
+			if(timePassed %2 == 1) {
+				img = new ImageIcon("images/tankShield.png").getImage(); 
+				
+			}
+			timePassed++;
+			try {
+				Thread.sleep(125);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	}
 	/**
 	 * 
 	 * @return boolean returns whether this player controlled tank is alive or
@@ -390,4 +440,5 @@ public class PlayerTank extends Observable {
 	public boolean isDead() {
 		return (health == 0);
 	}
+	
 }

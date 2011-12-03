@@ -26,6 +26,12 @@ public abstract class ItemRectangle extends Rectangle {
 		this.h = 50;
 
 	}
+	public int xCoord() {
+		return x;
+	}
+	public int yCoord() {
+		return y;
+	}
 
 	public Dimension findCenter() {
 		int xCenter = 0;

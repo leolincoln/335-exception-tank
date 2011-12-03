@@ -12,8 +12,8 @@ private Map map;
 	public NetWorkTankView(MasterView m, int num) {
 		super(m);
 		this.mapNumber = num;
-		readMap();
-		buildMap();
+//		readMap();
+//		buildMap();
 		
 		// TODO Auto-generated constructor stub
 	}
