@@ -83,13 +83,12 @@ public class HostView extends MasterViewPanel implements Observer {
 		clientTankPane.add(clientTankType);
 		ready = new JButton("Ready!");
 		ready.addActionListener(new readyListener());
-		ready.setEnabled(true);
+		ready.setEnabled(false);
 
 		client.add(clientTop);
 		client.add(clientNamePane);
 		client.add(clientTankPane);
 		client.add(ready);
-
 		this.add(client);
 	}
 
