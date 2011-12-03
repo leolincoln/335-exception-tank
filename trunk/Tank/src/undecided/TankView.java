@@ -18,6 +18,8 @@ import java.util.Observer;
 
 import javax.swing.*;
 
+import map.Map;
+
 import View.MasterView;
 import View.MasterViewPanel;
 
@@ -61,6 +63,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	private TankView thisView;
 	private ItemCreator creator;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
+	private Map map;
 
 	/**
 	 * Class constructor
@@ -472,6 +475,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	 */
 	public void buildMap(String mapFile) {
 		// remove later!!!!
+		
 		for (int i = 0; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 25));
 			obstacleList.add(b);

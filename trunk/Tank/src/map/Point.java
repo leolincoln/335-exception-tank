@@ -1,4 +1,7 @@
 package map;
+
+import java.io.Serializable;
+
 /**
  * 
  * @author Team Exception
@@ -7,7 +10,7 @@ package map;
  *         used to determine the location of tanks and obstacles
  * 
  */
-public class Point {
+public class Point implements Serializable{
 
 	public final int row;
 	public final int col;
