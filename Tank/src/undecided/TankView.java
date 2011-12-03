@@ -186,6 +186,7 @@ public class TankView extends MasterViewPanel implements Observer {
 			ProjectileRectangle rect = p.getRectangle();
 			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 		}
+		
 		for (PlayerTank p : tankList) {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
@@ -278,8 +279,8 @@ public class TankView extends MasterViewPanel implements Observer {
 			if (s.equals("moveCrate")) {
 				repaint();
 			}
-
 		}
+		
 		if (o instanceof FireRing) {
 			FireRing fr = (FireRing) o;
 			for (int i = 0; i < tankList.size(); i++) {
@@ -301,7 +302,7 @@ public class TankView extends MasterViewPanel implements Observer {
 				p.addObserver(this);
 
 			} else {
-				if (p.getRectangle().xCoord() == -1) {
+				if (p.getRectangle().xCoord() <=0) {
 					projectileList.remove(p);
 				}
 				for (Obstacle obs : obstacleList) {
