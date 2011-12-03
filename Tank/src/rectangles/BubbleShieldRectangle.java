@@ -1,6 +1,9 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 /**
  * 
@@ -22,6 +25,11 @@ public class BubbleShieldRectangle extends ItemRectangle {
 	@Override
 	public Color setColor() {
 		return Color.blue;
+	}
+	
+	public Image getImage() {
+		Image crate = new ImageIcon("images/bubbleShield.png").getImage();
+		return crate;
 	}
 
 }

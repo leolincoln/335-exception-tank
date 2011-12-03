@@ -1,6 +1,9 @@
 package rectangles;
 
 import java.awt.Color;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 /**
  * 
@@ -23,5 +26,8 @@ public class SpeedBoostRectangle extends ItemRectangle {
 	public Color setColor() {
 		return Color.cyan;
 	}
-
+	public Image getImage() {
+		Image crate = new ImageIcon("images/speedBoost.png").getImage();
+		return crate;
+	}
 }
