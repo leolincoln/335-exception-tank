@@ -28,7 +28,6 @@ public class ServerModel implements Runnable, Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	public void connect(String ip) throws IOException {
