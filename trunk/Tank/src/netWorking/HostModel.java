@@ -1,5 +1,6 @@
 package netWorking;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -16,35 +17,39 @@ public class HostModel implements Runnable, Observer {
 	private ServerSocket host;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
-	private ArrayList<String> ipList;
+	public static ArrayList<String> ipList;
+	private Socket client;
 	
 	public HostModel() {
 		
-	setUpHost();
-
 		
 	}
 	
 	public void setUpHost() throws IOException{
 		host = new ServerSocket(4000);
+		String ip = InetAddress.getLocalHost().toString();
+		ipList.add(ip);
 		JOptionPane.showMessageDialog(null, "connecting");
-		host.setSoTimeout(60000);
-		out = new ObjectOutputStream(socket.getOutputStream());
-		out.writeObject(m);
-
-	
 
 }
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		
+	
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		try {
+			setUpHost();
+			client = 
+		}
+		
+		catch(IOException ioe) {
+			
+		}
 		
 	}
 }
