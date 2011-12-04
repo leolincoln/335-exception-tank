@@ -12,5 +12,4 @@ public abstract void receiveDamage(int dmg);
 public abstract void setLocation(Point p);
 public abstract Point getLocation();
 public abstract void move(Direction d);
-
 }
