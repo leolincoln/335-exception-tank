@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import netWorking.HostModel;
+
 public class HostView extends MasterViewPanel implements Observer {
 	private JPanel host, client, hostNamePane, clientNamePane, hostTankPane,
 			clientTankPane;
@@ -19,6 +21,7 @@ public class HostView extends MasterViewPanel implements Observer {
 			clientTankType, waitForClient;
 	public JButton ready, start;
 	public JTextField hostNameText, clientNameText;
+	public HostModel hm;
 	
 	/**
 	 * 

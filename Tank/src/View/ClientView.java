@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import netWorking.ClientModel;
+
 public class ClientView extends MasterViewPanel implements Observer {
 	private JPanel host, client, hostNamePane, clientNamePane, hostTankPane,
 			clientTankPane;
@@ -20,6 +22,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 	public JButton ready, start;
 	public JTextField hostNameText, clientNameText;
 	public String ip;
+	public ClientModel cm;
 	
 	/**
 	 * 
@@ -29,6 +32,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 
 	public ClientView(MasterView m,String ip) {
 		super(m);
+		cm = new ClientModel(ip);
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
