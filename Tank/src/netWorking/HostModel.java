@@ -2,6 +2,7 @@ package netWorking;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 public class HostModel {
@@ -12,11 +13,11 @@ public class HostModel {
 	
 	public HostModel() {
 		
-//		host = new Socket(4000);
+	host = new Socket(InetAddress.getByName(ip), 4000);
 		
 	}
 	
-//	public void runHost() {
+	public void runHost() {
 //		
 //		try {
 //			connectToServer();
@@ -26,10 +27,9 @@ public class HostModel {
 //	}
 //	
 //	private void connectToServer() throws IOException {
-//		
+//	
 //	}
-//	
-//	
+
 	
 
 }

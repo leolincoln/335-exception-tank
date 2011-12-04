@@ -20,12 +20,15 @@ import javax.swing.JPanel;
  * 
  */
 public class LanView extends MasterViewPanel {
+	private String ip="127.0.0.1";
+
 
 	private static final long serialVersionUID = 1L;
 	private JPanel northPane, buttonPane, centerPane;
 	public JButton back, create, join,search;
 	private JLabel hosts, ping;
 	public JList hostList, pingList;
+	
 
 	/**
 	 * Class constructor
@@ -133,7 +136,8 @@ public class LanView extends MasterViewPanel {
 	private class joinListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			m.changeView(Views.CLIENT,null);
+			System.out.println("IP sent is: " + ip);
+			m.changeView(Views.CLIENT,ip);
 
 		}
 
