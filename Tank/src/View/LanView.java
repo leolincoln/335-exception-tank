@@ -102,7 +102,7 @@ public class LanView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.changeView(Views.PREVIOUS);
+			m.changeView(Views.PREVIOUS,null);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class LanView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			m.changeView(Views.HOST);
+			m.changeView(Views.HOST,null);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class LanView extends MasterViewPanel {
 	private class joinListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			m.changeView(Views.CLIENT);
+			m.changeView(Views.CLIENT,null);
 
 		}
 

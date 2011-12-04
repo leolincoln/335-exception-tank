@@ -19,6 +19,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 			clientTankType, waitForClient;
 	public JButton ready, start;
 	public JTextField hostNameText, clientNameText;
+	public String ip;
 	
 	/**
 	 * 
@@ -26,7 +27,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 	
 	private static final long serialVersionUID = 1L;
 
-	public ClientView(MasterView m) {
+	public ClientView(MasterView m,String ip) {
 		super(m);
 		buildMain();
 		buildHostPanel();
