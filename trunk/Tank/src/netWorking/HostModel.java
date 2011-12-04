@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
 
-public class HostModel implements Observer {
+public class HostModel extends Observable implements Runnable,  Observer {
 	
 	private Socket host;
 	private ObjectInputStream ois;
@@ -38,6 +38,12 @@ public class HostModel implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void run() {
 		// TODO Auto-generated method stub
 		
 	}
