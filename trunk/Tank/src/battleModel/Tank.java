@@ -1,7 +1,7 @@
 package battleModel;
 
 import map.Point;
-import map.Tile;
+
 
 public abstract class Tank {
 private boolean activeItem;

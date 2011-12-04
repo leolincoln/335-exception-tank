@@ -46,6 +46,10 @@ import undecided.TankView.moveAndShootListener;*/
 import map.Map;
 
 public class NetWorkTankView extends MasterViewPanel implements Observer{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 private int mapNumber;
 private Map map;
 private JPanel panel;
