@@ -113,13 +113,13 @@ public class MasterView extends JFrame {
 	 * @param v
 	 *            this is the view that is to be switched to.
 	 */
-	public void changeView(Views v) {
+	public void changeView(Views v,String ip) {
 		switch (v) {
 		
 		case CLIENT:
 			this.setBackground(Color.white);
 			previousPane = currentPane;
-			currentPane = new ClientView(this);
+			currentPane = new ClientView(this,ip);
 			body.removeAll();
 			body.add(currentPane,"CLIENT");
 			this.setLocation(50, 50);
@@ -168,11 +168,11 @@ public class MasterView extends JFrame {
 			previousPane = currentPane;
 			currentPane = temp;
 			if (currentPane instanceof LanView)
-				changeView(Views.LAN);
+				changeView(Views.LAN,null);
 			if (currentPane instanceof TitleView)
-				changeView(Views.TITLE);
+				changeView(Views.TITLE,null);
 			if (currentPane instanceof TankView)
-				changeView(Views.TANKVIEW);
+				changeView(Views.TANKVIEW,null);
 
 			body.removeAll();
 			body.add(currentPane, v.name());
@@ -221,7 +221,7 @@ public class MasterView extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			m.setSize(400, 600);
 			m.setLocationRelativeTo(null);
-			changeView(Views.TANKVIEW);
+			changeView(Views.TANKVIEW,null);
 
 		}
 
@@ -258,7 +258,7 @@ public class MasterView extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			m.setSize(400, 600);
 			m.setLocationRelativeTo(null);
-			changeView(Views.LAN);
+			changeView(Views.LAN,null);
 		}
 
 	}
@@ -277,7 +277,7 @@ public class MasterView extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			m.setSize(400, 600);
 			m.setLocationRelativeTo(null);
-			changeView(Views.TITLE);
+			changeView(Views.TITLE,null);
 
 		}
 
