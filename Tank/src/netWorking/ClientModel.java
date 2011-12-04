@@ -14,15 +14,15 @@ import javax.swing.JOptionPane;
 
 public class ClientModel  extends Observable implements Observer{
 String ip;
-public Socket socket;
+public Socket socket=null;
 public ObjectOutputStream out;
 public ObjectInputStream in;
+private Object unKnown;
 	public ClientModel(String ip){
 		try {
 			socket = new Socket(ip,4000);
-			Thread listen = new GameListener(socket);
-			listen.run();
-			
+			socket.setSoTimeout(50);
+			listenStart();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -32,33 +32,45 @@ public ObjectInputStream in;
 		}
 		
 	}
+	public void listenStart(){
+		Thread listen = new GameListener();
+		listen.start();
+	}
+	public void ready(){
+		Thread send = new readySender();
+		send.start();
+	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
 	}
-	private class GameSender extends Thread implements Runnable{
 
-		@Override
-		public void run() {
-			
+	
+	private class readySender extends Thread implements Runnable{
+		public void run(){
+			try{
+				out = new ObjectOutputStream(socket.getOutputStream());
+				out.writeObject(new String("ready"));
+				
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
 		}
-		
 	}
+	
+	
 	private class GameListener extends Thread implements Runnable, Observer {
-		private Socket socket=null;
-		private ServerSocket serverSocket=null;
-		Object unKnown;
-		public GameListener(Object o){
-			if(o instanceof Socket) this.socket=(Socket)o;
-			if(o instanceof ServerSocket) this.serverSocket=(ServerSocket)o;
-		}
+		
+		
+		
 
 		@Override
 		public void run() {
 			while (true){
 			try{
-				socket.setSoTimeout(50);
+				
 				in = new ObjectInputStream(socket.getInputStream());
 				unKnown = in.readObject();	
 			}
@@ -68,6 +80,9 @@ public ObjectInputStream in;
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			if(unKnown !=null){
+				//switch the view to networkTankview, and pass the ClientModel. 
 			}
 			try {
 				sleep(10);
