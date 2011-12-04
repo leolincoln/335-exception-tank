@@ -126,6 +126,19 @@ public class MasterView extends JFrame {
 			this.setSize(600, 400);
 			break;
 			
+		case NETWORKTANKVIEW:
+			this.setBackground(Color.black);
+			this.setSize(1000, 750);
+			previousPane = currentPane;
+			currentPane = new NetWorkTankView(this, 1);
+			body.removeAll();
+			body.add(currentPane, "NETWORKTANKVIEW");
+			currentPane.requestFocus();
+			this.setLocationRelativeTo(null);
+			// this.setExtendedState(this.MAXIMIZED_BOTH);
+
+			break;
+			
 			
 		case LAN:
 			this.setBackground(Color.white);
