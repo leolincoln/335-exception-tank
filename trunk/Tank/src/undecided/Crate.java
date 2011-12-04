@@ -17,9 +17,14 @@ import rectangles.CrateRectangle;
  */
 public class Crate extends Observable implements Obstacle {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int health;// health of the crate (either 0 or 1)
 	private CrateRectangle rect;// shape for crate controlling collisions
 	private Point location;// location of crate
+	private PlayerTank player;
 
 
 	/**
@@ -29,7 +34,7 @@ public class Crate extends Observable implements Obstacle {
 	 *            point of the location at which the crate is to be created
 	 */
 	public Crate(Point p) {
-
+		player = TankView.tankList.getFirst();
 		location = p;
 		health = 1;// one shot death
 		// 25 is to offset for the size so it's not off the field
@@ -76,22 +81,40 @@ public class Crate extends Observable implements Obstacle {
 	 */
 	public boolean move(Direction d) {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
+		LinkedList<PlayerTank> players = TankView.tankList;
+		LinkedList<EnemyTank> enemies = TankView.enemyList;
 		
 		if(d == Direction.EAST) {
-			location = new Point(location.row, location.col + 5);
+			location = new Point(location.row, location.col + player.getSpeed());
 			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col - player.getSpeed());
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col - player.getSpeed());
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
 					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row, location.col - 5);
+						location = new Point(location.row, location.col - player.getSpeed());
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
 				}
 				if(o instanceof TNT) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row, location.col - 5);
+						location = new Point(location.row, location.col - player.getSpeed());
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -99,7 +122,7 @@ public class Crate extends Observable implements Obstacle {
 				if(o instanceof Crate) {
 					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row, location.col - 5);
+						location = new Point(location.row, location.col - player.getSpeed());
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -113,7 +136,7 @@ public class Crate extends Observable implements Obstacle {
 				}
 			}
 			if (location.col > 955) {
-				location = new Point(location.row, location.col - 5);
+				location = new Point(location.row, location.col - player.getSpeed());
 				rect = new CrateRectangle(location.col - 25, location.row - 25);
 				return false;
 			}
@@ -122,20 +145,36 @@ public class Crate extends Observable implements Obstacle {
 			
 		}
 		if(d == Direction.WEST) {
-			location = new Point(location.row, location.col - 5);
+			location = new Point(location.row, location.col - player.getSpeed());
 			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col + player.getSpeed());
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col - player.getSpeed());
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
 					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row, location.col + 5);
+						location = new Point(location.row, location.col + player.getSpeed());
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
 				}
 				if(o instanceof TNT) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row, location.col + 5);
+						location = new Point(location.row, location.col + player.getSpeed());
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -143,7 +182,7 @@ public class Crate extends Observable implements Obstacle {
 				if(o instanceof Crate) {
 					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row, location.col + 5);
+						location = new Point(location.row, location.col + player.getSpeed());
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -157,7 +196,7 @@ public class Crate extends Observable implements Obstacle {
 				}
 			}
 			if (location.col < 30) {
-				location = new Point(location.row, location.col + 5);
+				location = new Point(location.row, location.col + player.getSpeed());
 				rect = new CrateRectangle(location.col - 25, location.row - 25);
 				return false;
 			}
@@ -166,20 +205,36 @@ public class Crate extends Observable implements Obstacle {
 			
 		}
 		if(d == Direction.NORTH) {
-			location = new Point(location.row - 5, location.col);
+			location = new Point(location.row - player.getSpeed(), location.col);
 			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row + player.getSpeed(), location.col);
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row + player.getSpeed(), location.col);
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
 					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row + 5, location.col);
+						location = new Point(location.row + player.getSpeed(), location.col);
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
 				}
 				if(o instanceof TNT) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row + 5, location.col);
+						location = new Point(location.row + player.getSpeed(), location.col);
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -187,7 +242,7 @@ public class Crate extends Observable implements Obstacle {
 				if(o instanceof Crate) {
 					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row + 5, location.col);
+						location = new Point(location.row + player.getSpeed(), location.col);
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -201,7 +256,7 @@ public class Crate extends Observable implements Obstacle {
 				}
 			}
 			if (location.row < 30) {
-				location = new Point(location.row + 5, location.col);
+				location = new Point(location.row + player.getSpeed(), location.col);
 				rect = new CrateRectangle(location.col - 25, location.row - 25);
 				return false;
 			}
@@ -210,20 +265,36 @@ public class Crate extends Observable implements Obstacle {
 	
 		}
 		if(d == Direction.SOUTH) {
-			location = new Point(location.row + 5, location.col);
+			location = new Point(location.row + player.getSpeed(), location.col);
 			rect = new CrateRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row - player.getSpeed(), location.col);
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row - player.getSpeed(), location.col);
+					rect = new CrateRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
 					if(((ImmovableBlock) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row - 5, location.col);
+						location = new Point(location.row - player.getSpeed(), location.col);
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
 				}
 				if(o instanceof TNT) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row - 5, location.col);
+						location = new Point(location.row - player.getSpeed(), location.col);
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -231,7 +302,7 @@ public class Crate extends Observable implements Obstacle {
 				if(o instanceof Crate) {
 					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row - 5, location.col);
+						location = new Point(location.row - player.getSpeed(), location.col);
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
@@ -245,7 +316,7 @@ public class Crate extends Observable implements Obstacle {
 				}
 			}
 			if (location.row > 665) {
-				location = new Point(location.row - 5, location.col);
+				location = new Point(location.row - player.getSpeed(), location.col);
 				rect = new CrateRectangle(location.col - 25, location.row - 25);
 				return false;
 			}

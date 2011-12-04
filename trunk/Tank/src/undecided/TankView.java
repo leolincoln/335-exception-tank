@@ -2,6 +2,7 @@ package undecided;
 
 import java.awt.Color;
 
+
 import java.awt.Graphics;
 import java.awt.Image;
 
@@ -18,12 +19,11 @@ import java.util.Observer;
 
 import javax.swing.*;
 
-import map.Map;
+
 
 import View.MasterView;
 import View.MasterViewPanel;
 
-import rectangles.BlastRadiusRectangle;
 import rectangles.BubbleShieldRectangle;
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
@@ -51,19 +51,15 @@ public class TankView extends MasterViewPanel implements Observer {
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
-	private Crate crate;
-	private ImmovableBlock immovableBlock;
-	private FireRing fireRing;
-	private SpikePit spikePit;
-	private TNT tnt;
+	private EnemyTank enemy;
 	public static LinkedList<Projectile> projectileList;
 	public static LinkedList<Obstacle> obstacleList;
 	public static LinkedList<PlayerTank> tankList;
 	public static LinkedList<Item> itemList;
-	private TankView thisView;
+	public static LinkedList<EnemyTank> enemyList;
 	private ItemCreator creator;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
-	private Map map;
+
 
 	/**
 	 * Class constructor
@@ -78,6 +74,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
 		itemList = new LinkedList<Item>();
+		enemyList = new LinkedList<EnemyTank>();
 		creator = new ItemCreator();
 		creator.start();
 		tankList.add(player);
@@ -96,7 +93,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		this.buildMap(null);
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
-		thisView = this;
+	
 
 	}
 
@@ -148,7 +145,14 @@ public class TankView extends MasterViewPanel implements Observer {
 		 *           
 		 */
 		public void mousePressed(MouseEvent arg0) {
-
+			int count = 0;
+			for(Projectile p : projectileList) {
+				if(p instanceof PlayerProjectile) {
+					count++;
+				}
+			}
+			
+			if(count == 0) {
 			// finding difference in player and target location
 			int xdiff = arg0.getX() - player.getLocation().col;
 			int ydiff = arg0.getY() - player.getLocation().row;
@@ -164,7 +168,7 @@ public class TankView extends MasterViewPanel implements Observer {
 					(int) (xdiff * (5 / length)), (int) (ydiff * (5 / length)));
 
 			// player.shoot();
-
+			}
 		}
 
 		@Override
@@ -195,11 +199,23 @@ public class TankView extends MasterViewPanel implements Observer {
 	public void paintComponent(Graphics g) {
 
 		for (Projectile p : projectileList) {
-			ProjectileRectangle rect = p.getRectangle();
+			if(p instanceof PlayerProjectile) {
+			PlayerProjectile s = (PlayerProjectile)p;
+			ProjectileRectangle rect = s.getRectangle();
 			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
+		}
+			if(p instanceof EnemyProjectile) {
+				EnemyProjectile s = (EnemyProjectile)p;
+				ProjectileRectangle rect = s.getRectangle();
+				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
+			}
 		}
 		
 		for (PlayerTank p : tankList) {
+			TankRectangle tRect = p.getRectangle();
+			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
+		for (EnemyTank p : enemyList) {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
@@ -328,9 +344,103 @@ public class TankView extends MasterViewPanel implements Observer {
 			repaint();
 		}
 
-		if (o instanceof Projectile) {
+		if (o instanceof PlayerProjectile) {
+				PlayerProjectile p = (PlayerProjectile)o;	
+				
+				if (!projectileList.contains(p)) {
+					projectileList.add(p);
+					p.addObserver(this);
 
-			Projectile p = (Projectile) o;
+				} else {
+					if (p.getRectangle().xCoord() <=0) {
+						projectileList.remove(p);
+					}
+					for(Item i : itemList) {
+						if(i instanceof BubbleShield) {
+							BubbleShield c = (BubbleShield)i;
+							if (c.getRectangle().intersects(p.getRectangle())) {
+								p.collided();
+								projectileList.remove(p);
+								itemList.remove(c);
+								repaint();
+								break;
+							}
+						}
+						if(i instanceof SpeedBoost) {
+							SpeedBoost c = (SpeedBoost)i;
+							if (c.getRectangle().intersects(p.getRectangle())) {
+								p.collided();
+								projectileList.remove(p);
+								itemList.remove(c);
+								repaint();
+								break;
+							}
+						}
+					}
+					
+					for(EnemyTank h : enemyList) {
+						if(h.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							h.recieveDamage(p.getDamage());
+							repaint();
+							break;
+						}
+					}
+					for (Obstacle obs : obstacleList) {
+						if (obs instanceof Crate) {
+							Crate c = (Crate) obs;
+							if (c.getRectangle().intersects(p.getRectangle())) {
+								p.collided();
+								projectileList.remove(p);
+								c.recieveDamage(p.getDamage());
+								repaint();
+								break;
+							}
+						}
+						if (obs instanceof TNT) {
+							TNT c = (TNT) obs;
+							if (c.getRectangle().intersects(p.getRectangle())) {
+								p.collided();
+								projectileList.remove(p);
+								c.recieveDamage(p.getDamage());
+								repaint();
+								break;
+							}
+						}
+						if (obs instanceof ImmovableBlock) {
+							ImmovableBlock c = (ImmovableBlock) obs;
+							if (c.getRectangle().intersects(p.getRectangle())) {
+								p.collided();
+								projectileList.remove(p);
+								c.recieveDamage(p.getDamage());
+								repaint();
+								break;
+
+							}
+						}
+						if (obs instanceof FireRing) {
+							FireRing c = (FireRing) obs;
+							if (c.getRectangle().intersects(p.getRectangle())) {
+								p.collided();
+								projectileList.remove(p);
+								c.recieveDamage(p.getDamage());
+								repaint();
+								break;
+
+							}
+						}
+
+					}
+			
+				
+
+				repaint();
+			}
+			}
+		if (o instanceof EnemyProjectile) {
+			EnemyProjectile p = (EnemyProjectile)o;	
+			
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
@@ -359,6 +469,16 @@ public class TankView extends MasterViewPanel implements Observer {
 							repaint();
 							break;
 						}
+					}
+				}
+				
+				for(PlayerTank h : tankList) {
+					if(h.getRectangle().intersects(p.getRectangle())) {
+						p.collided();
+						projectileList.remove(p);
+						h.recieveDamage(p.getDamage());
+						repaint();
+						break;
 					}
 				}
 				for (Obstacle obs : obstacleList) {
@@ -406,11 +526,66 @@ public class TankView extends MasterViewPanel implements Observer {
 					}
 
 				}
+		
+			
 
-				repaint();
+			repaint();
+		}
+		}
 
+		
+		if (o instanceof EnemyTank) {
+			EnemyTank p = (EnemyTank) o;
+			TankRectangle rect = p.getRectangle();
+			for(Item i : itemList) {
+				if(i instanceof BubbleShield) {
+					BubbleShield c = (BubbleShield)i;
+					if (c.getRectangle().intersects(p.getRectangle())) {
+						if(p.getHealth() == 1) {
+						c.activateEffect(p);
+						}
+						itemList.remove(c);
+						repaint();
+						break;
+					}
+				}
+				if(i instanceof SpeedBoost) {
+					SpeedBoost c = (SpeedBoost)i;
+					if (c.getRectangle().intersects(p.getRectangle())) {
+						c.activateEffect(p);
+						itemList.remove(c);
+						repaint();
+						break;
+					}
+				}
 			}
-
+			for (Obstacle obs : obstacleList) {
+				if (obs instanceof Crate) {
+					Crate c = (Crate) obs;
+					if (rect.intersects(c.getRectangle())) {
+						c.move(player.getDirection());
+					}
+				}
+				if (obs instanceof TNT) {
+					TNT c = (TNT) obs;
+					if (rect.intersects(c.getRectangle())) {
+						c.move(player.getDirection());
+					}
+				}
+				if (obs instanceof FireRing) {
+					FireRing c = (FireRing) obs;
+					if (rect.intersects(c.getRectangle())) {
+						p.recieveDamage(1);
+					}
+				}
+				if (obs instanceof SpikePit) {
+					SpikePit c = (SpikePit) obs;
+					if (rect.intersects(c.getRectangle())) {
+						p.recieveDamage(1);
+					}
+				}
+			}
+			repaint();
 		}
 		if (o instanceof PlayerTank) {
 			PlayerTank p = (PlayerTank) o;
@@ -419,7 +594,9 @@ public class TankView extends MasterViewPanel implements Observer {
 				if(i instanceof BubbleShield) {
 					BubbleShield c = (BubbleShield)i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
+						if(p.getHealth() == 1) {
 						c.activateEffect(p);
+						}
 						itemList.remove(c);
 						repaint();
 						break;
@@ -534,9 +711,9 @@ public class TankView extends MasterViewPanel implements Observer {
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
-		FireRing fr = new FireRing(new Point(75, 910));
-		obstacleList.add(fr);
-		fr.addObserver(this);
+		enemy = new EnemyTank(new Point(300, 300));
+		enemyList.add(enemy);
+		enemy.addObserver(this);
 
 		for (int i = 60; i < 500; i += 50) {
 			for (int j = 460; j < 560; j += 50) {
