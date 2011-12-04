@@ -6,7 +6,7 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ClientModel implements Observer {
+public class ClientModel  extends Observable implements Observer{
 String ip;
 public Socket socket;
 	public ClientModel(String ip){
