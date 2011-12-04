@@ -82,7 +82,7 @@ public class EnemyTank extends Observable {
 			PlayerTank e = players.get(i);
 			if (e.getRectangle().intersects(t)) {
 				p = new Point(p.row + this.speed, p.col);
-				t = new TankRectangle(p.col - 25, p.row - 25);
+				t = new TankRectangle(p.col - 25, p.row - 25); 
 				moveable = false;
 				return false;
 			}
@@ -112,6 +112,17 @@ public class EnemyTank extends Observable {
 			}
 			if (o instanceof TNT) {
 				TNT c = (TNT) o;
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
+						p = new Point(p.row + this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
+						return false;
+					}
+				}
+			}
+			if (o instanceof FireRing) {
+				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
 					if (!c.move(d)) {
 						p = new Point(p.row + this.speed, p.col);
@@ -189,6 +200,17 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
+			if (o instanceof FireRing) {
+				FireRing c = (FireRing) o;
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
+						p = new Point(p.row - this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
+						return false;
+					}
+				}
+			}
 		}
 
 		if (p.row > 665) {
@@ -248,6 +270,17 @@ public class EnemyTank extends Observable {
 			}
 			if (o instanceof TNT) {
 				TNT c = (TNT) o;
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
+						p = new Point(p.row, p.col - this.speed);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
+						return false;
+					}
+				}
+			}
+			if (o instanceof FireRing) {
+				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
 					if (!c.move(d)) {
 						p = new Point(p.row, p.col - this.speed);
@@ -325,6 +358,17 @@ public class EnemyTank extends Observable {
 						return false;
 					}
 				}
+			}
+				if (o instanceof FireRing) {
+					FireRing c = (FireRing) o;
+					if (c.getRectangle().intersects(t)) {
+						if (!c.move(d)) {
+							p = new Point(p.row, p.col + this.speed);
+							t = new TankRectangle(p.col - 25, p.row - 25);
+							moveable = false;
+							return false;
+						}
+					}
 			}
 
 		}
