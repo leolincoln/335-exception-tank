@@ -1,26 +1,15 @@
 package undecided;
 
 import java.awt.Image;
-
 import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 
 import rectangles.TankRectangle;
 
-/**
- * 
- * @author Team Exception
- * 
- *         This class is the tank object that is controlled by the player that
- *         can be moved by arrow keys and shoot independently via the mouse. It
- *         contains the tanks location, health, and shape that detects
- *         collisions.
- * 
- */
-public class PlayerTank extends Observable {
-
+public class EnemyTank extends Observable {
 	// X and Y coordinates for the Tank's location
 	private Point p;
 
@@ -32,109 +21,69 @@ public class PlayerTank extends Observable {
 	private int health;
 	private Direction d;
 	private Image img;
+	private boolean moveable;
 
-	/**
-	 * Class constructor
-	 * 
-	 * @param p
-	 *            location of the player controlled tank
-	 */
-	public PlayerTank(Point p) {
-		this.p = p;
-		speed = 5;
+	public EnemyTank(Point p) {
 		health = 1;
-		d = Direction.EAST;
+		this.p = p;
+		d = Direction.NORTH;
+		speed = 1;
+		moveable = true;
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tank.png").getImage();
+		img = new ImageIcon("images/tankEnemy.png").getImage();
+		EnemyThread et = new EnemyThread();
+		et.start();
 
 	}
 
-	/**
-	 * 
-	 * @return TankRectangle returns the shape of the tank that detects
-	 *         collisions
-	 */
-	public TankRectangle getRectangle() {
-		return t;
-	}
-
-	/**
-	 * 
-	 * @return Direction returns direction in which the tank is facing
-	 */
-	public Direction getDirection() {
-		return d;
-	}
-
-	/**
-	 * 
-	 * @return Point returns the player controlled tank's position
-	 */
-	public Point getLocation() {
+	public Point getP() {
 		return p;
 	}
-	
-	public Image getImage() {
-		return img;
-	}
 
-	/**
-	 * 
-	 * @param p
-	 *            this location at which the tank is to be set at
-	 */
-	public void setLocation(Point p) {
+	public void setP(Point p) {
 		this.p = p;
 	}
-	
-	public int getHealth() {
-		return health;
-	}
 
-
-	public void setHealth(int x) {
-		if(x == 2) {
-			img = new ImageIcon("images/tankShield.png").getImage();
-		}
-		health = x;
-	}
-
-	/**
-	 * This class will determine the speed of the tank depending on the terrain
-	 * that the tank is traversing across
-	 * 
-	 * @param t
-	 *            this is the terrain in which the tank is on whether grass,
-	 *            ice, or sand
-	 */
-	public void setSpeed(int x) {
-		speed = x;
-
-	}
-
-	/**
-	 * 
-	 * @return int this returns the current speed of the tank
-	 */
 	public int getSpeed() {
 		return speed;
 	}
 
-	/**
-	 * 
-	 * @return Point returns the point that is above the tank's current position
-	 */
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+	public TankRectangle getRectangle() {
+		return t;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public Direction getD() {
+		return d;
+	}
+
+	public Image getImage() {
+		return img;
+	}
+
 	public boolean moveUp() {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<PlayerTank> players = TankView.tankList;
 		d = Direction.NORTH;
 		p = new Point(p.row - this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		for(int i = 0; i < enemies.size(); i++) {
-			EnemyTank e = enemies.get(i);
-			if(e.getRectangle().intersects(t)) {
+		for (int i = 0; i < players.size(); i++) {
+			PlayerTank e = players.get(i);
+			if (e.getRectangle().intersects(t)) {
 				p = new Point(p.row + this.speed, p.col);
 				t = new TankRectangle(p.col - 25, p.row - 25);
+				moveable = false;
 				return false;
 			}
 		}
@@ -145,26 +94,29 @@ public class PlayerTank extends Observable {
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row + this.speed, p.col);
 					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
 					return false;
-				
+
 				}
 			}
 			if (o instanceof Crate) {
 				Crate c = (Crate) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row + this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
 			}
 			if (o instanceof TNT) {
 				TNT c = (TNT) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row + this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
@@ -175,10 +127,12 @@ public class PlayerTank extends Observable {
 		if (p.row < 30) {
 			p = new Point(p.row + this.speed, p.col);
 			t = new TankRectangle(p.col - 25, p.row - 25);
+			moveable = false;
 			return false;
 		}
 		notifyObservers(this);
 		setChanged();
+		moveable = true;
 		return true;
 	}
 
@@ -188,15 +142,16 @@ public class PlayerTank extends Observable {
 	 */
 	public boolean moveDown() {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<PlayerTank> players = TankView.tankList;
 		d = Direction.SOUTH;
 		p = new Point(p.row + this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		for(int i = 0; i < enemies.size(); i++) {
-			EnemyTank e = enemies.get(i);
-			if(e.getRectangle().intersects(t)) {
+		for (int i = 0; i < players.size(); i++) {
+			PlayerTank e = players.get(i);
+			if (e.getRectangle().intersects(t)) {
 				p = new Point(p.row - this.speed, p.col);
 				t = new TankRectangle(p.col - 25, p.row - 25);
+				moveable = false;
 				return false;
 			}
 		}
@@ -207,26 +162,29 @@ public class PlayerTank extends Observable {
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row - this.speed, p.col);
 					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
 					return false;
 				}
 
 			}
 			if (o instanceof Crate) {
 				Crate c = (Crate) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row - this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
 			}
 			if (o instanceof TNT) {
 				TNT c = (TNT) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row - this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
@@ -236,10 +194,12 @@ public class PlayerTank extends Observable {
 		if (p.row > 665) {
 			p = new Point(p.row - this.speed, p.col);
 			t = new TankRectangle(p.col - 25, p.row - 25);
+			moveable = false;
 			return false;
 		}
 		notifyObservers(this);
 		setChanged();
+		moveable = true;
 		return true;
 	}
 
@@ -250,15 +210,16 @@ public class PlayerTank extends Observable {
 	 */
 	public boolean moveRight() {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<PlayerTank> players = TankView.tankList;
 		d = Direction.EAST;
 		p = new Point(p.row, p.col + this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		for(int i = 0; i < enemies.size(); i++) {
-			EnemyTank e = enemies.get(i);
-			if(e.getRectangle().intersects(t)) {
+		for (int i = 0; i < players.size(); i++) {
+			PlayerTank e = players.get(i);
+			if (e.getRectangle().intersects(t)) {
 				p = new Point(p.row, p.col - this.speed);
 				t = new TankRectangle(p.col - 25, p.row - 25);
+				moveable = false;
 				return false;
 			}
 		}
@@ -269,26 +230,29 @@ public class PlayerTank extends Observable {
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row, p.col - this.speed);
 					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
 					return false;
 				}
 
 			}
 			if (o instanceof Crate) {
 				Crate c = (Crate) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row, p.col - this.speed);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
 			}
 			if (o instanceof TNT) {
 				TNT c = (TNT) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row, p.col - this.speed);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
@@ -299,10 +263,12 @@ public class PlayerTank extends Observable {
 		if (p.col > 955) {
 			p = new Point(p.row, p.col - this.speed);
 			t = new TankRectangle(p.col - 25, p.row - 25);
+			moveable = false;
 			return false;
 		}
 		notifyObservers(this);
 		setChanged();
+		moveable = true;
 		return true;
 	}
 
@@ -313,15 +279,16 @@ public class PlayerTank extends Observable {
 	 */
 	public boolean moveLeft() {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<PlayerTank> players = TankView.tankList;
 		d = Direction.WEST;
 		p = new Point(p.row, p.col - this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		for(int i = 0; i < enemies.size(); i++) {
-			EnemyTank e = enemies.get(i);
-			if(e.getRectangle().intersects(t)) {
+		for (int i = 0; i < players.size(); i++) {
+			PlayerTank e = players.get(i);
+			if (e.getRectangle().intersects(t)) {
 				p = new Point(p.row, p.col + this.speed);
 				t = new TankRectangle(p.col - 25, p.row - 25);
+				moveable = false;
 				return false;
 			}
 		}
@@ -332,26 +299,29 @@ public class PlayerTank extends Observable {
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row, p.col + this.speed);
 					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
 					return false;
 				}
 
 			}
 			if (o instanceof Crate) {
 				Crate c = (Crate) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row, p.col + this.speed);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
 			}
 			if (o instanceof TNT) {
 				TNT c = (TNT) o;
-				if(c.getRectangle().intersects(t)) {
-					if(!c.move(d)) {
+				if (c.getRectangle().intersects(t)) {
+					if (!c.move(d)) {
 						p = new Point(p.row, p.col + this.speed);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
 						return false;
 					}
 				}
@@ -362,90 +332,113 @@ public class PlayerTank extends Observable {
 		if (p.col < 30) {
 			p = new Point(p.row, p.col + this.speed);
 			t = new TankRectangle(p.col - 25, p.row - 25);
+			moveable = false;
 			return false;
 		}
 		notifyObservers(this);
 		setChanged();
+		moveable = true;
 		return true;
 	}
 
-	/**
-	 * The method shoot determines the direction of the tank and shoots a single
-	 * animated projectile in the appropriate direction
-	 */
-	
-	
-	// new version!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public void shoot(Point p, int x, int y) {
-		
-		PlayerProjectile missle = new PlayerProjectile(p, x, y, this);
-			notifyObservers(missle);
-			setChanged();
-	
-	}
-	
-	
 
-	/**
-	 * 
-	 * @param damage
-	 *            this is the damage that the player controlled tank is to
-	 *            receive
-	 */
-	public void recieveDamage(int damage) {
-		health = health - damage;
-		if (this.isDead()) {
-			t = new TankRectangle(-100, -100);
-			p = new Point(-1, -1);
-			TankView.tankList.remove(this);
-		}
-		else if (health == 1) {
-			ImmuneThread it = new ImmuneThread();
-			it.start();
-		}
+		EnemyProjectile missle = new EnemyProjectile(p, x, y, this);
+		notifyObservers(missle);
+		setChanged();
 
 	}
-	
-	private class ImmuneThread extends Thread {
-		private int timePassed;
-		
-		public ImmuneThread() {
+
+	public boolean isDead() {
+		return health == 0;
+	}
+
+	private class EnemyThread extends Thread {
+		private int tick, timePassed;
+		private boolean exists;
+
+		public EnemyThread() {
+			tick = 0;
+			exists = true;
 			timePassed = 0;
 		}
-		
+
 		@Override
-		public void run() {
-			while(timePassed < 17) {
-			if(timePassed < 16) {
-				health = 10000;
-			}
-			if(timePassed == 16) {
-				health = 1;
-			}
-			if(timePassed % 2 == 0) {
-				img = new ImageIcon("images/tank.png").getImage(); 
-			}
-			if(timePassed %2 == 1) {
-				img = new ImageIcon("images/tankShield.png").getImage(); 
+		public synchronized void run() {
+			while (exists && TankView.tankList.size() != 0) {
+				Random rnd = new Random();
+				PlayerTank player = TankView.tankList.getFirst();
+				int x = player.getLocation().col;
+				int y = player.getLocation().row;
+				int xdiff = x - p.col + rnd.nextInt(100);
+				int ydiff = y - p.row + rnd.nextInt(100);
 				
+				if (tick == 0) {
+					int rndDirection = rnd.nextInt(4) + 1;
+					if (rndDirection == 1) {
+						d = Direction.NORTH;
+					}
+					if (rndDirection == 2) {
+						d = Direction.SOUTH;
+
+					}
+					if (rndDirection == 3) {
+						d = Direction.EAST;
+					}
+					if (rndDirection == 4) {
+						d = Direction.WEST;
+					}
+				}
+
+				if (d == Direction.NORTH) {
+					moveUp();
+				}
+				if (d == Direction.WEST) {
+					moveLeft();
+				}
+				if (d == Direction.SOUTH) {
+					moveDown();
+				}
+				if (d == Direction.EAST) {
+					moveRight();
+				}
+				if (!moveable) {
+					tick = 400;
+				}
+				if (timePassed % 200 == 0 && timePassed != 0) {
+					shoot(new Point(p.row, p.col),
+							(int) (xdiff * (5 /  Math.sqrt(xdiff * xdiff + ydiff * ydiff))),
+							(int) (ydiff * (5 / Math.sqrt(xdiff * xdiff + ydiff * ydiff))));
+					
+				}
+
+				if (tick < 400) {
+					tick++;
+				} else {
+					tick = 0;
+				}
+				timePassed++;
+				try {
+					Thread.sleep(10);
+				} catch (Exception e) {
+
+				}
+				if (isDead()) {
+					exists = false;
+				}
+
 			}
-			timePassed++;
-			try {
-				Thread.sleep(125);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
+
 		}
+
 	}
+
+	public void recieveDamage(int i) {
+		health = health - i;
+		if (isDead()) {
+			TankView.enemyList.remove(this);
+		}
+
 	}
-	/**
-	 * 
-	 * @return boolean returns whether this player controlled tank is alive or
-	 *         at zero health
-	 */
-	public boolean isDead() {
-		return (health == 0);
-	}
-	
+
 }

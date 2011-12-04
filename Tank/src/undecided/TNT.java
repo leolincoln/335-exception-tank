@@ -1,13 +1,18 @@
 package undecided;
-import java.util.Iterator;
+
 import java.util.LinkedList;
 import java.util.Observable;
 
 import rectangles.BlastRadiusRectangle;
 import rectangles.TNTRectangle;
 
+
 public class TNT extends Observable implements Obstacle {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int health;// health of the TNT (1 or 0)
 	private TNTRectangle rect;// shape for TNT controlling collisions
 	private Point location;// location of the TNT
@@ -75,10 +80,28 @@ public class TNT extends Observable implements Obstacle {
 	}
 	public boolean move(Direction d) {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
+		LinkedList<PlayerTank> players = TankView.tankList;
+		LinkedList<EnemyTank> enemies = TankView.enemyList;
 		
 		if(d == Direction.EAST) {
 			location = new Point(location.row, location.col + 5);
 			rect = new TNTRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col - 5);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col - 5);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
@@ -89,21 +112,19 @@ public class TNT extends Observable implements Obstacle {
 					}
 				}
 				if(o instanceof TNT) {
-					if(o != this) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row, location.col - 5);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
-					}
 				}
 				if(o instanceof Crate) {
-					
+					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row, location.col - 5);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
-					
+					}
 					}
 				}
 				if(o instanceof FireRing) {
@@ -123,8 +144,24 @@ public class TNT extends Observable implements Obstacle {
 			
 		}
 		if(d == Direction.WEST) {
-			location = new Point(location.row, location.col - 5);
+			location = new Point(location.row, location.col + 5);
 			rect = new TNTRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col + 5);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row, location.col - 5);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
@@ -135,21 +172,19 @@ public class TNT extends Observable implements Obstacle {
 					}
 				}
 				if(o instanceof TNT) {
-					if(o != this) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row, location.col + 5);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
-					}
 				}
 				if(o instanceof Crate) {
-					
+					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row, location.col + 5);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
-					
+					}
 					}
 				}
 				if(o instanceof FireRing) {
@@ -171,6 +206,22 @@ public class TNT extends Observable implements Obstacle {
 		if(d == Direction.NORTH) {
 			location = new Point(location.row - 5, location.col);
 			rect = new TNTRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row + 5, location.col);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row + 5, location.col);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
@@ -181,21 +232,19 @@ public class TNT extends Observable implements Obstacle {
 					}
 				}
 				if(o instanceof TNT) {
-					if(o != this) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row + 5, location.col);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
-					}
 				}
 				if(o instanceof Crate) {
-					
+					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row + 5, location.col);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
-					
+					}
 					}
 				}
 				if(o instanceof FireRing) {
@@ -217,6 +266,22 @@ public class TNT extends Observable implements Obstacle {
 		if(d == Direction.SOUTH) {
 			location = new Point(location.row + 5, location.col);
 			rect = new TNTRectangle(location.col - 25, location.row - 25);
+			for(int i = 0; i < players.size(); i++) {
+				PlayerTank p = players.get(i); 
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row - 5, location.col);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank p = enemies.get(i);
+				if(p.getRectangle().intersects(rect)) {
+					location = new Point(location.row - 5, location.col);
+					rect = new TNTRectangle(location.col - 25, location.row - 25);
+					return false;
+				}
+			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof ImmovableBlock) {
@@ -227,21 +292,19 @@ public class TNT extends Observable implements Obstacle {
 					}
 				}
 				if(o instanceof TNT) {
-					if(o != this) {
 					if(((TNT) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row - 5, location.col);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
-					}
 				}
 				if(o instanceof Crate) {
-				
+					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
 						location = new Point(location.row - 5, location.col);
 						rect = new TNTRectangle(location.col - 25, location.row - 25);
 						return false;
-					
+					}
 					}
 				}
 				if(o instanceof FireRing) {

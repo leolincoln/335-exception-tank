@@ -84,7 +84,7 @@ public class FireRing extends Observable implements Obstacle {
 	}
 
 	//moves the FireRing in the specified Direction if it is possible to move there
-	public boolean move(Direction d) {
+	public synchronized boolean move(Direction d) {
 		LinkedList<Obstacle> obs = TankView.obstacleList;
 		
 		if(d == Direction.EAST) {

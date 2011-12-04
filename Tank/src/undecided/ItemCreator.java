@@ -27,7 +27,7 @@ public class ItemCreator extends Thread {
 	
 		while(exists) {
 			Random rnd = new Random();
-			int creation = rnd.nextInt(300) + 1;
+			int creation = rnd.nextInt(400) + 1;
 			if(creation == 1 || creation == 2) {
 				if(!hasBubbleShield()) {
 					if(spawnBubbleShield()) {

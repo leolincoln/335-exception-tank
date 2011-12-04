@@ -28,6 +28,12 @@ public class BubbleShield extends Observable implements Item{
 		t.setHealth(t.getHealth() + 1);
 		
 	}
+
+	@Override
+	public void activateEffect(EnemyTank t) {
+		t.setHealth(t.getHealth() + 1);
+		
+	}
 	
 	
 
