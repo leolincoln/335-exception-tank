@@ -71,12 +71,12 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		this.mapNumber = num;
 		
 		player = new PlayerTank(new Point(400, 125));
-		player2 = new PlayerTank(new Point(200, 180));
+		player2 = new PlayerTank(new Point(125, 400));
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
 		itemList = new LinkedList<Item>();
-		enemyList = new LinkedList<EnemyTank>();
+		
 		creator = new ItemCreator();
 		creator.start();
 		tankList.add(player);
@@ -219,10 +219,7 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
-		for (EnemyTank p : enemyList) {
-			TankRectangle tRect = p.getRectangle();
-			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
-		}
+	
 		for (Item p : itemList) {
 			if(p instanceof SpeedBoost) {
 			SpeedBoost s = (SpeedBoost)p;
