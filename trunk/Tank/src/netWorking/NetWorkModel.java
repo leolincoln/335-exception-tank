@@ -12,9 +12,8 @@ public class NetWorkModel implements Serializable {
 private String command;
 private Point location;
 
-public NetWorkModel(String command, Point location){
-	this.command = command;
-	this.location = location;
+public NetWorkModel(){
+	
 }
 public Point getLocation(){
 	return location;
