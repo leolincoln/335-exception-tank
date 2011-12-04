@@ -12,7 +12,7 @@ import javax.swing.DefaultListModel;
 import undecided.PlayerTank;
 
 public class LanModel {
-ArrayList<Socket> hostList;
+ArrayList<String> hostList;
 private ServerSocket Socket;
 private MasterView m;
 ObjectInputStream in;
@@ -21,7 +21,7 @@ ObjectInputStream in;
 
 	public LanModel(MasterView m, PlayerTank p) {
 		this.m = m;
-		hostList = new ArrayList<Socket>();
+		hostList = new ArrayList<String>();
 		System.out.println("hostList set to null");
 		initializeSocket();
 		
