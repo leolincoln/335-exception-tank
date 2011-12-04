@@ -34,6 +34,8 @@ public class HostView extends MasterViewPanel implements Observer {
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
+		HostModel hm = new HostModel();
+		hm.run();
 		// TODO Auto-generated constructor stub
 	}
 
