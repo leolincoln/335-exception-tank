@@ -62,7 +62,6 @@ public class LanView extends MasterViewPanel {
 		centerPane.add(pingList, 1);
 
 		this.add(centerPane, BorderLayout.CENTER);
-
 	}
 
 	/**
@@ -105,7 +104,6 @@ public class LanView extends MasterViewPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			m.changeView(Views.PREVIOUS);
 		}
-
 	}
 
 	/**
@@ -133,10 +131,9 @@ public class LanView extends MasterViewPanel {
 	 *         host.
 	 */
 	private class joinListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			m.changeView(Views.WAIT);
+			m.changeView(Views.CLIENT);
 
 		}
 
