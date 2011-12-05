@@ -30,9 +30,9 @@ public class ClientView extends MasterViewPanel implements Observer {
 	
 	private static final long serialVersionUID = 1L;
 
-	public ClientView(MasterView m,String ip) {
+	public ClientView(MasterView m,Object o) {
 		super(m);
-		cm = new ClientModel(ip);
+		cm = new ClientModel(m,o);
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
@@ -109,8 +109,10 @@ public class ClientView extends MasterViewPanel implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-
+			ready.setEnabled(false);
+			cm.ready();
+			cm.listenStart();
+			cm.addObserver((Observer) this);
 		}
 
 	}

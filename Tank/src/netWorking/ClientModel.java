@@ -12,13 +12,21 @@ import java.util.concurrent.TimeoutException;
 
 import javax.swing.JOptionPane;
 
+import View.MasterView;
+import View.Views;
+
 public class ClientModel  extends Observable implements Observer{
 String ip;
 public Socket socket=null;
 public ObjectOutputStream out;
 public ObjectInputStream in;
 private Object unKnown;
-	public ClientModel(String ip){
+private MasterView m;
+	public ClientModel(MasterView m, Object o){
+		this.m=m;
+		if(o instanceof String){
+			ip = (String)o;
+		}
 		try {
 			socket = new Socket(ip,4000);
 			socket.setSoTimeout(50);
@@ -30,6 +38,7 @@ private Object unKnown;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		connected();
 		
 	}
 	public void listenStart(){
@@ -40,19 +49,35 @@ private Object unKnown;
 		Thread send = new readySender();
 		send.start();
 	}
+	public void connected(){
+		Thread connected = new connectSender();
+		connected.start();
+	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	private class connectSender extends Thread implements Runnable{
+		public void run(){
+			try{
+				out = new ObjectOutputStream(socket.getOutputStream());
+				out.writeObject(new String("connected"));
+				out.close();
+			}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		}
+	}
 	
 	private class readySender extends Thread implements Runnable{
 		public void run(){
 			try{
 				out = new ObjectOutputStream(socket.getOutputStream());
 				out.writeObject(new String("ready"));
-				
+				out.close();
 			}
 			catch(IOException e){
 				e.printStackTrace();
@@ -62,15 +87,11 @@ private Object unKnown;
 	
 	
 	private class GameListener extends Thread implements Runnable, Observer {
-		
-		
-		
-
+		private ClientModel cm;
 		@Override
 		public void run() {
 			while (true){
 			try{
-				
 				in = new ObjectInputStream(socket.getInputStream());
 				unKnown = in.readObject();	
 			}
@@ -82,7 +103,14 @@ private Object unKnown;
 				e.printStackTrace();
 			}
 			if(unKnown !=null){
-				//switch the view to networkTankview, and pass the ClientModel. 
+				if(unKnown instanceof String){
+					if (unKnown.equals("start")){
+						cm.startGame();
+					}
+				}
+				else if(true){
+					
+				}
 			}
 			try {
 				sleep(10);
@@ -94,6 +122,8 @@ private Object unKnown;
 			}
 		}
 
+		
+
 		@Override
 		public void update(Observable arg0, Object arg1) {
 			// TODO Auto-generated method stub
@@ -101,6 +131,15 @@ private Object unKnown;
 		}
 		
 	}
+
+
+	public void startGame() {
+		m.changeView(Views.NETWORKTANKVIEW, this);
+		
+	}
+
+
+
 	
 
 }
