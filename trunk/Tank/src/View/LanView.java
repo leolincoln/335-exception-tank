@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+
+
 /**
  * 
  * @author Team Exception
@@ -28,6 +30,7 @@ public class LanView extends MasterViewPanel {
 	public JButton back, create, join,search;
 	private JLabel hosts, ping;
 	public JList hostList, pingList;
+	
 	
 
 	/**
@@ -123,6 +126,7 @@ public class LanView extends MasterViewPanel {
 		public void actionPerformed(ActionEvent e) {
 			
 			m.changeView(Views.HOST,null);
+			
 		}
 	}
 

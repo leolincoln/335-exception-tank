@@ -12,7 +12,7 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
-public class HostModel implements Runnable, Observer {
+public class HostModel implements Runnable{
 	
 	private ServerSocket host;
 	private ObjectInputStream in;
@@ -34,22 +34,41 @@ public class HostModel implements Runnable, Observer {
 }
 
 	@Override
-	public void update(Observable o, Object arg) {
-		
-	
-	}
-
-	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
 			setUpHost();
-			client = 
+			client = host.accept();
+			System.out.println("Succesfully connected");
+			out = new ObjectOutputStream(client.getOutputStream());
+			in = new ObjectInputStream(client.getInputStream());
 		}
 		
 		catch(IOException ioe) {
+			ioe.printStackTrace();
 			
 		}
+	}
+	
+	public void broadcastStart() {
+		
+		Thread broadcast = new BroadcastSender();
+		broadcast.start();
+	}
+	
+	private class BroadcastSender extends Thread implements Runnable {
+		
+		public void run(){
+			try{
+				out = new ObjectOutputStream(client.getOutputStream());
+				out.writeObject(new String("Accepting connections..."));
+				out.close();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+		
 		
 	}
 }
