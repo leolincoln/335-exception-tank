@@ -42,7 +42,7 @@ private MasterView m;
 		
 	}
 	public void listenStart(){
-		Thread listen = new GameListener();
+		Thread listen = new GameListener(this);
 		listen.start();
 	}
 	public void ready(){
@@ -52,6 +52,7 @@ private MasterView m;
 	public void connected(){
 		Thread connected = new connectSender();
 		connected.start();
+		connected.interrupt();
 	}
 	@Override
 	public void update(Observable arg0, Object arg1) {
@@ -88,6 +89,9 @@ private MasterView m;
 	
 	private class GameListener extends Thread implements Runnable, Observer {
 		private ClientModel cm;
+		public GameListener(ClientModel cm){
+			this.cm=cm;
+		}
 		@Override
 		public void run() {
 			while (true){
