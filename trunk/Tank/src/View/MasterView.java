@@ -113,13 +113,13 @@ public class MasterView extends JFrame {
 	 * @param v
 	 *            this is the view that is to be switched to.
 	 */
-	public void changeView(Views v,String ip) {
+	public void changeView(Views v,Object o) {
 		switch (v) {
 		
 		case CLIENT:
 			this.setBackground(Color.white);
 			previousPane = currentPane;
-			currentPane = new ClientView(this,ip);
+			currentPane = new ClientView(this,o);
 			body.removeAll();
 			body.add(currentPane,"CLIENT");
 			this.setLocation(50, 50);
