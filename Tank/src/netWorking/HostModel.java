@@ -49,7 +49,6 @@ public class HostModel implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			setUpHost();
 			client = host.accept();
 			System.out.println("Succesfully connected");
 			out = new ObjectOutputStream(client.getOutputStream());
