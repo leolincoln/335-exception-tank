@@ -19,8 +19,20 @@ public class HostModel implements Runnable{
 	private ObjectOutputStream out;
 	public static ArrayList<String> ipList;
 	private Socket client;
+	private String ip;
 	
 	public HostModel() {
+		
+		ip = "";
+		ipList = new ArrayList<String>();
+		
+		try{
+			setUpHost();
+		}
+		
+		catch(IOException ioe) {
+			ioe.printStackTrace();
+		}
 		
 		
 	}
