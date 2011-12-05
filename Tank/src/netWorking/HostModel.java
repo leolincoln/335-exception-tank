@@ -12,7 +12,7 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
-public class HostModel implements Runnable{
+public class HostModel {
 	
 	private ServerSocket host;
 	private ObjectInputStream in;
@@ -41,23 +41,32 @@ public class HostModel implements Runnable{
 		host = new ServerSocket(4000);
 		String ip = InetAddress.getLocalHost().toString();
 		ipList.add(ip);
+		System.out.println("Connecting");
 		JOptionPane.showMessageDialog(null, "connecting");
 }
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
+	public void connectionStart() {
+		Thread connection = new WaitForConnection();
+		connection.start();
+	}
+	
+	private class WaitForConnection extends Thread implements Runnable{
+		
+		public void run() {
 		try {
+			
 			client = host.accept();
 			System.out.println("Succesfully connected");
 			out = new ObjectOutputStream(client.getOutputStream());
 			in = new ObjectInputStream(client.getInputStream());
+			
 		}
-		
 		catch(IOException ioe) {
 			ioe.printStackTrace();
 			
 		}
+		}
+		
 	}
 	
 	public void broadcastStart() {
@@ -82,3 +91,5 @@ public class HostModel implements Runnable{
 		
 	}
 }
+
+
