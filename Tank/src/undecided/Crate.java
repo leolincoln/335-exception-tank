@@ -3,6 +3,9 @@ package undecided;
 
 import java.util.LinkedList;
 import java.util.Observable;
+
+import org.omg.CORBA.TRANSIENT;
+
 import rectangles.CrateRectangle;
 
 /**
@@ -34,7 +37,7 @@ public class Crate extends Observable implements Obstacle {
 	 *            point of the location at which the crate is to be created
 	 */
 	public Crate(Point p) {
-		player = TankView.tankList.getFirst();
+		if(TankView.tankList!=null) player = TankView.tankList.getFirst();
 		location = p;
 		health = 1;// one shot death
 		// 25 is to offset for the size so it's not off the field

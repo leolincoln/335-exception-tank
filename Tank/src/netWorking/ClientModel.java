@@ -78,7 +78,6 @@ private MasterView m;
 			try{
 				out = new ObjectOutputStream(socket.getOutputStream());
 				out.writeObject(new String("ready"));
-				out.close();
 			}
 			catch(IOException e){
 				e.printStackTrace();
@@ -138,8 +137,7 @@ private MasterView m;
 
 
 	public void startGame() {
-		m.changeView(Views.NETWORKTANKVIEW, this);
-		
+		m.changeView(Views.NETWORKTANKVIEW, this);	
 	}
 
 
