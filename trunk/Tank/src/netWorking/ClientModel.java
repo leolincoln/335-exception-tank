@@ -66,6 +66,7 @@ private MasterView m;
 				out = new ObjectOutputStream(socket.getOutputStream());
 				out.writeObject(new String("connected"));
 				out.close();
+				this.interrupt();
 			}
 		catch(IOException e){
 			e.printStackTrace();
