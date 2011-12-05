@@ -46,11 +46,11 @@ private MasterView m;
 		listen.start();
 	}
 	public void ready(){
-		Thread send = new readySender();
+		Thread send = new ReadySender();
 		send.start();
 	}
 	public void connected(){
-		Thread connected = new connectSender();
+		Thread connected = new ConnectSender();
 		connected.start();
 		connected.interrupt();
 	}
@@ -60,7 +60,7 @@ private MasterView m;
 		
 	}
 	
-	private class connectSender extends Thread implements Runnable{
+	private class ConnectSender extends Thread implements Runnable{
 		public void run(){
 			try{
 				out = new ObjectOutputStream(socket.getOutputStream());
@@ -73,7 +73,7 @@ private MasterView m;
 		}
 	}
 	
-	private class readySender extends Thread implements Runnable{
+	private class ReadySender extends Thread implements Runnable{
 		public void run(){
 			try{
 				out = new ObjectOutputStream(socket.getOutputStream());

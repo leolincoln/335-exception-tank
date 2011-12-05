@@ -42,7 +42,6 @@ public class HostModel implements Runnable{
 		String ip = InetAddress.getLocalHost().toString();
 		ipList.add(ip);
 		JOptionPane.showMessageDialog(null, "connecting");
-
 }
 
 	@Override
