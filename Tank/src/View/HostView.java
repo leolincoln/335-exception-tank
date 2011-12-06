@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -102,7 +103,12 @@ public class HostView extends MasterViewPanel implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			hm.clientStart();
+			try {
+				hm.clientStart();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			m.changeView(Views.NETWORKTANKVIEW, hm);
 		}
 	}
