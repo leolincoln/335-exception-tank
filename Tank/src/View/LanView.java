@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import netWorking.HostModel;
 
@@ -71,17 +73,20 @@ public class LanView extends MasterViewPanel {
 
 		centerPane = new JPanel(new GridLayout(1, 2));
 		
-		if(HostModel.ipList!=null &&HostModel.ipList.size() > 0) {
-		hostsInfo = new DefaultListModel();
-		for(String ip : HostModel.ipList) {
-			hostsInfo.addElement(ip);	
-		}
-		hostList = new JList(hostsInfo);
-		}
+		/*if(HostModel.ipList!=null &&HostModel.ipList.size() > 0) {
 		
-		else {
+		for(String ip : HostModel.ipList) {
+			hostsInfo.addElement();	
+		}*/
+		hostsInfo = new DefaultListModel();
+		hostsInfo.addElement("127.0.1.1");
+		
+		hostList = new JList(hostsInfo);
+		
+		
+		/*else {
 			hostList = new JList();
-		}
+		}*/
 		centerPane.add(hostList, 0);
 		pingList = new JList();
 		centerPane.add(pingList, 1);
@@ -174,6 +179,22 @@ public class LanView extends MasterViewPanel {
 		
 		}
 		
+	}
+	
+	private class HostSelectionListener implements ListSelectionListener {
+		
+		public void valueChanged(ListSelectionEvent evt) {
+			if(!evt.getValueIsAdjusting()) {
+				JList hostList = (JList) evt.getSource();
+			}
+			
+			Object[] selected = hostList.getSelectedValues();
+			ip = (String) selected[0];
+			
+			/*for(int i = 0; i < selected.length; i++) {
+				Object sel = selected[i];
+			}*/
+		}
 	}
 
 }
