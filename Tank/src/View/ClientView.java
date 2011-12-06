@@ -112,7 +112,6 @@ public class ClientView extends MasterViewPanel implements Observer {
 			ready.setEnabled(false);
 			cm.ready();
 			cm.listenStart();
-			cm.addObserver((Observer) this);
 		}
 
 	}
