@@ -15,6 +15,7 @@ public class EnemyProjectile extends Observable  implements Projectile {
 										// used to determine collisions
 	private EnemyProjectile thisMissle;
 	private EnemyTank tank;
+	private Map map;
 
 	/**
 	 * Class constructor
@@ -27,9 +28,10 @@ public class EnemyProjectile extends Observable  implements Projectile {
 	
 	
 	// NEW OVERLOADING CONSTRUCTOR!!!!!!!!!!!!!!!!!!!!!
-	public EnemyProjectile(Point p, int x, int y, EnemyTank t) {
+	public EnemyProjectile(Point p, int x, int y, EnemyTank t, Map map) {
 		this.p = p;
 		this.tank = t;
+		this.map = map;
 		speed = 20;
 		this.xspeed = x;
 		this.yspeed= y;
@@ -91,10 +93,11 @@ public class EnemyProjectile extends Observable  implements Projectile {
 	 * with other objects on the field
 	 */
 	public void exists() {
-		if (p.row <= 15 || p.row >= 915 || p.col <= 15 || p.col >= 975) {
+		if (p.row <= 15 || p.row >= 665 || p.col <= 15 || p.col >= 975 || map.isOver()) {
 			exists = false;
 			p = new Point(-1, -1);
 			rect = new ProjectileRectangle(-100, -100);
+			map.getProjectiles().remove(this);
 			
 		}
 	}
@@ -141,7 +144,7 @@ public class EnemyProjectile extends Observable  implements Projectile {
 				notifyObservers(thisMissle);
 				setChanged();
 				} catch(NullPointerException e) {
-					TankView.projectileList.remove(this);
+					map.getProjectiles().remove(this);
 				}
 				try {
 					sleep(speed);
@@ -159,7 +162,6 @@ public class EnemyProjectile extends Observable  implements Projectile {
 	 */
 	public void collided() {
 		exists = false;
-
 	}
 
 }

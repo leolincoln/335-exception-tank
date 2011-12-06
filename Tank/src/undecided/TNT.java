@@ -16,6 +16,7 @@ public class TNT extends Observable implements Obstacle {
 	private int health;// health of the TNT (1 or 0)
 	private TNTRectangle rect;// shape for TNT controlling collisions
 	private Point location;// location of the TNT
+	private Map map;
 
 	/**
 	 * Class constructor
@@ -23,8 +24,8 @@ public class TNT extends Observable implements Obstacle {
 	 * @param p
 	 *            location that the TNT is to be set
 	 */
-	public TNT(Point p) {
-
+	public TNT(Point p, Map map) {
+		this.map = map;
 		location = p;
 		health = 1;// TNT starts with 1 health
 		// 25 is to offset for the size so it's not off the field
@@ -44,8 +45,8 @@ public class TNT extends Observable implements Obstacle {
 		if (this.removeObstacle()) {
 			rect = new TNTRectangle(-100, -100);// removing off field
 			BlastRadiusRectangle b = new BlastRadiusRectangle(location.col - 50, location.row - 50);
-			LinkedList<Obstacle> obs = TankView.obstacleList;
-			LinkedList<PlayerTank> tank = TankView.tankList;
+			LinkedList<Obstacle> obs = map.getObstacles();
+			LinkedList<PlayerTank> tank = map.getPlayers();
 			for(int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
 				if(o instanceof Crate) {
@@ -76,12 +77,12 @@ public class TNT extends Observable implements Obstacle {
 			
 
 		}
-		TankView.obstacleList.remove(this);
+		map.getObstacles().remove(this);
 	}
 	public boolean move(Direction d) {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> players = TankView.tankList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> players = map.getPlayers();
+		LinkedList<EnemyTank> enemies = map.getEnemies();
 		
 		if(d == Direction.EAST) {
 			location = new Point(location.row, location.col + 5);

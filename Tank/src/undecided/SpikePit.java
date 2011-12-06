@@ -7,6 +7,7 @@ public class SpikePit extends Observable implements Obstacle {
 	private int health;// health of the spike pit (-1)
 	private SpikePitRectangle rect;// shape for spike pit controlling collisions
 	private Point location;// location of spike pit
+	private Map map;
 
 	/**
 	 * Class constructor
@@ -14,8 +15,8 @@ public class SpikePit extends Observable implements Obstacle {
 	 * @param p
 	 *            location that the spike pit is to be set
 	 */
-	public SpikePit(Point p) {
-
+	public SpikePit(Point p, Map map) {
+		this.map = map;
 		location = p;
 		health = -1;// spike pit can't be destroyed
 		// 25 is to offset for the size so it's not off the field

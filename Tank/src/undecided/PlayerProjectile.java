@@ -24,6 +24,7 @@ public class PlayerProjectile extends Observable  implements Projectile {
 										// used to determine collisions
 	private PlayerProjectile thisMissle;
 	private PlayerTank tank;
+	private Map map;
 
 	/**
 	 * Class constructor
@@ -34,9 +35,10 @@ public class PlayerProjectile extends Observable  implements Projectile {
 	 *            direction of the projectile
 	 */
 	
-	public PlayerProjectile(Point p, int x, int y, PlayerTank t) {
+	public PlayerProjectile(Point p, int x, int y, PlayerTank t, Map map) {
 		this.p = p;
 		speed = 20;
+		this.map = map;
 		this.xspeed = x;
 		this.yspeed= y;
 		rect = new ProjectileRectangle(p.col - 3, p.row - 3);// creating new projectile rectangle
@@ -97,10 +99,11 @@ public class PlayerProjectile extends Observable  implements Projectile {
 	 * with other objects on the field
 	 */
 	public void exists() {
-		if (p.row <= 15 || p.row >= 915 || p.col <= 15 || p.col >= 975) {
+		if (p.row <= 15 || p.row >= 665 || p.col <= 15 || p.col >= 975 || map.isOver()) {
 			exists = false;
 			p = new Point(-1, -1);
 			rect = new ProjectileRectangle(-100, -100);
+			map.getProjectiles().remove(this);
 			
 		}
 	}
@@ -147,7 +150,7 @@ public class PlayerProjectile extends Observable  implements Projectile {
 				notifyObservers(thisMissle);
 				setChanged();
 				} catch(NullPointerException e) {
-					TankView.projectileList.remove(this);
+					map.getProjectiles().remove(this);
 				}
 				try {
 					sleep(speed);

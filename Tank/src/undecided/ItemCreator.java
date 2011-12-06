@@ -17,8 +17,10 @@ public class ItemCreator extends Thread {
 	private BubbleShield b;
 	private SpeedBoost s;
 	private boolean exists;
+	private Map map;
 	
-	public ItemCreator() {
+	public ItemCreator(Map map) {
+		this.map = map;
 		exists = true;
 	}
 	
@@ -31,16 +33,19 @@ public class ItemCreator extends Thread {
 			if(creation == 1 || creation == 2) {
 				if(!hasBubbleShield()) {
 					if(spawnBubbleShield()) {
-						TankView.itemList.add(b);
+						map.getItems().add(b);
 					}
  				}
 			}
 			if(creation == 3 || creation == 4) {
 				if(!hasSpeedBoost()) {
 					if(spawnSpeedBoost()) {
-						TankView.itemList.add(s);
+						map.getItems().add(s);
 					}
 				}
+			}
+			if(map.isOver()) {
+				exists = false;
 			}
 			try {
 				Thread.sleep(50);
@@ -56,9 +61,9 @@ public class ItemCreator extends Thread {
 		int y = rnd.nextInt(875) + 25;
 		s = new SpeedBoost(new Point(x, y));
 		SpeedBoostRectangle rect = s.getRectangle();
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> tank = TankView.tankList;
-		LinkedList<Item> item = TankView.itemList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> tank = map.getPlayers();
+		LinkedList<Item> item = map.getItems();
 		for (PlayerTank p : tank) {
 			TankRectangle tRect = p.getRectangle();
 			if(tRect.intersects(rect)) {
@@ -131,9 +136,9 @@ public class ItemCreator extends Thread {
 		int y = rnd.nextInt(875) + 25;
 		b = new BubbleShield(new Point(x, y));
 		BubbleShieldRectangle rect = b.getRectangle();
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> tank = TankView.tankList;
-		LinkedList<Item> item = TankView.itemList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> tank = map.getPlayers();
+		LinkedList<Item> item = map.getItems();
 		for (PlayerTank p : tank) {
 			TankRectangle tRect = p.getRectangle();
 			if(tRect.intersects(rect)) {
@@ -202,9 +207,9 @@ public class ItemCreator extends Thread {
 	}
 
 	private boolean hasSpeedBoost() {
-		LinkedList<Item> it = TankView.itemList;
-		for(int i = 0; i < it.size(); i++) {
-			if(it.get(i) instanceof SpeedBoost) {
+		LinkedList<Item> item = map.getItems();
+		for(int i = 0; i < item.size(); i++) {
+			if(item.get(i) instanceof SpeedBoost) {
 				return true;
 			}
 		}
@@ -212,9 +217,9 @@ public class ItemCreator extends Thread {
 	}
 
 	private boolean hasBubbleShield() {
-		LinkedList<Item> it = TankView.itemList;
-		for(int i = 0; i < it.size(); i++) {
-			if(it.get(i) instanceof BubbleShield) {
+		LinkedList<Item> item = map.getItems();
+		for(int i = 0; i < item.size(); i++) {
+			if(item.get(i) instanceof BubbleShield) {
 				return true;
 			}
 		}

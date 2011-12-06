@@ -4,6 +4,7 @@ package View;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import undecided.Level1;
+import undecided.Level2;
+import undecided.Level3;
+import undecided.Level4;
+import undecided.Level5;
 import undecided.TankView;
 
 /**
@@ -26,7 +32,7 @@ import undecided.TankView;
  * 
  */
 public class MasterView extends JFrame {
-
+	public static int currentLevel;
 	JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame m;
@@ -46,7 +52,7 @@ public class MasterView extends JFrame {
 	 * Class constructor
 	 */
 	public MasterView() {
-
+		currentLevel = 1;
 		buildFrame();
 		buildMenu();
 		setDefaultPane();
@@ -183,17 +189,39 @@ public class MasterView extends JFrame {
 			repaint();
 			break;
 		case TANKVIEW:
+			if(currentLevel == 1) {
+			currentPane = new TankView(this, new Level1());
+			}
+			if(currentLevel == 2) {
+				currentPane = new TankView(this, new Level2());
+				}
+			if(currentLevel == 3) {
+				currentPane = new TankView(this, new Level3());
+				}
+			if(currentLevel == 4) {
+				currentPane = new TankView(this, new Level4());
+				}
+			if(currentLevel == 5) {
+				currentPane = new TankView(this, new Level5());
+				}
+			if(currentLevel == 6) {
+				changeView(Views.TITLE, null);
+				}
+			body.add(currentPane, "TANKVIEW");
+			CardLayout c = (CardLayout)body.getLayout();
+			c.show(body, "TANKVIEW");
+			for(Component co : body.getComponents()) {
+			if(co == currentPane) {
+			currentPane.requestFocusInWindow();
+			}
+			}
 			this.setBackground(Color.black);
 			this.setSize(1000, 750);
-			previousPane = currentPane;
-			currentPane = new TankView(this);
-			body.removeAll();
-			body.add(currentPane, "TANKVIEW");
-			currentPane.requestFocus();
 			this.setLocationRelativeTo(null);
 			// this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;
+	
 		case TITLE:
 			this.setBackground(Color.black);
 			previousPane = currentPane;
@@ -203,6 +231,7 @@ public class MasterView extends JFrame {
 			this.setSize(640, 400);
 			this.setLocationRelativeTo(null);
 			repaint();
+			break;
 		}
 
 	}

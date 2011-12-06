@@ -28,16 +28,19 @@ public class Crate extends Observable implements Obstacle {
 	private CrateRectangle rect;// shape for crate controlling collisions
 	private Point location;// location of crate
 	private PlayerTank player;
-
+	private Map map;
 
 	/**
 	 * Class Constructor
 	 * 
 	 * @param p
 	 *            point of the location at which the crate is to be created
+	 * @param map 
 	 */
-	public Crate(Point p) {
-		if(TankView.tankList!=null) player = TankView.tankList.getFirst();
+
+	public Crate(Point p, Map map) {
+		this.map = map;
+		player = map.getPlayers().getFirst();
 		location = p;
 		health = 1;// one shot death
 		// 25 is to offset for the size so it's not off the field
@@ -55,7 +58,7 @@ public class Crate extends Observable implements Obstacle {
 		health = health - dmg;
 		if (this.removeObstacle()) {
 			rect = new CrateRectangle(-1, -1);// removing off field
-			TankView.obstacleList.remove(this);
+			map.getObstacles().remove(this);
 		}
 
 	}
@@ -83,9 +86,9 @@ public class Crate extends Observable implements Obstacle {
 	 * @return moves the crate if it is being pushed by a tank
 	 */
 	public boolean move(Direction d) {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> players = TankView.tankList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> players = map.getPlayers();
+		LinkedList<EnemyTank> enemies = map.getEnemies();
 		
 		if(d == Direction.EAST) {
 			location = new Point(location.row, location.col + player.getSpeed());
