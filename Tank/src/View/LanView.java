@@ -5,11 +5,15 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+
+import netWorking.HostModel;
 
 
 
@@ -30,6 +34,7 @@ public class LanView extends MasterViewPanel {
 	public JButton back, create, join,search;
 	private JLabel hosts, ping;
 	public JList hostList, pingList;
+	private DefaultListModel hostsInfo;
 	
 	
 
@@ -41,8 +46,10 @@ public class LanView extends MasterViewPanel {
 	 */
 	public LanView(MasterView m) {
 		super(m);
+		
 		setupPane();
 		buildButtons();
+		
 		this.setVisible(true);
 	}
 
@@ -50,6 +57,7 @@ public class LanView extends MasterViewPanel {
 	 * This is the method that sets up the majority of the LAN panel including
 	 * the layouts and labels.
 	 */
+ 
 	private void setupPane() {
 		this.setLayout(new BorderLayout());
 		// setup labels
@@ -62,7 +70,18 @@ public class LanView extends MasterViewPanel {
 		this.add(northPane, BorderLayout.NORTH);
 
 		centerPane = new JPanel(new GridLayout(1, 2));
-		hostList = new JList();
+		
+		if(HostModel.ipList!=null &&HostModel.ipList.size() > 0) {
+		hostsInfo = new DefaultListModel();
+		for(String ip : HostModel.ipList) {
+			hostsInfo.addElement(ip);	
+		}
+		hostList = new JList(hostsInfo);
+		}
+		
+		else {
+			hostList = new JList();
+		}
 		centerPane.add(hostList, 0);
 		pingList = new JList();
 		centerPane.add(pingList, 1);
