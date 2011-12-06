@@ -102,7 +102,8 @@ public class HostView extends MasterViewPanel implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
+			hm.clientStart();
+			m.changeView(Views.NETWORKTANKVIEW, hm);
 		}
 	}
 

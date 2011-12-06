@@ -79,7 +79,8 @@ public class HostModel {
 	}
 
 	private class WaitForConnection extends Thread implements Runnable {
-boolean first = true;
+		boolean first = true;
+
 		public void run() {
 			while (true) {
 				System.out.println("waiting still waiting");
@@ -89,7 +90,7 @@ boolean first = true;
 						System.out.println(client);
 						out = new ObjectOutputStream(client.getOutputStream());
 						in = new ObjectInputStream(client.getInputStream());
-						if(first){
+						if (first) {
 							out.writeObject(new String("Welcome!"));
 							first = false;
 						}
@@ -132,6 +133,13 @@ boolean first = true;
 				e.printStackTrace();
 			}
 		}
+
+	}
+
+	public void clientStart() throws IOException {
+		out = new ObjectOutputStream(client.getOutputStream());
+		out.writeObject(new String("start"));
+		out.close();
 
 	}
 }

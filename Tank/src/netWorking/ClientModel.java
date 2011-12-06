@@ -105,8 +105,7 @@ public class ClientModel extends Observable implements Observer {
 		public void run() {
 			while (true) {
 				System.out.println("Trying to read");
-				try {
-
+				try{
 					in = new ObjectInputStream(socket.getInputStream());
 					unKnown = in.readObject();
 					System.out.println(in);
@@ -128,8 +127,6 @@ public class ClientModel extends Observable implements Observer {
 										"Connected to host!");
 								first = false;
 							}
-									
-
 						} else if (unKnown.equals("start")) {
 							JOptionPane.showMessageDialog(null,
 									"Changing to game view");
@@ -140,10 +137,10 @@ public class ClientModel extends Observable implements Observer {
 					}
 				}
 				try {
-					sleep(10);
+					sleep(3);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
 					System.out.println("interrupted thread listen");
 				}
 			}
