@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -82,6 +83,7 @@ public class LanView extends MasterViewPanel {
 		hostsInfo.addElement("127.0.1.1");
 		
 		hostList = new JList(hostsInfo);
+		hostList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		hostList.addListSelectionListener(new HostSelectionListener());
 		
 		
