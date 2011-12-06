@@ -94,10 +94,9 @@ public class EnemyProjectile extends Observable  implements Projectile {
 	 */
 	public void exists() {
 		if (p.row <= 15 || p.row >= 665 || p.col <= 15 || p.col >= 975 || map.isOver()) {
-			exists = false;
 			p = new Point(-1, -1);
 			rect = new ProjectileRectangle(-100, -100);
-			map.getProjectiles().remove(this);
+			exists = false;
 			
 		}
 	}
