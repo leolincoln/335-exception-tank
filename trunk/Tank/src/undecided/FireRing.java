@@ -206,38 +206,30 @@ public class FireRing extends Observable implements Obstacle {
 		if (d == Direction.NORTH) {
 			location = new Point(location.row - 1, location.col);
 			rect = new FireRingRectangle(location.col - 25, location.row - 25);
-			for (int i = 0; i < obs.size(); i++) {
-				Obstacle o = obs.get(i);
-				if (o instanceof ImmovableBlock) {
-					if (((ImmovableBlock) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row + 1, location.col);
-						rect = new FireRingRectangle(location.col - 25,
-						location.row - 25);
-						moveable = false;
-						return false;
+			if (obs != null) {
+				for (int i = 0; i < obs.size(); i++) {
+					Obstacle o = obs.get(i);
+					if (o instanceof ImmovableBlock) {
+						if (((ImmovableBlock) o).getRectangle()
+								.intersects(rect)) {
+							location = new Point(location.row + 1, location.col);
+							rect = new FireRingRectangle(location.col - 25,
+									location.row - 25);
+							moveable = false;
+							return false;
+						}
 					}
-				}
-				if (o instanceof TNT) {
-					if (((TNT) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row + 1, location.col);
-						rect = new FireRingRectangle(location.col - 25,
-								location.row - 25);
-						moveable = false;
-						return false;
+					if (o instanceof TNT) {
+						if (((TNT) o).getRectangle().intersects(rect)) {
+							location = new Point(location.row + 1, location.col);
+							rect = new FireRingRectangle(location.col - 25,
+									location.row - 25);
+							moveable = false;
+							return false;
+						}
 					}
-				}
-				if (o instanceof Crate) {
-					if (((Crate) o).getRectangle().intersects(rect)) {
-						location = new Point(location.row - 1, location.col);
-						rect = new FireRingRectangle(location.col - 25,
-								location.row - 25);
-						moveable = false;
-						return false;
-					}
-				}
-				if (o instanceof FireRing) {
-					if (o != this) {
-						if (((FireRing) o).getRectangle().intersects(rect)) {
+					if (o instanceof Crate) {
+						if (((Crate) o).getRectangle().intersects(rect)) {
 							location = new Point(location.row - 1, location.col);
 							rect = new FireRingRectangle(location.col - 25,
 									location.row - 25);
@@ -245,8 +237,20 @@ public class FireRing extends Observable implements Obstacle {
 							return false;
 						}
 					}
-				}
+					if (o instanceof FireRing) {
+						if (o != this) {
+							if (((FireRing) o).getRectangle().intersects(rect)) {
+								location = new Point(location.row - 1,
+										location.col);
+								rect = new FireRingRectangle(location.col - 25,
+										location.row - 25);
+								moveable = false;
+								return false;
+							}
+						}
+					}
 
+				}
 			}
 			if (location.row < 30) {
 				location = new Point(location.row + 1, location.col);

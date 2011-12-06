@@ -3,6 +3,8 @@ package undecided;
 import java.util.LinkedList;
 import java.io.*;
 
+import javax.swing.JOptionPane;
+
 import map.Map;
 
 public class MapBuilder {
@@ -29,6 +31,7 @@ public class MapBuilder {
 		oops.writeObject(m);
 		oops.close();
 		fos.close();
+		JOptionPane.showMessageDialog(null, "map file has been written to map1.map " );
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

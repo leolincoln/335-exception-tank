@@ -34,14 +34,15 @@ public class HostView extends MasterViewPanel implements Observer {
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
-		HostModel hm = new HostModel();
+		this.setVisible(true);
+		HostModel hm = new HostModel(this, m);
 		hm.connectionStart();
 		// TODO Auto-generated constructor stub
 	}
 
 	public void buildMain() {
 		this.setLayout(new GridLayout(1, 2));
-		this.setVisible(true);
+		
 	}
 
 	public void buildHostPanel() {
