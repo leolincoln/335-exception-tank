@@ -150,7 +150,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		 */
 		public void mousePressed(MouseEvent arg0) {
 			int count = 0;
-			for(Projectile p : projectileList) {
+			for(Projectile p : currentMap.getProjectiles()) {
 				if(p instanceof PlayerProjectile) {
 					count++;
 				}
@@ -207,27 +207,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	 */
 	public void paintComponent(Graphics g) {
 	
-		for (Projectile p : projectileList) {
-			if(p instanceof PlayerProjectile) {
-			PlayerProjectile s = (PlayerProjectile)p;
-			ProjectileRectangle rect = s.getRectangle();
-			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
-		}
-			if(p instanceof EnemyProjectile) {
-				EnemyProjectile s = (EnemyProjectile)p;
-				ProjectileRectangle rect = s.getRectangle();
-				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
-			}
-		}
 		
-		for (PlayerTank p : tankList) {
-			TankRectangle tRect = p.getRectangle();
-			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
-		}
-		for (EnemyTank p : enemyList) {
-			TankRectangle tRect = p.getRectangle();
-			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
-		}
 		for (Item p : itemList) {
 			if(p instanceof SpeedBoost) {
 			SpeedBoost s = (SpeedBoost)p;
@@ -242,6 +222,12 @@ public class TankView extends MasterViewPanel implements Observer {
 		}
 		for (int i = 0; i < obstacleList.size(); i++) {
 			Obstacle p = obstacleList.get(i);
+			if (p instanceof SpikePit) {// for instance of SpikePit
+				SpikePit sp = (SpikePit) p;
+				SpikePitRectangle spRect = sp.getRectangle();
+				g.drawImage(spRect.getImage(), spRect.xCoord(),
+						spRect.yCoord(), null);
+			}
 			if (p instanceof Crate) {// for instance of crate
 				Crate c = (Crate) p;
 				CrateRectangle cRect = c.getRectangle();
@@ -253,12 +239,6 @@ public class TankView extends MasterViewPanel implements Observer {
 				ImmovableBlockRectangle ibRect = ib.getRectangle();
 				g.drawImage(ibRect.getImage(), ibRect.xCoord(),
 						ibRect.yCoord(), null);
-			}
-			if (p instanceof SpikePit) {// for instance of SpikePit
-				SpikePit sp = (SpikePit) p;
-				SpikePitRectangle spRect = sp.getRectangle();
-				g.drawImage(spRect.getImage(), spRect.xCoord(),
-						spRect.yCoord(), null);
 			}
 			if (p instanceof FireRing) {// for instance of fireRing
 				FireRing fr = (FireRing) p;
@@ -274,6 +254,26 @@ public class TankView extends MasterViewPanel implements Observer {
 						tntRect.yCoord(), null);
 			}
 
+		}
+		for (PlayerTank p : tankList) {
+			TankRectangle tRect = p.getRectangle();
+			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
+		for (EnemyTank p : enemyList) {
+			TankRectangle tRect = p.getRectangle();
+			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
+		for (Projectile p : projectileList) {
+			if(p instanceof PlayerProjectile) {
+			PlayerProjectile s = (PlayerProjectile)p;
+			ProjectileRectangle rect = s.getRectangle();
+			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
+		}
+			if(p instanceof EnemyProjectile) {
+				EnemyProjectile s = (EnemyProjectile)p;
+				ProjectileRectangle rect = s.getRectangle();
+				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
+			}
 		}
 		if(won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);

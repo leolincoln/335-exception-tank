@@ -15,6 +15,7 @@ public class FireRing extends Observable implements Obstacle {
 	private int tick;
 	private boolean moveable;
 	private Map map;
+	private EnemyTank enemy;
 
 	/**
 	 * Class constructor
@@ -87,8 +88,9 @@ public class FireRing extends Observable implements Obstacle {
 	public synchronized boolean move(Direction d) {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<EnemyTank> enemies = map.getEnemies();
-		EnemyTank enemy = enemies.getFirst();
-
+		if(enemies.size() != 0) {
+		enemy = enemies.getFirst();
+		} 
 		if (d == Direction.EAST) {
 			location = new Point(location.row, location.col + 1);
 			rect = new FireRingRectangle(location.col - 25, location.row - 25);
