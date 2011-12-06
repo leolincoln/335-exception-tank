@@ -84,6 +84,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		itemList = currentMap.getItems();
 		GameThread gt = new GameThread();
 		gt.start();
+		
 		this.setFocusable(true);
 		panel = new JPanel();
 		player = tankList.getFirst();
@@ -382,7 +383,6 @@ public class TankView extends MasterViewPanel implements Observer {
 					MasterView.currentLevel++;
 					m.changeView(Views.TANKVIEW, null);
 					exists = false;
-					
 					}
 					else {
 						try {

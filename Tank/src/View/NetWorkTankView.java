@@ -32,6 +32,7 @@ import undecided.FireRing;
 import undecided.ImmovableBlock;
 import undecided.Item;
 import undecided.ItemCreator;
+import undecided.Level1;
 import undecided.Obstacle;
 import undecided.PlayerProjectile;
 import undecided.PlayerTank;
@@ -51,7 +52,7 @@ public class NetWorkTankView extends MasterViewPanel implements Observer{
 	 */
 	private static final long serialVersionUID = 1L;
 private int mapNumber;
-private Map map;
+
 private JPanel panel;
 private Image dbImage;
 private Graphics dbg;
@@ -68,16 +69,18 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 
 	public NetWorkTankView(MasterView m, int num) {
 		super(m);
+		undecided.Map level1= new Level1();
 		this.mapNumber = num;
-		
-		player = new PlayerTank(new Point(400, 125));
-		player2 = new PlayerTank(new Point(125, 400));
+		//player1 is the host
+		//player 2 is the client
+		player = new PlayerTank(new Point(400, 125), new Level1());
+		player2 = new PlayerTank(new Point(125, 400),new Level1());
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
 		itemList = new LinkedList<Item>();
 		
-		creator = new ItemCreator();
+		creator = new ItemCreator(new Level1());
 		creator.start();
 		tankList.add(player);
 		tankList.add(player2);
