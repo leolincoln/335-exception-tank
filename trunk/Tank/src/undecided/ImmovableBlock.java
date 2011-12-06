@@ -16,6 +16,7 @@ public class ImmovableBlock extends Observable implements Obstacle {
 
 	private int health;// health of the crate (either 0 or 1)
 	private ImmovableBlockRectangle rect;// shape for crate controlling
+	private Map map;
 											// collisions
 	private Point location;// location of crate
 
@@ -24,9 +25,10 @@ public class ImmovableBlock extends Observable implements Obstacle {
 	 * 
 	 * @param p
 	 *            location at which the immovable block is to placed
+	 * @param map 
 	 */
-	public ImmovableBlock(Point p) {
-
+	public ImmovableBlock(Point p, Map map) {
+		this.map = map;
 		location = p;// setting location of immovable block
 		health = -1;// -1 invincible so -1 health
 		// creating new rectangle to detect collisions

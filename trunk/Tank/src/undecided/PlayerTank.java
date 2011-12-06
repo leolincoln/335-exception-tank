@@ -32,17 +32,20 @@ public class PlayerTank extends Observable {
 	private int health;
 	private Direction d;
 	private Image img;
+	private Map map;
 
 	/**
 	 * Class constructor
 	 * 
 	 * @param p
 	 *            location of the player controlled tank
+	 * @param map 
 	 */
-	public PlayerTank(Point p) {
+	public PlayerTank(Point p, Map map) {
 		this.p = p;
 		speed = 5;
 		health = 1;
+		this.map = map;
 		d = Direction.EAST;
 		t = new TankRectangle(p.col - 25, p.row - 25);
 		img = new ImageIcon("images/tank.png").getImage();
@@ -125,8 +128,8 @@ public class PlayerTank extends Observable {
 	 * @return Point returns the point that is above the tank's current position
 	 */
 	public boolean moveUp() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<EnemyTank> enemies = map.getEnemies();
 		d = Direction.NORTH;
 		p = new Point(p.row - this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -187,8 +190,8 @@ public class PlayerTank extends Observable {
 	 * @return Point returns the point that is below the tank's current position
 	 */
 	public boolean moveDown() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<EnemyTank> enemies = map.getEnemies();
 		d = Direction.SOUTH;
 		p = new Point(p.row + this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -249,8 +252,8 @@ public class PlayerTank extends Observable {
 	 *         current position
 	 */
 	public boolean moveRight() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<EnemyTank> enemies = map.getEnemies();
 		d = Direction.EAST;
 		p = new Point(p.row, p.col + this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -312,8 +315,8 @@ public class PlayerTank extends Observable {
 	 *         position
 	 */
 	public boolean moveLeft() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<EnemyTank> enemies = TankView.enemyList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<EnemyTank> enemies = map.getEnemies();
 		d = Direction.WEST;
 		p = new Point(p.row, p.col - this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -378,7 +381,7 @@ public class PlayerTank extends Observable {
 	// new version!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public void shoot(Point p, int x, int y) {
 		
-		PlayerProjectile missle = new PlayerProjectile(p, x, y, this);
+		PlayerProjectile missle = new PlayerProjectile(p, x, y, this, map);
 			notifyObservers(missle);
 			setChanged();
 	
@@ -397,7 +400,7 @@ public class PlayerTank extends Observable {
 		if (this.isDead()) {
 			t = new TankRectangle(-100, -100);
 			p = new Point(-1, -1);
-			TankView.tankList.remove(this);
+			map.getPlayers().remove(this);
 		}
 		else if (health == 1) {
 			ImmuneThread it = new ImmuneThread();

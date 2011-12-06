@@ -22,10 +22,12 @@ public class EnemyTank extends Observable {
 	private Direction d;
 	private Image img;
 	private boolean moveable;
+	private Map map;
 
-	public EnemyTank(Point p) {
+	public EnemyTank(Point p, Map map) {
 		health = 1;
 		this.p = p;
+		this.map = map;
 		d = Direction.NORTH;
 		speed = 1;
 		moveable = true;
@@ -73,8 +75,8 @@ public class EnemyTank extends Observable {
 	}
 
 	public boolean moveUp() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> players = TankView.tankList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.NORTH;
 		p = new Point(p.row - this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -124,12 +126,20 @@ public class EnemyTank extends Observable {
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
-					if (!c.move(d)) {
 						p = new Point(p.row + this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
 						moveable = false;
 						return false;
-					}
+					
+				}
+			}
+			if (o instanceof SpikePit) {
+				SpikePit c = (SpikePit) o;
+				if (c.getRectangle().intersects(t)) {
+						p = new Point(p.row + this.speed, p.col);
+						t = new TankRectangle(p.col - 25, p.row - 25);
+						moveable = false;
+						return false;
 				}
 			}
 
@@ -152,8 +162,8 @@ public class EnemyTank extends Observable {
 	 * @return Point returns the point that is below the tank's current position
 	 */
 	public boolean moveDown() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> players = TankView.tankList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.SOUTH;
 		p = new Point(p.row + this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -170,6 +180,16 @@ public class EnemyTank extends Observable {
 			Obstacle o = obs.get(i);
 			if (o instanceof ImmovableBlock) {
 				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row - this.speed, p.col);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
+					return false;
+				}
+
+			}
+			if (o instanceof SpikePit) {
+				SpikePit b = (SpikePit) o;
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row - this.speed, p.col);
 					t = new TankRectangle(p.col - 25, p.row - 25);
@@ -231,8 +251,8 @@ public class EnemyTank extends Observable {
 	 *         current position
 	 */
 	public boolean moveRight() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> players = TankView.tankList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.EAST;
 		p = new Point(p.row, p.col + this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -249,6 +269,16 @@ public class EnemyTank extends Observable {
 			Obstacle o = obs.get(i);
 			if (o instanceof ImmovableBlock) {
 				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row, p.col - this.speed);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
+					return false;
+				}
+
+			}
+			if (o instanceof SpikePit) {
+				SpikePit b = (SpikePit) o;
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row, p.col - this.speed);
 					t = new TankRectangle(p.col - 25, p.row - 25);
@@ -311,8 +341,8 @@ public class EnemyTank extends Observable {
 	 *         position
 	 */
 	public boolean moveLeft() {
-		LinkedList<Obstacle> obs = TankView.obstacleList;
-		LinkedList<PlayerTank> players = TankView.tankList;
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.WEST;
 		p = new Point(p.row, p.col - this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
@@ -329,6 +359,16 @@ public class EnemyTank extends Observable {
 			Obstacle o = obs.get(i);
 			if (o instanceof ImmovableBlock) {
 				ImmovableBlock b = (ImmovableBlock) o;
+				if (b.getRectangle().intersects(t)) {
+					p = new Point(p.row, p.col + this.speed);
+					t = new TankRectangle(p.col - 25, p.row - 25);
+					moveable = false;
+					return false;
+				}
+
+			}
+			if (o instanceof SpikePit) {
+				SpikePit b = (SpikePit) o;
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row, p.col + this.speed);
 					t = new TankRectangle(p.col - 25, p.row - 25);
@@ -387,7 +427,7 @@ public class EnemyTank extends Observable {
 
 	public void shoot(Point p, int x, int y) {
 
-		EnemyProjectile missle = new EnemyProjectile(p, x, y, this);
+		EnemyProjectile missle = new EnemyProjectile(p, x, y, this, map);
 		notifyObservers(missle);
 		setChanged();
 
@@ -409,11 +449,14 @@ public class EnemyTank extends Observable {
 
 		@Override
 		public synchronized void run() {
-			while (exists && TankView.tankList.size() != 0) {
+			while (exists || map.getPlayers().size() != 0) {
 				Random rnd = new Random();
-				PlayerTank player = TankView.tankList.getFirst();
+				if(map.getPlayers().size() == 1) {
+				PlayerTank player = map.getPlayers().getFirst();
+				
 				int x = player.getLocation().col;
 				int y = player.getLocation().row;
+				
 				int xdiff = x - p.col + rnd.nextInt(100);
 				int ydiff = y - p.row + rnd.nextInt(100);
 				
@@ -449,11 +492,21 @@ public class EnemyTank extends Observable {
 				if (!moveable) {
 					tick = 400;
 				}
-				if (timePassed % 200 == 0 && timePassed != 0) {
+				if (timePassed % 20 == 0 && timePassed != 0) {
+					LinkedList<Projectile> proj = map.getProjectiles();
+					int count = 0;
+					for(Projectile p : proj) {
+						if(p instanceof EnemyProjectile) {
+							count++;
+						}
+					}
+					
+					if(count == 0) {
 					shoot(new Point(p.row, p.col),
 							(int) (xdiff * (5 /  Math.sqrt(xdiff * xdiff + ydiff * ydiff))),
 							(int) (ydiff * (5 / Math.sqrt(xdiff * xdiff + ydiff * ydiff))));
-					
+					}
+				}
 				}
 
 				if (tick < 400) {
@@ -461,15 +514,16 @@ public class EnemyTank extends Observable {
 				} else {
 					tick = 0;
 				}
+				if(isDead()) {
+					exists = false;
+				}
 				timePassed++;
 				try {
 					Thread.sleep(10);
 				} catch (Exception e) {
 
 				}
-				if (isDead()) {
-					exists = false;
-				}
+
 
 			}
 
@@ -480,7 +534,7 @@ public class EnemyTank extends Observable {
 	public void recieveDamage(int i) {
 		health = health - i;
 		if (isDead()) {
-			TankView.enemyList.remove(this);
+			map.getEnemies().remove(this);
 		}
 
 	}
