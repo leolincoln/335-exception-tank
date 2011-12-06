@@ -82,6 +82,7 @@ public class LanView extends MasterViewPanel {
 		hostsInfo.addElement("127.0.1.1");
 		
 		hostList = new JList(hostsInfo);
+		hostList.addListSelectionListener(new HostSelectionListener());
 		
 		
 		/*else {
@@ -190,7 +191,7 @@ public class LanView extends MasterViewPanel {
 			
 			Object[] selected = hostList.getSelectedValues();
 			ip = (String) selected[0];
-			
+			System.out.println(ip);
 			/*for(int i = 0; i < selected.length; i++) {
 				Object sel = selected[i];
 			}*/
