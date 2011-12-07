@@ -21,6 +21,7 @@ import undecided.Level2;
 import undecided.Level3;
 import undecided.Level4;
 import undecided.Level5;
+import undecided.Map;
 import undecided.TankView;
 
 /**
@@ -148,7 +149,8 @@ public class MasterView extends JFrame {
 			this.setBackground(Color.black);
 			this.setSize(1000, 750);
 			previousPane = currentPane;
-			currentPane = new NetWorkTankView(this, 1);
+			
+			currentPane = new NetWorkTankView(this);
 			body.removeAll();
 			body.add(currentPane, "NETWORKTANKVIEW");
 			currentPane.requestFocus();
