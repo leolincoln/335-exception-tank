@@ -110,6 +110,10 @@ public abstract class Map extends Observable implements Observer{
 				notifyObservers();
 				setChanged();
 			}
+			if (s.equals("moveTNT")) {
+				notifyObservers();
+				setChanged();
+			}
 		}
 		
 		if (o instanceof FireRing) {
