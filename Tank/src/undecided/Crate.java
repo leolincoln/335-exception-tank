@@ -164,7 +164,7 @@ public class Crate extends Observable implements Obstacle {
 			for(int i = 0; i < enemies.size(); i++) {
 				EnemyTank p = enemies.get(i);
 				if(p.getRectangle().intersects(rect)) {
-					location = new Point(location.row, location.col - player.getSpeed());
+					location = new Point(location.row, location.col + player.getSpeed());
 					rect = new CrateRectangle(location.col - 25, location.row - 25);
 					return false;
 				}

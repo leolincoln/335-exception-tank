@@ -204,9 +204,7 @@ public class MasterView extends JFrame {
 			if(currentLevel == 5) {
 				currentPane = new TankView(this, new Level5());
 				}
-			if(currentLevel == 6) {
-				changeView(Views.TITLE, null);
-				}
+		
 			body.add(currentPane, "TANKVIEW");
 			CardLayout c = (CardLayout)body.getLayout();
 			c.show(body, "TANKVIEW");
@@ -218,6 +216,9 @@ public class MasterView extends JFrame {
 			this.setBackground(Color.black);
 			this.setSize(1000, 750);
 			this.setLocationRelativeTo(null);
+			if(currentLevel == 6) {
+				changeView(Views.TITLE, null);
+				}
 			// this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;

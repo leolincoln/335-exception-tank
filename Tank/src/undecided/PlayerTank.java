@@ -290,6 +290,7 @@ public class PlayerTank extends Observable {
 				TNT c = (TNT) o;
 				if(c.getRectangle().intersects(t)) {
 					if(!c.move(d)) {
+						System.out.println("??");
 						p = new Point(p.row, p.col - this.speed);
 						t = new TankRectangle(p.col - 25, p.row - 25);
 						return false;

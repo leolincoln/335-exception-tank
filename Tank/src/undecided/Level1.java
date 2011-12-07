@@ -35,6 +35,7 @@ public class Level1 extends Map implements Observer {
 			ImmovableBlock b = new ImmovableBlock(new Point(25, i), this);
 			addObstacle(b);
 		}
+		
 		for (int i = 75; i < 275; i += 50) {
 			Crate c = new Crate(new Point(i, 480), this);
 			addObstacle(c);
