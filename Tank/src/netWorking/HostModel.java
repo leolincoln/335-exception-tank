@@ -31,11 +31,9 @@ public class HostModel {
 		this.m = m;
 		ip = "";
 		ipList = new ArrayList<String>();
-
 		try {
 			setUpHost();
 		}
-
 		catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -74,7 +72,6 @@ public class HostModel {
 
 			} catch (IOException e) {
 			}
-
 		}
 	}
 
@@ -133,7 +130,6 @@ public class HostModel {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	public void clientStart() throws IOException {

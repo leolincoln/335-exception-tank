@@ -119,20 +119,20 @@ public class MasterView extends JFrame {
 	 * @param v
 	 *            this is the view that is to be switched to.
 	 */
-	public void changeView(Views v,Object o) {
+	public void changeView(Views v, Object o) {
 		switch (v) {
-		
+
 		case CLIENT:
 			this.setBackground(Color.white);
 			previousPane = currentPane;
-			currentPane = new ClientView(this,o);
+			currentPane = new ClientView(this, o);
 			body.removeAll();
-			body.add(currentPane,"CLIENT");
+			body.add(currentPane, "CLIENT");
 			this.setLocation(50, 50);
-			this.setSize(600,400);
+			this.setSize(600, 400);
 			repaint();
 			break;
-			
+
 		case HOST:
 			this.setBackground(Color.white);
 			System.out.println("HostviewWorking");
@@ -143,7 +143,7 @@ public class MasterView extends JFrame {
 			this.setLocationRelativeTo(null);
 			this.setSize(600, 400);
 			break;
-			
+
 		case NETWORKTANKVIEW:
 			this.setBackground(Color.black);
 			this.setSize(1000, 750);
@@ -156,8 +156,7 @@ public class MasterView extends JFrame {
 			// this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;
-			
-			
+
 		case LAN:
 			this.setBackground(Color.white);
 			previousPane = currentPane;
@@ -174,11 +173,11 @@ public class MasterView extends JFrame {
 			previousPane = currentPane;
 			currentPane = temp;
 			if (currentPane instanceof LanView)
-				changeView(Views.LAN,null);
+				changeView(Views.LAN, null);
 			if (currentPane instanceof TitleView)
-				changeView(Views.TITLE,null);
+				changeView(Views.TITLE, null);
 			if (currentPane instanceof TankView)
-				changeView(Views.TANKVIEW,null);
+				changeView(Views.TANKVIEW, null);
 
 			body.removeAll();
 			body.add(currentPane, v.name());
@@ -189,40 +188,40 @@ public class MasterView extends JFrame {
 			repaint();
 			break;
 		case TANKVIEW:
-			if(currentLevel == 1) {
-			currentPane = new TankView(this, new Level1());
+			if (currentLevel == 1) {
+				currentPane = new TankView(this, new Level1());
 			}
-			if(currentLevel == 2) {
+			if (currentLevel == 2) {
 				currentPane = new TankView(this, new Level2());
-				}
-			if(currentLevel == 3) {
-				currentPane = new TankView(this, new Level3());
-				}
-			if(currentLevel == 4) {
-				currentPane = new TankView(this, new Level4());
-				}
-			if(currentLevel == 5) {
-				currentPane = new TankView(this, new Level5());
-				}
-		
-			body.add(currentPane, "TANKVIEW");
-			CardLayout c = (CardLayout)body.getLayout();
-			c.show(body, "TANKVIEW");
-			for(Component co : body.getComponents()) {
-			if(co == currentPane) {
-			currentPane.requestFocusInWindow();
 			}
+			if (currentLevel == 3) {
+				currentPane = new TankView(this, new Level3());
+			}
+			if (currentLevel == 4) {
+				currentPane = new TankView(this, new Level4());
+			}
+			if (currentLevel == 5) {
+				currentPane = new TankView(this, new Level5());
+			}
+
+			body.add(currentPane, "TANKVIEW");
+			CardLayout c = (CardLayout) body.getLayout();
+			c.show(body, "TANKVIEW");
+			for (Component co : body.getComponents()) {
+				if (co == currentPane) {
+					currentPane.requestFocusInWindow();
+				}
 			}
 			this.setBackground(Color.black);
 			this.setSize(1000, 750);
 			this.setLocationRelativeTo(null);
-			if(currentLevel == 6) {
+			if (currentLevel == 6) {
 				changeView(Views.TITLE, null);
-				}
+			}
 			// this.setExtendedState(this.MAXIMIZED_BOTH);
 
 			break;
-	
+
 		case TITLE:
 			this.setBackground(Color.black);
 			previousPane = currentPane;
@@ -251,7 +250,7 @@ public class MasterView extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			m.setSize(400, 600);
 			m.setLocationRelativeTo(null);
-			changeView(Views.TANKVIEW,null);
+			changeView(Views.TANKVIEW, null);
 
 		}
 
@@ -288,7 +287,7 @@ public class MasterView extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			m.setSize(400, 600);
 			m.setLocationRelativeTo(null);
-			changeView(Views.LAN,null);
+			changeView(Views.LAN, null);
 		}
 
 	}
@@ -307,7 +306,7 @@ public class MasterView extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			m.setSize(400, 600);
 			m.setLocationRelativeTo(null);
-			changeView(Views.TITLE,null);
+			changeView(Views.TITLE, null);
 
 		}
 
