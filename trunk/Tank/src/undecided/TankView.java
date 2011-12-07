@@ -74,6 +74,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	public TankView(MasterView m, Map map) {
 		super(m);
 		currentMap = map;
+		
 		won = false;
 		lost = false;
 		currentMap.addObserver(this);

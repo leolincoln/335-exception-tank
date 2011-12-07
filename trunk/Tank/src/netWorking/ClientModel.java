@@ -106,12 +106,12 @@ public class ClientModel extends Observable implements Observer {
 			while (true) {
 				System.out.println("Trying to read");
 				try{
+					in = null;
 					in = new ObjectInputStream(socket.getInputStream());
-					unKnown = in.readObject();
+					if(in!=null) unKnown = in.readObject();
 					System.out.println(in);
 				}
-				
-
+			
 				catch (IOException e) {
 					e.printStackTrace();
 				} catch (ClassNotFoundException e) {
@@ -126,6 +126,7 @@ public class ClientModel extends Observable implements Observer {
 								JOptionPane.showMessageDialog(null,
 										"Connected to host!");
 								first = false;
+								
 							}
 						} else if (unKnown.equals("start")) {
 							JOptionPane.showMessageDialog(null,

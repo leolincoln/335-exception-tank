@@ -42,7 +42,6 @@ public class LanModel {
 	private void initializeSocket() {
 		try {
 			Socket = new ServerSocket(4000);
-
 		} catch (Exception e) {
 
 		}
