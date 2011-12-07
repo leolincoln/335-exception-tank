@@ -18,8 +18,6 @@ import javax.swing.event.ListSelectionListener;
 
 import netWorking.HostModel;
 
-
-
 /**
  * 
  * @author Team Exception
@@ -29,17 +27,14 @@ import netWorking.HostModel;
  * 
  */
 public class LanView extends MasterViewPanel {
-	private String ip="127.0.0.1";
-
+	private String ip = "127.0.0.1";
 
 	private static final long serialVersionUID = 1L;
 	private JPanel northPane, buttonPane, centerPane;
-	public JButton back, create, join,search;
+	public JButton back, create, join, search;
 	private JLabel hosts, ping;
 	public JList hostList, pingList;
 	private DefaultListModel hostsInfo;
-	
-	
 
 	/**
 	 * Class constructor
@@ -49,10 +44,10 @@ public class LanView extends MasterViewPanel {
 	 */
 	public LanView(MasterView m) {
 		super(m);
-		
+
 		setupPane();
 		buildButtons();
-		
+
 		this.setVisible(true);
 	}
 
@@ -60,36 +55,35 @@ public class LanView extends MasterViewPanel {
 	 * This is the method that sets up the majority of the LAN panel including
 	 * the layouts and labels.
 	 */
- 
+
 	private void setupPane() {
 		this.setLayout(new BorderLayout());
 		// setup labels
 		northPane = new JPanel(new GridLayout(1, 2));
 		hosts = new JLabel("Hosts");
 		northPane.add(hosts, 0);
-		
+
 		ping = new JLabel("ping");
 		northPane.add(ping, 1);
 		this.add(northPane, BorderLayout.NORTH);
 
 		centerPane = new JPanel(new GridLayout(1, 2));
-		
-		/*if(HostModel.ipList!=null &&HostModel.ipList.size() > 0) {
-		
-		for(String ip : HostModel.ipList) {
-			hostsInfo.addElement();	
-		}*/
+
+		/*
+		 * if(HostModel.ipList!=null &&HostModel.ipList.size() > 0) {
+		 * 
+		 * for(String ip : HostModel.ipList) { hostsInfo.addElement(); }
+		 */
 		hostsInfo = new DefaultListModel();
 		hostsInfo.addElement("127.0.1.1");
-		
+
 		hostList = new JList(hostsInfo);
 		hostList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		hostList.addListSelectionListener(new HostSelectionListener());
-		
-		
-		/*else {
-			hostList = new JList();
-		}*/
+
+		/*
+		 * else { hostList = new JList(); }
+		 */
 		centerPane.add(hostList, 0);
 		pingList = new JList();
 		centerPane.add(pingList, 1);
@@ -105,13 +99,13 @@ public class LanView extends MasterViewPanel {
 
 		back = new JButton("back");
 		back.addActionListener(new backListener());
-		
+
 		create = new JButton("HostGame");
 		create.addActionListener(new createListener());
-		
+
 		search = new JButton("SearchForHosts");
 		search.addActionListener(new searchListener());
-		
+
 		join = new JButton("JoinGame");
 		join.addActionListener(new joinListener());
 
@@ -135,7 +129,7 @@ public class LanView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.changeView(Views.PREVIOUS,null);
+			m.changeView(Views.PREVIOUS, null);
 		}
 	}
 
@@ -151,9 +145,9 @@ public class LanView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			m.changeView(Views.HOST,null);
-			
+
+			m.changeView(Views.HOST, null);
+
 		}
 	}
 
@@ -169,34 +163,35 @@ public class LanView extends MasterViewPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("IP sent is: " + ip);
-			m.changeView(Views.CLIENT,ip);
+			m.changeView(Views.CLIENT, ip);
 
 		}
 
 	}
-	private class searchListener implements ActionListener{
+
+	private class searchListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-		
-		
+
 		}
-		
+
 	}
-	
+
 	private class HostSelectionListener implements ListSelectionListener {
-		
+
 		public void valueChanged(ListSelectionEvent evt) {
-			if(!evt.getValueIsAdjusting()) {
+			if (!evt.getValueIsAdjusting()) {
 				JList hostList = (JList) evt.getSource();
 			}
-			
+
 			Object[] selected = hostList.getSelectedValues();
 			ip = (String) selected[0];
 			System.out.println(ip);
-			/*for(int i = 0; i < selected.length; i++) {
-				Object sel = selected[i];
-			}*/
+			/*
+			 * for(int i = 0; i < selected.length; i++) { Object sel =
+			 * selected[i]; }
+			 */
 		}
 	}
 

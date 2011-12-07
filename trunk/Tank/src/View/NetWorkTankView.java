@@ -33,6 +33,7 @@ import undecided.ImmovableBlock;
 import undecided.Item;
 import undecided.ItemCreator;
 import undecided.Level1;
+import undecided.Map;
 import undecided.Obstacle;
 import undecided.PlayerProjectile;
 import undecided.PlayerTank;
@@ -41,45 +42,45 @@ import undecided.Projectile;
 import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
+
 /*import undecided.TankView.Handlerclass;
-import undecided.TankView.moveAndShootListener;*/
+ import undecided.TankView.moveAndShootListener;*/
 
-import map.Map;
-
-public class NetWorkTankView extends MasterViewPanel implements Observer{
-/**
+public class NetWorkTankView extends MasterViewPanel implements Observer {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-private int mapNumber;
-
-private JPanel panel;
-private Image dbImage;
-private Graphics dbg;
-private PlayerTank player, player2;
-private EnemyTank enemy;
-public static LinkedList<Projectile> projectileList;
-public static LinkedList<Obstacle> obstacleList;
-public static LinkedList<PlayerTank> tankList;
-public static LinkedList<Item> itemList;
-public static LinkedList<EnemyTank> enemyList;
-private ItemCreator creator;
-java.util.Vector<Projectile> pVector; // a vector of projectiles
-
+	private int mapNumber;
+	public Map map;
+	private JPanel panel;
+	private Image dbImage;
+	private Graphics dbg;
+	private PlayerTank player, player2;
+	private EnemyTank enemy;
+	public static LinkedList<Projectile> projectileList;
+	public static LinkedList<Obstacle> obstacleList;
+	public static LinkedList<PlayerTank> tankList;
+	public static LinkedList<Item> itemList;
+	public static LinkedList<EnemyTank> enemyList;
+	private ItemCreator creator;
+	java.util.Vector<Projectile> pVector; // a vector of projectiles
 
 	public NetWorkTankView(MasterView m, int num) {
 		super(m);
-		undecided.Map level1= new Level1();
+		String level = "Level" + num;
+
+		map = new Level1();
 		this.mapNumber = num;
-		//player1 is the host
-		//player 2 is the client
-		player = new PlayerTank(new Point(400, 125), new Level1());
-		player2 = new PlayerTank(new Point(125, 400),new Level1());
+		// player1 is the host
+		// player 2 is the client
+		player = new PlayerTank(new Point(400, 125), map);
+		player2 = new PlayerTank(new Point(125, 400), map);
 		obstacleList = new LinkedList<Obstacle>();
 		projectileList = new LinkedList<Projectile>();
 		tankList = new LinkedList<PlayerTank>();
 		itemList = new LinkedList<Item>();
-		
+
 		creator = new ItemCreator(new Level1());
 		creator.start();
 		tankList.add(player);
@@ -99,10 +100,9 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		buildMap(mapNumber);
 		this.setBackground(Color.BLACK);
 		this.setVisible(true);
-		
+
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	/**
 	 * 
@@ -148,33 +148,35 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		/**
 		 * @param arg0
 		 *            mouse event argument
-		 *            
-		 *           
+		 * 
+		 * 
 		 */
 		public void mousePressed(MouseEvent arg0) {
 			int count = 0;
-			for(Projectile p : projectileList) {
-				if(p instanceof PlayerProjectile) {
+			for (Projectile p : projectileList) {
+				if (p instanceof PlayerProjectile) {
 					count++;
 				}
 			}
-			
-			if(count == 0) {
-			// finding difference in player and target location
-			int xdiff = arg0.getX() - player.getLocation().col;
-			int ydiff = arg0.getY() - player.getLocation().row;
 
-			// calculating the distance between the player and the mouse
-			double length = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+			if (count == 0) {
+				// finding difference in player and target location
+				int xdiff = arg0.getX() - player.getLocation().col;
+				int ydiff = arg0.getY() - player.getLocation().row;
 
-			// create a new shot, with position relative to location of tank,
-			// the speed in the x and y directions
-			player.shoot(
-					new Point(player.getLocation().row,
-							player.getLocation().col),
-					(int) (xdiff * (5 / length)), (int) (ydiff * (5 / length)));
+				// calculating the distance between the player and the mouse
+				double length = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
 
-			// player.shoot();
+				// create a new shot, with position relative to location of
+				// tank,
+				// the speed in the x and y directions
+				player.shoot(
+						new Point(player.getLocation().row, player
+								.getLocation().col),
+						(int) (xdiff * (5 / length)),
+						(int) (ydiff * (5 / length)));
+
+				// player.shoot();
 			}
 		}
 
@@ -206,33 +208,35 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 	public void paintComponent(Graphics g) {
 
 		for (Projectile p : projectileList) {
-			if(p instanceof PlayerProjectile) {
-			PlayerProjectile s = (PlayerProjectile)p;
-			ProjectileRectangle rect = s.getRectangle();
-			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
-		}
-			if(p instanceof EnemyProjectile) {
-				EnemyProjectile s = (EnemyProjectile)p;
+			if (p instanceof PlayerProjectile) {
+				PlayerProjectile s = (PlayerProjectile) p;
+				ProjectileRectangle rect = s.getRectangle();
+				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
+			}
+			if (p instanceof EnemyProjectile) {
+				EnemyProjectile s = (EnemyProjectile) p;
 				ProjectileRectangle rect = s.getRectangle();
 				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 			}
 		}
-		
+
 		for (PlayerTank p : tankList) {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
-	
+
 		for (Item p : itemList) {
-			if(p instanceof SpeedBoost) {
-			SpeedBoost s = (SpeedBoost)p;
-			SpeedBoostRectangle tRect = s.getRectangle();
-			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
-		}
-			if(p instanceof BubbleShield) {
-			BubbleShield s = (BubbleShield)p;
-			BubbleShieldRectangle tRect = s.getRectangle();
-			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+			if (p instanceof SpeedBoost) {
+				SpeedBoost s = (SpeedBoost) p;
+				SpeedBoostRectangle tRect = s.getRectangle();
+				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
+						null);
+			}
+			if (p instanceof BubbleShield) {
+				BubbleShield s = (BubbleShield) p;
+				BubbleShieldRectangle tRect = s.getRectangle();
+				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
+						null);
 			}
 		}
 		for (int i = 0; i < obstacleList.size(); i++) {
@@ -298,7 +302,6 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 			if (keyEvent == KeyEvent.VK_D) {
 				player.moveRight();
 			}
-
 		}
 
 		@Override
@@ -311,44 +314,44 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 
 		}
 	}
-	
+
 	public void buildMap(int mapFile) {
-		
+
 		for (int i = 0; i < 750; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(i, 25));
+			ImmovableBlock b = new ImmovableBlock(new Point(i, 25), map);
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
 		for (int i = 30; i < 1000; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(665, i));
+			ImmovableBlock b = new ImmovableBlock(new Point(665, i), map);
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
 		for (int i = 10; i < 750; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(i, 960));
+			ImmovableBlock b = new ImmovableBlock(new Point(i, 960), map);
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
-		
+
 		for (int i = 60; i < 1000; i = i + 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(25, i));
+			ImmovableBlock b = new ImmovableBlock(new Point(25, i), map);
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
 		for (int i = 75; i < 275; i = i + 50) {
 			for (int j = 300; j < 550; j = j + 50) {
 				if (j == 300 || j == 500) {
-					ImmovableBlock b = new ImmovableBlock(new Point(j, i));
+					ImmovableBlock b = new ImmovableBlock(new Point(j, i), map);
 					obstacleList.add(b);
 					b.addObserver(this);
 				}
 				if (j != 300 && j != 500 && i == 225) {
-					Crate c = new Crate(new Point(j, i));
+					Crate c = new Crate(new Point(j, i), map);
 					obstacleList.add(c);
 					c.addObserver(this);
 				}
 				if (j != 300 && j != 500 && j != 400 && i == 75) {
-					SpikePit s = new SpikePit(new Point(j, i));
+					SpikePit s = new SpikePit(new Point(j, i), map);
 					obstacleList.add(s);
 					s.addObserver(this);
 				}
@@ -357,90 +360,90 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		for (int i = 555; i < 655; i = i + 50) {
 			for (int j = 75; j < 225; j = j + 50) {
 				if (i == 605 && j == 125) {
-					TNT t = new TNT(new Point(i, j));
+					TNT t = new TNT(new Point(i, j), map);
 					obstacleList.add(t);
 					t.addObserver(this);
 				} else {
-					Crate c = new Crate(new Point(i, j));
+					Crate c = new Crate(new Point(i, j), map);
 					obstacleList.add(c);
 					c.addObserver(this);
 				}
 			}
 		}
 		for (int i = 710; i < 1000; i += 50) {
-			ImmovableBlock b = new ImmovableBlock(new Point(125, i));
+			ImmovableBlock b = new ImmovableBlock(new Point(125, i), map);
 			obstacleList.add(b);
 			b.addObserver(this);
 		}
-		enemy = new EnemyTank(new Point(300, 300));
+		enemy = new EnemyTank(new Point(300, 300), map);
 		enemyList.add(enemy);
 		enemy.addObserver(this);
 
 		for (int i = 60; i < 500; i += 50) {
 			for (int j = 460; j < 560; j += 50) {
-				ImmovableBlock b = new ImmovableBlock(new Point(i, j));
+				ImmovableBlock b = new ImmovableBlock(new Point(i, j), map);
 				obstacleList.add(b);
 				b.addObserver(this);
 			}
 		}
 		for (int i = 513; i < 650; i += 50) {
-			Crate c = new Crate(new Point(i, 500));
+			Crate c = new Crate(new Point(i, 500), map);
 			obstacleList.add(c);
 			c.addObserver(this);
 		}
 		for (int i = 75; i < 275; i += 50) {
 			for (int j = 75; j < 275; j += 50) {
-				TNT t = new TNT(new Point(i, j));
+				TNT t = new TNT(new Point(i, j), map);
 				obstacleList.add(t);
 				t.addObserver(this);
 			}
 		}
 		for (int i = 560; i < 810; i += 50) {
 			for (int j = 225; j < 325; j += 50) {
-				ImmovableBlock b = new ImmovableBlock(new Point(j, i));
+				ImmovableBlock b = new ImmovableBlock(new Point(j, i), map);
 				obstacleList.add(b);
 				b.addObserver(this);
 			}
 		}
-		FireRing fr2 = new FireRing(new Point(600, 900));
+		FireRing fr2 = new FireRing(new Point(600, 900), map);
 		obstacleList.add(fr2);
 		fr2.addObserver(this);
 
 		for (int i = 490; i < 590; i += 50) {
 			for (int j = 700; j < 900; j += 50) {
-				ImmovableBlock b = new ImmovableBlock(new Point(i, j));
+				ImmovableBlock b = new ImmovableBlock(new Point(i, j), map);
 				obstacleList.add(b);
 				b.addObserver(this);
 			}
 		}
 		for (int i = 560; i < 660; i += 50) {
 			for (int j = 325; j < 425; j += 50) {
-				TNT t = new TNT(new Point(j, i));
+				TNT t = new TNT(new Point(j, i), map);
 				obstacleList.add(t);
 				t.addObserver(this);
 			}
 		}
 
 	}
-	
+
 	/**
-	 * @return 
-	 * @param 
+	 * @return
+	 * @param
 	 */
-	
+
 	@Override
 	/**
 	 * This method will be notified when the observed are called and will either
 	 * remove dead obstacles and repaint the projectiles.
 	 */
 	public synchronized void update(Observable v, Object o) {
-		if(o instanceof BubbleShield) {
-			BubbleShield b = (BubbleShield)o;
+		if (o instanceof BubbleShield) {
+			BubbleShield b = (BubbleShield) o;
 			itemList.add(b);
 			repaint();
 		}
-		if(o instanceof SpeedBoost) {
-			SpeedBoost b = (SpeedBoost)o;
+		if (o instanceof SpeedBoost) {
+			SpeedBoost b = (SpeedBoost) o;
 			itemList.add(b);
 			repaint();
 		}
@@ -450,7 +453,7 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 				repaint();
 			}
 		}
-		
+
 		if (o instanceof FireRing) {
 			FireRing fr = (FireRing) o;
 			for (int i = 0; i < tankList.size(); i++) {
@@ -465,113 +468,19 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		}
 
 		if (o instanceof PlayerProjectile) {
-				PlayerProjectile p = (PlayerProjectile)o;	
-				
-				if (!projectileList.contains(p)) {
-					projectileList.add(p);
-					p.addObserver(this);
+			PlayerProjectile p = (PlayerProjectile) o;
 
-				} else {
-					if (p.getRectangle().xCoord() <=0) {
-						projectileList.remove(p);
-					}
-					for(Item i : itemList) {
-						if(i instanceof BubbleShield) {
-							BubbleShield c = (BubbleShield)i;
-							if (c.getRectangle().intersects(p.getRectangle())) {
-								p.collided();
-								projectileList.remove(p);
-								itemList.remove(c);
-								repaint();
-								break;
-							}
-						}
-						if(i instanceof SpeedBoost) {
-							SpeedBoost c = (SpeedBoost)i;
-							if (c.getRectangle().intersects(p.getRectangle())) {
-								p.collided();
-								projectileList.remove(p);
-								itemList.remove(c);
-								repaint();
-								break;
-							}
-						}
-					}
-					
-					for(EnemyTank h : enemyList) {
-						if(h.getRectangle().intersects(p.getRectangle())) {
-							p.collided();
-							projectileList.remove(p);
-							h.recieveDamage(p.getDamage());
-							repaint();
-							break;
-						}
-					}
-					for (Obstacle obs : obstacleList) {
-						if (obs instanceof Crate) {
-							Crate c = (Crate) obs;
-							if (c.getRectangle().intersects(p.getRectangle())) {
-								p.collided();
-								projectileList.remove(p);
-								c.recieveDamage(p.getDamage());
-								repaint();
-								break;
-							}
-						}
-						if (obs instanceof TNT) {
-							TNT c = (TNT) obs;
-							if (c.getRectangle().intersects(p.getRectangle())) {
-								p.collided();
-								projectileList.remove(p);
-								c.recieveDamage(p.getDamage());
-								repaint();
-								break;
-							}
-						}
-						if (obs instanceof ImmovableBlock) {
-							ImmovableBlock c = (ImmovableBlock) obs;
-							if (c.getRectangle().intersects(p.getRectangle())) {
-								p.collided();
-								projectileList.remove(p);
-								c.recieveDamage(p.getDamage());
-								repaint();
-								break;
-
-							}
-						}
-						if (obs instanceof FireRing) {
-							FireRing c = (FireRing) obs;
-							if (c.getRectangle().intersects(p.getRectangle())) {
-								p.collided();
-								projectileList.remove(p);
-								c.recieveDamage(p.getDamage());
-								repaint();
-								break;
-
-							}
-						}
-
-					}
-			
-				
-
-				repaint();
-			}
-			}
-		if (o instanceof EnemyProjectile) {
-			EnemyProjectile p = (EnemyProjectile)o;	
-			
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
 
 			} else {
-				if (p.getRectangle().xCoord() <=0) {
+				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
 				}
-				for(Item i : itemList) {
-					if(i instanceof BubbleShield) {
-						BubbleShield c = (BubbleShield)i;
+				for (Item i : itemList) {
+					if (i instanceof BubbleShield) {
+						BubbleShield c = (BubbleShield) i;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
@@ -580,8 +489,8 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 							break;
 						}
 					}
-					if(i instanceof SpeedBoost) {
-						SpeedBoost c = (SpeedBoost)i;
+					if (i instanceof SpeedBoost) {
+						SpeedBoost c = (SpeedBoost) i;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
@@ -591,9 +500,9 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 						}
 					}
 				}
-				
-				for(PlayerTank h : tankList) {
-					if(h.getRectangle().intersects(p.getRectangle())) {
+
+				for (EnemyTank h : enemyList) {
+					if (h.getRectangle().intersects(p.getRectangle())) {
 						p.collided();
 						projectileList.remove(p);
 						h.recieveDamage(p.getDamage());
@@ -646,31 +555,120 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 					}
 
 				}
-		
-			
 
-			repaint();
+				repaint();
+			}
 		}
+		if (o instanceof EnemyProjectile) {
+			EnemyProjectile p = (EnemyProjectile) o;
+
+			if (!projectileList.contains(p)) {
+				projectileList.add(p);
+				p.addObserver(this);
+
+			} else {
+				if (p.getRectangle().xCoord() <= 0) {
+					projectileList.remove(p);
+				}
+				for (Item i : itemList) {
+					if (i instanceof BubbleShield) {
+						BubbleShield c = (BubbleShield) i;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							itemList.remove(c);
+							repaint();
+							break;
+						}
+					}
+					if (i instanceof SpeedBoost) {
+						SpeedBoost c = (SpeedBoost) i;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							itemList.remove(c);
+							repaint();
+							break;
+						}
+					}
+				}
+
+				for (PlayerTank h : tankList) {
+					if (h.getRectangle().intersects(p.getRectangle())) {
+						p.collided();
+						projectileList.remove(p);
+						h.recieveDamage(p.getDamage());
+						repaint();
+						break;
+					}
+				}
+				for (Obstacle obs : obstacleList) {
+					if (obs instanceof Crate) {
+						Crate c = (Crate) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+						}
+					}
+					if (obs instanceof TNT) {
+						TNT c = (TNT) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+						}
+					}
+					if (obs instanceof ImmovableBlock) {
+						ImmovableBlock c = (ImmovableBlock) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+
+						}
+					}
+					if (obs instanceof FireRing) {
+						FireRing c = (FireRing) obs;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							c.recieveDamage(p.getDamage());
+							repaint();
+							break;
+
+						}
+					}
+
+				}
+
+				repaint();
+			}
 		}
 
-		
 		if (o instanceof EnemyTank) {
 			EnemyTank p = (EnemyTank) o;
 			TankRectangle rect = p.getRectangle();
-			for(Item i : itemList) {
-				if(i instanceof BubbleShield) {
-					BubbleShield c = (BubbleShield)i;
+			for (Item i : itemList) {
+				if (i instanceof BubbleShield) {
+					BubbleShield c = (BubbleShield) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
-						if(p.getHealth() == 1) {
-						c.activateEffect(p);
+						if (p.getHealth() == 1) {
+							c.activateEffect(p);
 						}
 						itemList.remove(c);
 						repaint();
 						break;
 					}
 				}
-				if(i instanceof SpeedBoost) {
-					SpeedBoost c = (SpeedBoost)i;
+				if (i instanceof SpeedBoost) {
+					SpeedBoost c = (SpeedBoost) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
 						c.activateEffect(p);
 						itemList.remove(c);
@@ -710,20 +708,20 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		if (o instanceof PlayerTank) {
 			PlayerTank p = (PlayerTank) o;
 			TankRectangle rect = p.getRectangle();
-			for(Item i : itemList) {
-				if(i instanceof BubbleShield) {
-					BubbleShield c = (BubbleShield)i;
+			for (Item i : itemList) {
+				if (i instanceof BubbleShield) {
+					BubbleShield c = (BubbleShield) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
-						if(p.getHealth() == 1) {
-						c.activateEffect(p);
+						if (p.getHealth() == 1) {
+							c.activateEffect(p);
 						}
 						itemList.remove(c);
 						repaint();
 						break;
 					}
 				}
-				if(i instanceof SpeedBoost) {
-					SpeedBoost c = (SpeedBoost)i;
+				if (i instanceof SpeedBoost) {
+					SpeedBoost c = (SpeedBoost) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
 						c.activateEffect(p);
 						itemList.remove(c);
@@ -766,7 +764,5 @@ java.util.Vector<Projectile> pVector; // a vector of projectiles
 		}
 
 	}
-	
-	
 
 }
