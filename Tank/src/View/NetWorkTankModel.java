@@ -393,6 +393,7 @@ public class NetWorkTankModel extends Observable implements Observer {
 					}
 				}
 			}
+
 			notifyObservers();
 			setChanged();
 		}
