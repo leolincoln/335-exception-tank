@@ -2,7 +2,6 @@ package undecided;
 
 import java.awt.Color;
 
-
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -21,8 +20,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.*;
-
-
 
 import View.MasterView;
 import View.MasterViewPanel;
@@ -65,7 +62,6 @@ public class TankView extends MasterViewPanel implements Observer {
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost;
 
-
 	/**
 	 * Class constructor
 	 * 
@@ -74,7 +70,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	public TankView(MasterView m, Map map) {
 		super(m);
 		currentMap = map;
-		
+
 		won = false;
 		lost = false;
 		currentMap.addObserver(this);
@@ -85,7 +81,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		itemList = currentMap.getItems();
 		GameThread gt = new GameThread();
 		gt.start();
-		
+
 		this.setFocusable(true);
 		panel = new JPanel();
 		player = tankList.getFirst();
@@ -99,7 +95,6 @@ public class TankView extends MasterViewPanel implements Observer {
 		this.addMouseMotionListener(handler);// adding mouse motion to be
 												// detected on the java panel
 		this.setVisible(true);
-	
 
 	}
 
@@ -147,33 +142,35 @@ public class TankView extends MasterViewPanel implements Observer {
 		/**
 		 * @param arg0
 		 *            mouse event argument
-		 *            
-		 *           
+		 * 
+		 * 
 		 */
 		public void mousePressed(MouseEvent arg0) {
 			int count = 0;
-			for(Projectile p : currentMap.getProjectiles()) {
-				if(p instanceof PlayerProjectile) {
+			for (Projectile p : currentMap.getProjectiles()) {
+				if (p instanceof PlayerProjectile) {
 					count++;
 				}
 			}
-			
-			if(count == 0) {
-			// finding difference in player and target location
-			int xdiff = arg0.getX() - player.getLocation().col;
-			int ydiff = arg0.getY() - player.getLocation().row;
 
-			// calculating the distance between the player and the mouse
-			double length = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
+			if (count == 0) {
+				// finding difference in player and target location
+				int xdiff = arg0.getX() - player.getLocation().col;
+				int ydiff = arg0.getY() - player.getLocation().row;
 
-			// create a new shot, with position relative to location of tank,
-			// the speed in the x and y directions
-			player.shoot(
-					new Point(player.getLocation().row,
-							player.getLocation().col),
-					(int) (xdiff * (5 / length)), (int) (ydiff * (5 / length)));
+				// calculating the distance between the player and the mouse
+				double length = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
 
-			// player.shoot();
+				// create a new shot, with position relative to location of
+				// tank,
+				// the speed in the x and y directions
+				player.shoot(
+						new Point(player.getLocation().row, player
+								.getLocation().col),
+						(int) (xdiff * (5 / length)),
+						(int) (ydiff * (5 / length)));
+
+				// player.shoot();
 			}
 		}
 
@@ -190,13 +187,12 @@ public class TankView extends MasterViewPanel implements Observer {
 	 */
 	public void paint(Graphics g) {
 		try {
-		dbImage = createImage(getWidth(), getHeight());
-		dbg = dbImage.getGraphics();
-		paintComponent(dbg);
-		g.drawImage(dbImage, 0, 0, this);
-		}
-		catch(Exception e) {
-			
+			dbImage = createImage(getWidth(), getHeight());
+			dbg = dbImage.getGraphics();
+			paintComponent(dbg);
+			g.drawImage(dbImage, 0, 0, this);
+		} catch (Exception e) {
+
 		}
 	}
 
@@ -208,18 +204,19 @@ public class TankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
-	
-		
+
 		for (Item p : itemList) {
-			if(p instanceof SpeedBoost) {
-			SpeedBoost s = (SpeedBoost)p;
-			SpeedBoostRectangle tRect = s.getRectangle();
-			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
-		}
-			if(p instanceof BubbleShield) {
-			BubbleShield s = (BubbleShield)p;
-			BubbleShieldRectangle tRect = s.getRectangle();
-			g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+			if (p instanceof SpeedBoost) {
+				SpeedBoost s = (SpeedBoost) p;
+				SpeedBoostRectangle tRect = s.getRectangle();
+				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
+						null);
+			}
+			if (p instanceof BubbleShield) {
+				BubbleShield s = (BubbleShield) p;
+				BubbleShieldRectangle tRect = s.getRectangle();
+				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
+						null);
 			}
 		}
 		for (int i = 0; i < obstacleList.size(); i++) {
@@ -266,33 +263,33 @@ public class TankView extends MasterViewPanel implements Observer {
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
 		for (Projectile p : projectileList) {
-			if(p instanceof PlayerProjectile) {
-			PlayerProjectile s = (PlayerProjectile)p;
-			ProjectileRectangle rect = s.getRectangle();
-			g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
-		}
-			if(p instanceof EnemyProjectile) {
-				EnemyProjectile s = (EnemyProjectile)p;
+			if (p instanceof PlayerProjectile) {
+				PlayerProjectile s = (PlayerProjectile) p;
+				ProjectileRectangle rect = s.getRectangle();
+				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
+			}
+			if (p instanceof EnemyProjectile) {
+				EnemyProjectile s = (EnemyProjectile) p;
 				ProjectileRectangle rect = s.getRectangle();
 				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 			}
 		}
-		if(won == true) {
+		if (won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
 			String jb = "Mission Complete!";
 			AttributedString att = new AttributedString(jb);
 			att.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
-			}
-			if(lost == true) {
-				Font font = new Font("Times New Roman", Font.BOLD, 28);
-				String jb = "Mission Failed!";
-				AttributedString att = new AttributedString(jb);
-				att.addAttribute(TextAttribute.FOREGROUND, Color.RED);
-				att.addAttribute(TextAttribute.FONT, font);
-				g.drawString(att.getIterator(), 400, 350);
-				}
+		}
+		if (lost == true) {
+			Font font = new Font("Times New Roman", Font.BOLD, 28);
+			String jb = "Mission Failed!";
+			AttributedString att = new AttributedString(jb);
+			att.addAttribute(TextAttribute.FOREGROUND, Color.RED);
+			att.addAttribute(TextAttribute.FONT, font);
+			g.drawString(att.getIterator(), 400, 350);
+		}
 	}
 
 	/**
@@ -341,64 +338,58 @@ public class TankView extends MasterViewPanel implements Observer {
 	 * remove dead obstacles and repaint the projectiles.
 	 */
 	public synchronized void update(Observable v, Object o) {
-		if(o == null) {
-		repaint();
+		if (o == null) {
+			repaint();
 		}
-
 
 	}
 
-
 	private class GameThread extends Thread {
-		
+
 		private boolean exists;
-		
+
 		public GameThread() {
 			exists = true;
 		}
-		
+
 		@Override
 		public synchronized void run() {
-			while(exists) {
+			while (exists) {
 
-					if(currentMap.getPlayers().size() == 0) {
-						lost = true;
-						repaint();
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-						
-						}
+				if (currentMap.getPlayers().size() == 0) {
+					lost = true;
+					repaint();
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+
+					}
 					m.changeView(Views.TANKVIEW, null);
 					exists = false;
+				} else if (currentMap.getEnemies().size() == 0) {
+					won = true;
+					repaint();
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+
 					}
-					else if(currentMap.getEnemies().size() == 0) {
-						won = true;
-						repaint();
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-						
-						}
-				
+
 					MasterView.currentLevel++;
 					m.changeView(Views.TANKVIEW, null);
 					exists = false;
-					}
-					else {
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-						
-						}
-					}
-					
-					}
-			
-				}
-				
-			}
-		
-	
-}
+				} else {
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
 
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+}
