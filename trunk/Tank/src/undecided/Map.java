@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
+import View.NetWorkMap1;
+
 import rectangles.TankRectangle;
 
 /**
@@ -19,7 +21,7 @@ import rectangles.TankRectangle;
 public abstract class Map extends Observable implements Observer {
 
 	private LinkedList<Obstacle> obstacleList;
-	private LinkedList<PlayerTank> tankList;
+	public LinkedList<PlayerTank> tankList;
 	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Item> itemList;
@@ -41,7 +43,7 @@ public abstract class Map extends Observable implements Observer {
 		itemList = new LinkedList<Item>();
 		setPlayerStart(playerStart());
 		setEnemyStart(enemyStart());
-		setUpMap();
+		if(!(this instanceof NetWorkMap1)) setUpMap();
 	}
 	
 	/**
@@ -209,6 +211,7 @@ public abstract class Map extends Observable implements Observer {
 				notifyObservers();
 				setChanged();
 			}
+			
 			if (s.equals("moveTNT")) {
 				notifyObservers();
 				setChanged();

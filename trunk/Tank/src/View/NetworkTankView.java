@@ -56,7 +56,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public NetworkTankModel model;
+	public NetworkTankController model;
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
@@ -68,7 +68,6 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	private JPanel panel;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost;
-	Map map;
 	private Image camo, wheel, steel, gold;
 	
 	// if i=0, then its the host, if i=1, then its the client
@@ -79,21 +78,22 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
 
-		this.map = new NetWorkMap1();
-		model = new NetworkTankModel(m, i);
-		tankList = map.getPlayers();
-		projectileList = map.getProjectiles();
-		obstacleList = map.getObstacles();
+		
+		model = new NetworkTankController(m, i);
+		model.addObserver(this);
+		tankList = model.getMap().getPlayers();
+		projectileList = model.getMap().getProjectiles();
+		obstacleList = model.getMap().getObstacles();
 	
-		itemList = map.getItems();
 		GameThread gt = new GameThread();
 		gt.start();
 
 		this.setFocusable(true);
 
 		if(i==0) player = tankList.getFirst();
-		if(i==1) player = tankList.getLast();
-		add(panel);
+		else if(i==1) player = tankList.getLast();
+
+		//add(panel);
 		// adding the movement and
 		addKeyListener(new moveAndShootListener());
 		// creating the mouse handler
@@ -104,6 +104,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
 												
 		this.setVisible(true);
+		System.out.println(model.getMap().getPlayers());
 
 	}
 
@@ -136,7 +137,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		@Override
 		public synchronized void run() {
 			while (exists) {
-				if (map.getPlayers().size() == 1) {
+				if (model.getMap().getPlayers().size() == 0) {
 					lost = true;
 					repaint();
 					try {
@@ -146,7 +147,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					}
 					m.changeView(Views.NETWORKTANKVIEW,3);
 					exists = false;
-				} else if (map.getEnemies().size() == 0) {
+				} else if (model.getMap().getEnemies().size() == 0) {
 					
 				} else {
 					try {
@@ -170,22 +171,12 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
-
-		for (Item p : itemList) {
-			if (p instanceof SpeedBoost) {
-				SpeedBoost s = (SpeedBoost) p;
-				SpeedBoostRectangle tRect = s.getRectangle();
-				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
-						null);
-			}
-			if (p instanceof BubbleShield) {
-				BubbleShield s = (BubbleShield) p;
-				BubbleShieldRectangle tRect = s.getRectangle();
-				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
-						null);
-			}
-		}
-		for (int i = 0; i < obstacleList.size(); i++) {
+		obstacleList = model.getMap().getObstacles();
+		tankList = model.getMap().getPlayers();
+		projectileList = model.getMap().getProjectiles();
+		
+		
+		for (int i = 0; i < model.getMap().getObstacles().size(); i++) {
 			Obstacle p = obstacleList.get(i);
 			if (p instanceof SpikePit) {// for instance of SpikePit
 				SpikePit sp = (SpikePit) p;
@@ -277,7 +268,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			g.drawImage(wheel, 1005 + j, 65, null);
 			}
 		}
-		String curr = "Current Level: " + map.getLevelNumber();
+		String curr = "Current Level: " ;
 		AttributedString att3 = new AttributedString(curr);
 		att3.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att3.addAttribute(TextAttribute.FONT, font);
@@ -378,7 +369,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		 */
 		public void mousePressed(MouseEvent arg0) {
 			int count = 0;
-			for (Projectile p : map.getProjectiles()) {
+			for (Projectile p : model.getMap().getProjectiles()) {
 				if (p instanceof PlayerProjectile) {
 					count++;
 				}

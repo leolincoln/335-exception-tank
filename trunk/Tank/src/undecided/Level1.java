@@ -13,15 +13,14 @@ public class Level1 extends Map implements Observer {
 	public Level1() {
 		super();
 		creator = new ItemCreator(this);
-		runCreator();
+		creator.start();
+		
 		
 	}
 	public void interruptCreator(){
 		if(creator.isAlive()) creator.interrupt();
 	}
-	public void runCreator(){
-		if(creator.isInterrupted()) creator.start();
-	}
+	
 	public void setUpMap() {
 		for (int i = 0; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 25), this);
