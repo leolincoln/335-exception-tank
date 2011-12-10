@@ -23,6 +23,7 @@ public abstract class Map extends Observable implements Observer {
 	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Item> itemList;
+	private LinkedList<Explosion> explosionList;
 	private PlayerTank player;
 	private EnemyTank enemy;
 	
@@ -36,6 +37,7 @@ public abstract class Map extends Observable implements Observer {
 		tankList = new LinkedList<PlayerTank>();
 		enemyList = new LinkedList<EnemyTank>();
 		projectileList = new LinkedList<Projectile>();
+		explosionList = new LinkedList<Explosion>();
 		itemList = new LinkedList<Item>();
 		setPlayerStart(playerStart());
 		setEnemyStart(enemyStart());
@@ -50,6 +52,12 @@ public abstract class Map extends Observable implements Observer {
 	 */
 	public void addItem(Item i) {
 		itemList.add(i);
+
+	}
+	
+	public void addExplosion(Explosion et) {
+		explosionList.add(et);
+		et.addObserver(this);
 
 	}
 	/**
@@ -197,6 +205,11 @@ public abstract class Map extends Observable implements Observer {
 				notifyObservers();
 				setChanged();
 			}
+			if (s.equals("Boom")) {
+				System.out.println("something");
+				notifyObservers();
+				setChanged();
+			}
 		}
 		
 		/* Whenever a FireRing moves it is passed to this method which then determines whether or not
@@ -315,7 +328,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(p.getLocation());
 							setChanged();
 							break;
 
@@ -643,6 +656,9 @@ public abstract class Map extends Observable implements Observer {
 	 */
 	public LinkedList<PlayerTank> getPlayers() {
 		return tankList;
+	}
+	public LinkedList<Explosion> getExplosions() {
+		return explosionList;
 	}
 
 }
