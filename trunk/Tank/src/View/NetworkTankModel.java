@@ -35,10 +35,10 @@ public class NetworkTankModel extends Observable implements Observer {
 	MasterView m;
 	private int playerScore, enemyScore;
 
-	public NetworkTankModel(MasterView m, Map map,int i) {
+	public NetworkTankModel(MasterView m,int i) {
 		playerScore=0;
 		enemyScore = 0;
-		this.map = map;
+		this.map =new NetWorkMap1();
 		this.m = m;
 		this.i=i;
 		obstacleList = new LinkedList<Obstacle>();
@@ -62,7 +62,7 @@ public class NetworkTankModel extends Observable implements Observer {
 	public void setEnemyStart(Point p) {
 		enemy = new PlayerTank(p, map);
 		enemy.addObserver(this);
-		tankList.add(enemy);
+		map.tankList.add(enemy);
 	}
 
 	public void setPlayerStart(Point p) {
@@ -74,7 +74,7 @@ public class NetworkTankModel extends Observable implements Observer {
 			player = tankList.getLast();
 			enemy = tankList.getFirst();
 		}
-		player = new PlayerTank(p, null);
+		player = new PlayerTank(p, map);
 		player.addObserver(this);
 		tankList.add(player);
 

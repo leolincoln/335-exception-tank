@@ -19,9 +19,9 @@ import undecided.TNT;
 
 
 public class NetWorkMap1 extends Map implements Observer {
-	private LinkedList<Obstacle> obstacleList;	
-	private LinkedList<PlayerTank> tankList;
-	private LinkedList<Projectile> projectileList;
+	public LinkedList<Obstacle> obstacleList;	
+	public LinkedList<PlayerTank> tankList;
+	public LinkedList<Projectile> projectileList;
 	Map map;
 	
 	public NetWorkMap1(){
