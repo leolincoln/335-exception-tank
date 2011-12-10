@@ -27,7 +27,6 @@ public class NetworkTankModel extends Observable implements Observer {
 
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
-	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Item> itemList;
 	private PlayerTank player,enemy;
@@ -46,8 +45,8 @@ public class NetworkTankModel extends Observable implements Observer {
 		tankList = new LinkedList<PlayerTank>();
 		projectileList = new LinkedList<Projectile>();
 		itemList = new LinkedList<Item>();
-		map.setPlayerStart(map.playerStart());
-		map.setPlayer2Start(map.playerStart());
+		setPlayerStart(map.playerStart());
+		setEnemyStart(map.playerStart());
 		map.setUpMap();
 		
 	}
@@ -58,35 +57,6 @@ public class NetworkTankModel extends Observable implements Observer {
 	}
 	public int getEnemyScore(){
 		return enemyScore;
-	}
-
-	public void addItem(Item i) {
-		itemList.add(i);
-	}
-
-	public void addObstacle(Obstacle o) {
-		obstacleList.add(o);
-		if (o instanceof TNT) {
-			TNT t = (TNT) o;
-			t.addObserver(this);
-		}
-		if (o instanceof Crate) {
-			Crate t = (Crate) o;
-			t.addObserver(this);
-		}
-		if (o instanceof ImmovableBlock) {
-			ImmovableBlock t = (ImmovableBlock) o;
-			t.addObserver(this);
-		}
-		if (o instanceof SpikePit) {
-			SpikePit t = (SpikePit) o;
-			t.addObserver(this);
-		}
-		if (o instanceof FireRing) {
-			FireRing t = (FireRing) o;
-			t.addObserver(this);
-		}
-
 	}
 
 	public void setEnemyStart(Point p) {
@@ -179,16 +149,7 @@ public class NetworkTankModel extends Observable implements Observer {
 					}
 				}
 
-				for (EnemyTank h : enemyList) {
-					if (h.getRectangle().intersects(p.getRectangle())) {
-						p.collided();
-						projectileList.remove(p);
-						h.recieveDamage(p.getDamage());
-						notifyObservers();
-						setChanged();
-						break;
-					}
-				}
+				
 				for (Obstacle obs : obstacleList) {
 					if (obs instanceof Crate) {
 						Crate c = (Crate) obs;
