@@ -175,6 +175,14 @@ public abstract class Map extends Observable implements Observer {
 
 	public synchronized void update(Observable v, Object o) {
 		
+		//Creates a new explosion at the passed Point
+		
+		if (o instanceof Point) {
+			Point p = (Point)o;
+			Explosion e = new Explosion(p, this);
+			this.addExplosion(e);
+		}
+		
 		// Adds a new BubbleShield to the map if it was successfully created in the ItemCreator thread
 		
 		if (o instanceof BubbleShield) {

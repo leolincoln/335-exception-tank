@@ -56,6 +56,8 @@ public class TNT extends Observable implements Obstacle {
 				if(o instanceof Crate) {
 					Crate c = (Crate)o;
 					if(b.intersects(c.getRectangle())) {
+						notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
+						setChanged();
 						c.recieveDamage(1);
 						i = 0;
 					}
@@ -64,6 +66,8 @@ public class TNT extends Observable implements Obstacle {
 					if(o != this) {
 					TNT c = (TNT)o;  
 					if(c.getRectangle().intersects(b)) {
+						notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
+						setChanged();
 						c.recieveDamage(1);
 						i = 0;
 					
@@ -74,6 +78,8 @@ public class TNT extends Observable implements Obstacle {
 			for(int i = 0; i < tank.size(); i++) {
 				PlayerTank t = tank.get(i);
 				if(t.getRectangle().intersects(b)) {
+					notifyObservers(new Point(t.getLocation().row - 12, t.getLocation().col - 12));
+					setChanged();
 					t.recieveDamage(1);
 					i = 0;
 				}
@@ -81,6 +87,8 @@ public class TNT extends Observable implements Obstacle {
 			for(int i = 0; i < enemies.size(); i++) {
 				EnemyTank t = enemies.get(i);
 				if(t.getRectangle().intersects(b)) {
+					notifyObservers(new Point(t.getLocation().row - 12, t.getLocation().col - 12));
+					setChanged();
 					t.recieveDamage(1);
 					i = 0;
 				}
@@ -88,6 +96,8 @@ public class TNT extends Observable implements Obstacle {
 			
 
 		}
+		notifyObservers(new Point(this.getLocation().row - 12, this.getLocation().col - 12));
+		setChanged();
 		map.getObstacles().remove(this);
 	}
 	public boolean move(Direction d) {

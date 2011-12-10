@@ -100,7 +100,7 @@ public class Explosion extends Observable  {
 			}
 			
 			if(timePassed == 14) {
-				location = new Point(-100, -100);
+				location = new Point(-200, -200);
 				map.getExplosions().remove(this);
 			}
 			try {

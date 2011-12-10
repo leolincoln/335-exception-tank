@@ -192,7 +192,7 @@ public class MasterView extends JFrame {
 			break;
 		case TANKVIEW:
 			if (currentLevel == 1) {
-				currentPane = new TankView(this, new Level1());
+				currentPane = new TankView(this, new Level5());
 			}
 			if (currentLevel == 2) {
 				currentPane = new TankView(this, new Level2());
