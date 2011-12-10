@@ -23,7 +23,7 @@ import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
 
-public class NetWorkTankModel extends Observable implements Observer {
+public class NetworkTankModel extends Observable implements Observer {
 
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
@@ -35,7 +35,7 @@ public class NetWorkTankModel extends Observable implements Observer {
 	Map map;
 	MasterView m;
 
-	public NetWorkTankModel(MasterView m, Map map) {
+	public NetworkTankModel(MasterView m, Map map) {
 		this.map = map;
 		this.m = m;
 		obstacleList = new LinkedList<Obstacle>();
