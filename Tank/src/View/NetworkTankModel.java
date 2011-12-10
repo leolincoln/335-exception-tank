@@ -30,21 +30,34 @@ public class NetworkTankModel extends Observable implements Observer {
 	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Item> itemList;
-	private PlayerTank host;
-	private PlayerTank client;
+	private PlayerTank player,enemy;
+	int i;
 	Map map;
 	MasterView m;
+	private int playerScore, enemyScore;
 
-	public NetworkTankModel(MasterView m, Map map) {
+	public NetworkTankModel(MasterView m, Map map,int i) {
+		playerScore=0;
+		enemyScore = 0;
 		this.map = map;
 		this.m = m;
+		this.i=i;
 		obstacleList = new LinkedList<Obstacle>();
 		tankList = new LinkedList<PlayerTank>();
 		projectileList = new LinkedList<Projectile>();
 		itemList = new LinkedList<Item>();
-		setPlayerStart(map.playerStart());
-		setEnemyStart(map.enemyStart());
+		map.setPlayerStart(map.playerStart());
+		map.setPlayer2Start(map.playerStart());
 		map.setUpMap();
+		
+	}
+	
+	public int getPlayerScore(){
+	
+		return playerScore;
+	}
+	public int getEnemyScore(){
+		return enemyScore;
 	}
 
 	public void addItem(Item i) {
@@ -77,20 +90,28 @@ public class NetworkTankModel extends Observable implements Observer {
 	}
 
 	public void setEnemyStart(Point p) {
-		client = new PlayerTank(p, map);
-		client.addObserver(this);
-		tankList.add(client);
+		enemy = new PlayerTank(p, map);
+		enemy.addObserver(this);
+		tankList.add(enemy);
 	}
 
 	public void setPlayerStart(Point p) {
-		host = new PlayerTank(p, null);
-		host.addObserver(this);
-		tankList.add(host);
+		if(i==0) {
+			player = tankList.getFirst();
+			enemy = tankList.getLast();
+		}
+		if(i==1) {
+			player = tankList.getLast();
+			enemy = tankList.getFirst();
+		}
+		player = new PlayerTank(p, null);
+		player.addObserver(this);
+		tankList.add(player);
 
 	}
 
 	public boolean isOver() {
-		if (host.isDead() || client.isDead()) {
+		if (player.isDead() || enemy.isDead()) {
 			return true;
 		} else {
 			return false;
@@ -120,21 +141,6 @@ public class NetworkTankModel extends Observable implements Observer {
 				notifyObservers();
 				setChanged();
 			}
-		}
-
-		if (o instanceof FireRing) {
-			FireRing fr = (FireRing) o;
-			for (int i = 0; i < tankList.size(); i++) {
-				PlayerTank t = tankList.get(i);
-				if (t.getRectangle().intersects(fr.getRectangle())) {
-					t.recieveDamage(1);
-					notifyObservers();
-					setChanged();
-					break;
-				}
-			}
-			notifyObservers();
-			setChanged();
 		}
 
 		if (o instanceof PlayerProjectile) {
@@ -218,19 +224,6 @@ public class NetworkTankModel extends Observable implements Observer {
 
 						}
 					}
-					if (obs instanceof FireRing) {
-						FireRing c = (FireRing) obs;
-						if (c.getRectangle().intersects(p.getRectangle())) {
-							p.collided();
-							projectileList.remove(p);
-							c.recieveDamage(p.getDamage());
-							notifyObservers();
-							setChanged();
-							break;
-
-						}
-					}
-
 				}
 
 				notifyObservers();
@@ -244,11 +237,11 @@ public class NetworkTankModel extends Observable implements Observer {
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
-
 			} else {
 				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
 				}
+				//item list 
 				for (Item i : itemList) {
 					if (i instanceof BubbleShield) {
 						BubbleShield c = (BubbleShield) i;
@@ -261,6 +254,7 @@ public class NetworkTankModel extends Observable implements Observer {
 							break;
 						}
 					}
+					//not sure if the speedboost is going to be shown. 
 					if (i instanceof SpeedBoost) {
 						SpeedBoost c = (SpeedBoost) i;
 						if (c.getRectangle().intersects(p.getRectangle())) {
