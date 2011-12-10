@@ -66,7 +66,7 @@ public abstract class Map extends Observable implements Observer {
 	 * 
 	 * @return Point 
 	 */
-
+	
 	public abstract Point playerStart();
 	
 	/**
@@ -85,7 +85,13 @@ public abstract class Map extends Observable implements Observer {
 	 * 		to the map it then adds the map as one of it's observers. This allows the map
 	 * 		to keep track of any important events or movements that occur on the obstacle.
 	 */
-
+	
+	/**
+	 * 
+	 * @return This method returns the number of the current level the player is on.
+	 */
+	public abstract int getLevelNumber();
+	
 	public void addObstacle(Obstacle o) {
 		obstacleList.add(o);
 		if (o instanceof TNT) {

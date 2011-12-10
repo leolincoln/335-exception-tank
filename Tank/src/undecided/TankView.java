@@ -60,7 +60,8 @@ public class TankView extends MasterViewPanel implements Observer {
 	private LinkedList<Item> itemList;
 	private LinkedList<EnemyTank> enemyList;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
-	private boolean won, lost;
+	private boolean won, lost, gameOver;
+	private Image camo, wheel, steel, gold;
 
 	/**
 	 * Class constructor
@@ -70,9 +71,13 @@ public class TankView extends MasterViewPanel implements Observer {
 	public TankView(MasterView m, Map map) {
 		super(m);
 		currentMap = map;
-
+		camo = new ImageIcon("images/camo.png").getImage();
+		wheel = new ImageIcon("images/wheel-md.png").getImage();
+		steel = new ImageIcon("images/steel.png").getImage();
+		gold = new ImageIcon("images/gold.png").getImage();
 		won = false;
 		lost = false;
+		gameOver = false;
 		currentMap.addObserver(this);
 		tankList = currentMap.getPlayers();
 		projectileList = currentMap.getProjectiles();
@@ -290,6 +295,64 @@ public class TankView extends MasterViewPanel implements Observer {
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
 		}
+		if (gameOver == true) {
+			Font font = new Font("Times New Roman", Font.BOLD, 44);
+			String jb = "Game Over!";
+			AttributedString att = new AttributedString(jb);
+			att.addAttribute(TextAttribute.FOREGROUND, Color.ORANGE);
+			att.addAttribute(TextAttribute.FONT, font);
+			g.drawString(att.getIterator(), 370, 350);
+		}
+		
+		for(int i = 0; i < 700; i += 50) {
+			for(int j = 985; j < 1200; j += 50) {
+				if(i == 150 || i == 200 || i == 350 || i == 400) {
+					g.drawImage(steel, j, i, null);
+				}
+				else {
+				g.drawImage(camo, j, i, null);
+			}
+			}
+		}
+		for(int i = 0; i < 700; i += 20) {
+			for(int j = 985; j < 1200; j += 20) {
+				if(i == 0 || i == 680 || j == 985 || j == 1165) {
+					g.drawImage(gold, j, i, null);
+				}
+			}
+			}
+	
+		Font font = new Font("Times New Roman", Font.BOLD, 20);
+		String lives = "Lives Remaning";
+		AttributedString att = new AttributedString(lives);
+		att.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		att.addAttribute(TextAttribute.FONT, font);
+		g.drawString(att.getIterator(), 1018, 44);
+		
+		for(int i = 0; i < MasterView.playerLives; i++) {
+			for(int j = 0; j < MasterView.playerLives * 50; j += 55) {
+			g.drawImage(wheel, 1005 + j, 65, null);
+			}
+		}
+		String curr = "Current Level: " + currentMap.getLevelNumber();
+		AttributedString att3 = new AttributedString(curr);
+		att3.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		att3.addAttribute(TextAttribute.FONT, font);
+		g.drawString(att3.getIterator(), 1013, 300);
+		
+		String item = "Active Items";
+		AttributedString att6 = new AttributedString(item);
+		att6.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		att6.addAttribute(TextAttribute.FONT, font);
+		g.drawString(att6.getIterator(), 1030, 485);
+		
+		if(player.isActiveShield()) {
+			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020, 515, null);
+		}
+		if(player.isActiveBoost()) {
+			g.drawImage(new SpeedBoostRectangle(-10, -10).getImage(), 1100, 515, null);
+		}
+		
 	}
 
 	/**
@@ -358,6 +421,22 @@ public class TankView extends MasterViewPanel implements Observer {
 
 				if (currentMap.getPlayers().size() == 0) {
 					lost = true;
+					MasterView.playerLives--;
+					if(MasterView.playerLives == -1) {
+						lost = false;
+						gameOver = true;
+						repaint();
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+						
+						}
+						
+						m.changeView(Views.TITLE, null);
+						MasterView.currentLevel = 1;
+						MasterView.playerLives = 3;
+						break;
+					}
 					repaint();
 					try {
 						Thread.sleep(2000);

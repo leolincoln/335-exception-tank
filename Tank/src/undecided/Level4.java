@@ -77,5 +77,11 @@ public class Level4 extends Map implements Observer {
 		return new Point(80, 860);
 	}
 
+	@Override
+	public int getLevelNumber() {
+		// TODO Auto-generated method stub
+		return 4;
+	}
+
 
 }
