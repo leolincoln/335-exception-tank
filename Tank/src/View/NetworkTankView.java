@@ -60,7 +60,6 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
 	private LinkedList<Item> itemList;
-	private LinkedList<EnemyTank> enemyList;
 	private JPanel panel;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost;
