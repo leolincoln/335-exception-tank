@@ -11,12 +11,14 @@ public class Explosion extends Observable  {
 	private Image img;
 	private Point location;
 	private Map map;
+
 	
 	public Explosion(Point p, Map map) {
 		timePassed = 0;
 		this.map = map;
-		img = new ImageIcon("images/explosion1").getImage();
+		img = new ImageIcon("images/explosion1.png").getImage();
 		location = p;
+		
 		ExplosionThread et = new ExplosionThread();
 		et.start();
 		
@@ -35,77 +37,74 @@ public class Explosion extends Observable  {
 	private class ExplosionThread extends Thread {
 	@Override
 	public void run() {
-		while(timePassed <= 28) {
+		while(timePassed <= 15) {
 			if(timePassed == 0) {
-				img = new ImageIcon("images/explosion1").getImage();
+				img = new ImageIcon("images/explosion1.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
 			if(timePassed == 2) {
-				img = new ImageIcon("images/explosion2").getImage();
+				img = new ImageIcon("images/explosion2.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
 			if(timePassed == 4) {
-				img = new ImageIcon("images/explosion3").getImage();
+				img = new ImageIcon("images/explosion3.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
 			if(timePassed == 6) {
-				img = new ImageIcon("images/explosion4").getImage();
+				img = new ImageIcon("images/explosion4.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
 			if(timePassed == 8) {
-				img = new ImageIcon("images/explosion5").getImage();
+				img = new ImageIcon("images/explosion5.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
 			if(timePassed == 10) {
-				img = new ImageIcon("images/explosion6").getImage();
+				img = new ImageIcon("images/explosion6.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
 			if(timePassed == 12) {
-				img = new ImageIcon("images/explosion7").getImage();
+				img = new ImageIcon("images/explosion7.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
 				notifyObservers("Boom");
 				setChanged();
 			}
+			if(timePassed == 12) {
+				img = new ImageIcon("images/explosion8.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
+				notifyObservers("Boom");
+				setChanged();
+			}
+			if(timePassed == 12) {
+				img = new ImageIcon("images/explosion9.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
+				notifyObservers("Boom");
+				setChanged();
+			}
+			if(timePassed == 12) {
+				img = new ImageIcon("images/explosion10.png").getImage();
+				location = new Point(location.row - 2, location.col - 2);
+				notifyObservers("Boom");
+				setChanged();
+			}
+			
 			if(timePassed == 14) {
-				img = new ImageIcon("images/explosion6").getImage();
-				notifyObservers("Boom");
-				setChanged();
-			}
-			if(timePassed == 16) {
-				img = new ImageIcon("images/explosion5").getImage();
-				notifyObservers("Boom");
-				setChanged();
-			}
-			if(timePassed == 18) {
-				img = new ImageIcon("images/explosion4").getImage();
-				notifyObservers("Boom");
-				setChanged();
-			}
-			if(timePassed == 20) {
-				img = new ImageIcon("images/explosion3").getImage();
-				notifyObservers("Boom");
-				setChanged();
-			}
-			if(timePassed == 22) {
-				img = new ImageIcon("images/explosion2").getImage();
-				notifyObservers("Boom");
-				setChanged();
-			}
-			if(timePassed == 24) {
-				img = new ImageIcon("images/explosion1").getImage();
-				notifyObservers("Boom");
-				setChanged();
-			}
-			if(timePassed == 28) {
+				location = new Point(-100, -100);
 				map.getExplosions().remove(this);
 			}
 			try {
-				Thread.sleep(50);
+				Thread.sleep(15);
 			} catch (InterruptedException e) {
 			
 			}
