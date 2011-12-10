@@ -52,6 +52,10 @@ import undecided.TNT;
 
 public class NetworkTankView extends MasterViewPanel implements Observer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public NetworkTankModel model;
 	private Image dbImage;
 	private Graphics dbg;
@@ -75,7 +79,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
 
-		this.map = new Level1();
+		this.map = new NetWorkMap1();
 		model = new NetworkTankModel(m, map, i);
 		tankList = map.getPlayers();
 		projectileList = map.getProjectiles();
