@@ -59,6 +59,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	private LinkedList<PlayerTank> tankList;
 	private LinkedList<Item> itemList;
 	private LinkedList<EnemyTank> enemyList;
+	private LinkedList<Explosion> explosionList;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost, gameOver;
 	private Image camo, wheel, steel, gold;
@@ -80,6 +81,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		gameOver = false;
 		currentMap.addObserver(this);
 		tankList = currentMap.getPlayers();
+		explosionList = currentMap.getExplosions();
 		projectileList = currentMap.getProjectiles();
 		obstacleList = currentMap.getObstacles();
 		enemyList = currentMap.getEnemies();
@@ -209,7 +211,9 @@ public class TankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
-
+		for (Explosion p : explosionList) {
+			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row, null);
+		}
 		for (Item p : itemList) {
 			if (p instanceof SpeedBoost) {
 				SpeedBoost s = (SpeedBoost) p;
@@ -279,6 +283,7 @@ public class TankView extends MasterViewPanel implements Observer {
 				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 			}
 		}
+		
 		if (won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
 			String jb = "Mission Complete!";
@@ -346,6 +351,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		att6.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att6.getIterator(), 1030, 485);
 		
+		
 		if(player.isActiveShield()) {
 			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020, 515, null);
 		}
@@ -403,6 +409,12 @@ public class TankView extends MasterViewPanel implements Observer {
 	public synchronized void update(Observable v, Object o) {
 		if (o == null) {
 			repaint();
+		}
+		if(o instanceof Point) {
+			Point p = (Point)o;
+			Explosion et = new Explosion(p, currentMap);
+			currentMap.addExplosion(et);
+			
 		}
 
 	}
