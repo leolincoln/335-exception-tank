@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import rectangles.BubbleShieldRectangle;
@@ -55,7 +56,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
-	private EnemyTank enemy;
+	private PlayerTank enemy;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
@@ -64,32 +65,40 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost;
 	Map map;
-
-	public NetworkTankView(MasterView m) {
+	private Image camo, wheel, steel, gold;
+	
+	// if i=0, then its the host, if i=1, then its the client
+	public NetworkTankView(MasterView m,int i) {
 		super(m);
+		camo = new ImageIcon("images/camo.png").getImage();
+		wheel = new ImageIcon("images/wheel-md.png").getImage();
+		steel = new ImageIcon("images/steel.png").getImage();
+		gold = new ImageIcon("images/gold.png").getImage();
+
 		this.map = new Level1();
-		model = new NetworkTankModel(m, map);
+		model = new NetworkTankModel(m, map, i);
 		tankList = map.getPlayers();
 		projectileList = map.getProjectiles();
 		obstacleList = map.getObstacles();
-		enemyList = map.getEnemies();
+	
 		itemList = map.getItems();
 		GameThread gt = new GameThread();
 		gt.start();
 
 		this.setFocusable(true);
 
-		player = tankList.getFirst();
-
+		if(i==0) player = tankList.getFirst();
+		if(i==1) player = tankList.getLast();
 		add(panel);
-		addKeyListener(new moveAndShootListener());// adding the movement and
-
-		Handlerclass handler = new Handlerclass();// creating the mouse handler
-													// class
-		this.addMouseListener(handler);// adding mouse actions to be detected on
-										// the java panel
-		this.addMouseMotionListener(handler);// adding mouse motion to be
-												// detected on the java panel
+		// adding the movement and
+		addKeyListener(new moveAndShootListener());
+		// creating the mouse handler
+		Handlerclass handler = new Handlerclass();
+		// adding mouse actions to be detected on	the java panel								
+		this.addMouseListener(handler);
+										
+		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
+												
 		this.setVisible(true);
 
 	}
@@ -123,7 +132,6 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		@Override
 		public synchronized void run() {
 			while (exists) {
-
 				if (map.getPlayers().size() == 1) {
 					lost = true;
 					repaint();
@@ -132,7 +140,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					} catch (InterruptedException e) {
 
 					}
-					m.changeView(Views.TANKVIEW, null);
+					m.changeView(Views.NETWORKTANKVIEW,3);
 					exists = false;
 				} else if (map.getEnemies().size() == 0) {
 					
@@ -193,13 +201,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				g.drawImage(ibRect.getImage(), ibRect.xCoord(),
 						ibRect.yCoord(), null);
 			}
-			if (p instanceof FireRing) {// for instance of fireRing
-				FireRing fr = (FireRing) p;
-				FireRingRectangle frRect = fr.getRectangle();
-				g.setColor(frRect.setColor());
-				g.drawImage(frRect.getImage(), frRect.xCoord(),
-						frRect.yCoord(), null);
-			}
+		
 			if (p instanceof TNT) {// for instance of TNT
 				TNT tnt = (TNT) p;
 				TNTRectangle tntRect = tnt.getRectangle();
@@ -212,10 +214,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
-		for (EnemyTank p : enemyList) {
-			TankRectangle tRect = p.getRectangle();
-			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
-		}
+		
 		for (Projectile p : projectileList) {
 			if (p instanceof PlayerProjectile) {
 				PlayerProjectile s = (PlayerProjectile) p;
@@ -243,6 +242,54 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			att.addAttribute(TextAttribute.FOREGROUND, Color.RED);
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
+		}
+		for(int i = 0; i < 700; i += 50) {
+			for(int j = 985; j < 1200; j += 50) {
+				if(i == 150 || i == 200 || i == 350 || i == 400) {
+					g.drawImage(steel, j, i, null);
+				}
+				else {
+				g.drawImage(camo, j, i, null);
+			}
+			}
+		}
+		for(int i = 0; i < 700; i += 20) {
+			for(int j = 985; j < 1200; j += 20) {
+				if(i == 0 || i == 680 || j == 985 || j == 1165) {
+					g.drawImage(gold, j, i, null);
+				}
+			}
+			}
+	
+		Font font = new Font("Times New Roman", Font.BOLD, 20);
+		String score = "Score Board";
+		AttributedString att = new AttributedString(score);
+		att.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		att.addAttribute(TextAttribute.FONT, font);
+		g.drawString(att.getIterator(), 1018, 44);
+		
+		for(int i = 0; i < MasterView.playerLives; i++) {
+			for(int j = 0; j < MasterView.playerLives * 50; j += 55) {
+			g.drawImage(wheel, 1005 + j, 65, null);
+			}
+		}
+		String curr = "Current Level: " + map.getLevelNumber();
+		AttributedString att3 = new AttributedString(curr);
+		att3.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		att3.addAttribute(TextAttribute.FONT, font);
+		g.drawString(att3.getIterator(), 1013, 300);
+		
+		String item = "Active Items";
+		AttributedString att6 = new AttributedString(item);
+		att6.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		att6.addAttribute(TextAttribute.FONT, font);
+		g.drawString(att6.getIterator(), 1030, 485);
+		
+		if(player.isActiveShield()) {
+			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020, 515, null);
+		}
+		if(player.isActiveBoost()) {
+			g.drawImage(new SpeedBoostRectangle(-10, -10).getImage(), 1100, 515, null);
 		}
 	}
 
@@ -349,7 +396,6 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 								.getLocation().col),
 						(int) (xdiff * (5 / length)),
 						(int) (ydiff * (5 / length)));
-
 				// player.shoot();
 			}
 		}
