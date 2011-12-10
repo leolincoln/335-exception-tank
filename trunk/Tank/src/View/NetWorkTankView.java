@@ -46,9 +46,6 @@ import undecided.Projectile;
 import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
-import undecided.TankView.GameThread;
-import undecided.TankView.Handlerclass;
-import undecided.TankView.moveAndShootListener;
 
 /*import undecided.TankView.Handlerclass;
  import undecided.TankView.moveAndShootListener;*/
