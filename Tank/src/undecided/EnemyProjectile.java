@@ -38,11 +38,7 @@ public class EnemyProjectile extends Observable  implements Projectile {
 		rect = new ProjectileRectangle(p.col - 3, p.row - 3);// creating new projectile rectangle
 		exists = true;
 		thisMissle = this;
-		
-		
-		
-		Thread pt = new ProjectileThread();// creating new thread for the
-											// projectile's movement
+		Thread pt = new ProjectileThread();// creating new thread for the									// projectile's movement
 		pt.start();// beginning the projectile's movement
 	}
 	

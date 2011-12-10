@@ -23,7 +23,7 @@ import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
 
-public class NetworkTankModel extends Observable implements Observer {
+public class NetworkTankController extends Observable implements Observer {
 
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
@@ -31,23 +31,24 @@ public class NetworkTankModel extends Observable implements Observer {
 	private LinkedList<Item> itemList;
 	private PlayerTank player,enemy;
 	int i;
-	Map map;
+	NetWorkMap1 map;
 	MasterView m;
 	private int playerScore, enemyScore;
 
-	public NetworkTankModel(MasterView m,int i) {
-		playerScore=0;
-		enemyScore = 0;
-		this.map =new NetWorkMap1();
-		this.m = m;
-		this.i=i;
+	public NetworkTankController(MasterView m,int i) {
 		obstacleList = new LinkedList<Obstacle>();
 		tankList = new LinkedList<PlayerTank>();
 		projectileList = new LinkedList<Projectile>();
 		itemList = new LinkedList<Item>();
-		setPlayerStart(map.playerStart());
-		setEnemyStart(map.playerStart());
+		playerScore=0;
+		enemyScore = 0;
+		this.map =new NetWorkMap1();
+		addPlayers();
 		map.setUpMap();
+		this.m = m;
+		this.i=i;
+		
+		
 		
 	}
 	
@@ -58,7 +59,11 @@ public class NetworkTankModel extends Observable implements Observer {
 	public int getEnemyScore(){
 		return enemyScore;
 	}
-
+	
+	public void addPlayers(){
+		setPlayerStart(map.playerStart());
+		setEnemyStart(map.enemyStart());
+	}
 	public void setEnemyStart(Point p) {
 		enemy = new PlayerTank(p, map);
 		enemy.addObserver(this);
@@ -66,20 +71,15 @@ public class NetworkTankModel extends Observable implements Observer {
 	}
 
 	public void setPlayerStart(Point p) {
-		if(i==0) {
-			player = tankList.getFirst();
-			enemy = tankList.getLast();
-		}
-		if(i==1) {
-			player = tankList.getLast();
-			enemy = tankList.getFirst();
-		}
+		
 		player = new PlayerTank(p, map);
 		player.addObserver(this);
-		tankList.add(player);
+		map.tankList.add(player);
 
 	}
-
+public Map getMap(){
+	return map;
+}
 	public boolean isOver() {
 		if (player.isDead() || enemy.isDead()) {
 			return true;
@@ -89,18 +89,6 @@ public class NetworkTankModel extends Observable implements Observer {
 	}
 
 	public synchronized void update(Observable v, Object o) {
-		if (o instanceof BubbleShield) {
-			BubbleShield b = (BubbleShield) o;
-			itemList.add(b);
-			notifyObservers();
-			setChanged();
-		}
-		if (o instanceof SpeedBoost) {
-			SpeedBoost b = (SpeedBoost) o;
-			itemList.add(b);
-			notifyObservers();
-			setChanged();
-		}
 		if (o instanceof String) {
 			String s = (String) o;
 			if (s.equals("moveCrate")) {

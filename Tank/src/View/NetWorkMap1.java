@@ -5,8 +5,11 @@ import java.util.LinkedList;
 import java.util.Observer;
 
 import undecided.Crate;
+
+import undecided.Explosion;
 import undecided.FireRing;
 import undecided.ImmovableBlock;
+import undecided.Item;
 import undecided.Map;
 import undecided.Obstacle;
 import undecided.PlayerTank;
@@ -22,7 +25,6 @@ public class NetWorkMap1 extends Map implements Observer {
 	public LinkedList<Obstacle> obstacleList;	
 	public LinkedList<PlayerTank> tankList;
 	public LinkedList<Projectile> projectileList;
-	Map map;
 	
 	public NetWorkMap1(){
 		obstacleList = new LinkedList<Obstacle>();
@@ -32,6 +34,8 @@ public class NetWorkMap1 extends Map implements Observer {
 	
 
 public void addObstacle(Obstacle o) {
+	System.out.println(o);
+	obstacleList = new LinkedList<Obstacle>();
 	obstacleList.add(o);
 	if (o instanceof TNT) {
 		TNT t = (TNT) o;
@@ -76,6 +80,7 @@ public void addObstacle(Obstacle o) {
 		}
 		
 		for (int i = 75; i < 275; i += 50) {
+			
 			Crate c = new Crate(new Point(i, 480), this);
 			addObstacle(c);
 		}
@@ -125,4 +130,28 @@ public void addObstacle(Obstacle o) {
 		// TODO Auto-generated method stub
 		return 1;
 	}
+	public LinkedList<Obstacle> getObstacles() {
+		return obstacleList;
+	}
+
+
+	/**
+	 * 
+	 * @return Returns the list containing this map's Projectiles
+	 */
+	public LinkedList<Projectile> getProjectiles() {
+		return projectileList;
+	}
+	/**
+	 * 
+	 * @return Returns the list containing this map's player
+	 */
+	public LinkedList<PlayerTank> getPlayers() {
+		return tankList;
+	}
+	public void addPlayers(PlayerTank p){
+		PlayerTank temp = p;
+		tankList.add(temp);
+	}
+	
 }
