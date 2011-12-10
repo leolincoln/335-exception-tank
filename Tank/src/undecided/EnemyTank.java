@@ -514,8 +514,9 @@ public class EnemyTank extends Observable {
 				} else {
 					tick = 0;
 				}
-				if(isDead()) {
+				if(map.getEnemies().size() == 0) {
 					exists = false;
+					break;
 				}
 				timePassed++;
 				try {

@@ -219,8 +219,8 @@ public abstract class Map extends Observable implements Observer {
 			for (int i = 0; i < tankList.size(); i++) {
 				PlayerTank t = tankList.get(i);
 				if (t.getRectangle().intersects(fr.getRectangle())) {
+					notifyObservers(new Point(fr.getLocation().row - 12, fr.getLocation().col - 12));
 					t.recieveDamage(1);
-					notifyObservers();
 					setChanged();
 					break;
 				}
@@ -469,7 +469,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
