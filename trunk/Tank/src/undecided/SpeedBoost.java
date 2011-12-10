@@ -35,6 +35,7 @@ public class SpeedBoost extends Observable implements Item {
 	public void activateEffect(PlayerTank t) {
 		
 		player = t;
+		t.setActiveBoost(true);
 		TimerThread time = new TimerThread();
 		time.start();
 	
@@ -82,6 +83,7 @@ public class SpeedBoost extends Observable implements Item {
 		public void run() {
 			while(timePassed < 10) {
 				if(timePassed == 9) {
+					player.setActiveBoost(false);
 					player.setSpeed(player.getSpeed() / 2);
 				}
 				else if(timePassed == 0) {

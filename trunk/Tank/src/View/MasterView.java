@@ -33,7 +33,7 @@ import undecided.TankView;
  * 
  */
 public class MasterView extends JFrame {
-	public static int currentLevel;
+	public static int currentLevel, playerLives;
 	JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame m;
@@ -54,6 +54,7 @@ public class MasterView extends JFrame {
 	 */
 	public MasterView() {
 		currentLevel = 1;
+		playerLives = 3;
 		buildFrame();
 		buildMenu();
 		setDefaultPane();
@@ -215,7 +216,7 @@ public class MasterView extends JFrame {
 				}
 			}
 			this.setBackground(Color.black);
-			this.setSize(1000, 750);
+			this.setSize(1200, 750);
 			this.setLocationRelativeTo(null);
 			if (currentLevel == 6) {
 				changeView(Views.TITLE, null);

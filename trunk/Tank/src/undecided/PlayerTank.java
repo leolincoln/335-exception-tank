@@ -33,6 +33,7 @@ public class PlayerTank extends Observable {
 	private Direction d;
 	private Image img;
 	private Map map;
+	private boolean activeShield, activeBoost;
 
 	/**
 	 * Class constructor
@@ -46,6 +47,8 @@ public class PlayerTank extends Observable {
 		speed = 5;
 		health = 1;
 		this.map = map;
+		activeShield = false;
+		activeBoost = false;
 		d = Direction.EAST;
 		t = new TankRectangle(p.col - 25, p.row - 25);
 		img = new ImageIcon("images/tank.png").getImage();
@@ -98,6 +101,7 @@ public class PlayerTank extends Observable {
 	public void setHealth(int x) {
 		if(x == 2) {
 			img = new ImageIcon("images/tankShield.png").getImage();
+			activeShield = true;
 		}
 		health = x;
 	}
@@ -309,6 +313,22 @@ public class PlayerTank extends Observable {
 		return true;
 	}
 
+	public boolean isActiveShield() {
+		return activeShield;
+	}
+
+	public void setActiveShield(boolean activeShield) {
+		this.activeShield = activeShield;
+	}
+
+	public boolean isActiveBoost() {
+		return activeBoost;
+	}
+
+	public void setActiveBoost(boolean activeBoost) {
+		this.activeBoost = activeBoost;
+	}
+
 	/**
 	 * 
 	 * @return Point returns the point that is to the left of the tank's current
@@ -403,6 +423,7 @@ public class PlayerTank extends Observable {
 			map.getPlayers().remove(this);
 		}
 		else if (health == 1) {
+			activeShield = false;
 			ImmuneThread it = new ImmuneThread();
 			it.start();
 		}
@@ -421,6 +442,7 @@ public class PlayerTank extends Observable {
 			while(timePassed < 17) {
 			if(timePassed < 16) {
 				health = 10000;
+	
 			}
 			if(timePassed == 16) {
 				health = 1;

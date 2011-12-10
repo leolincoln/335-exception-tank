@@ -80,4 +80,10 @@ public class Level1 extends Map implements Observer {
 	public Point enemyStart() {
 		return new Point(100, 900);
 	}
+
+	@Override
+	public int getLevelNumber() {
+		// TODO Auto-generated method stub
+		return 1;
+	}
 }
