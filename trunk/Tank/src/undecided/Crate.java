@@ -125,6 +125,11 @@ public class Crate extends Observable implements Obstacle {
 						return false;
 					}
 				}
+				if(o instanceof SpikePit) {
+					if(((SpikePit) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+					}
+				}
 				if(o instanceof Crate) {
 					if(o != this) {
 					if(((Crate) o).getRectangle().intersects(rect)) {
@@ -194,6 +199,11 @@ public class Crate extends Observable implements Obstacle {
 					}
 					}
 				}
+				if(o instanceof SpikePit) {
+					if(((SpikePit) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+					}
+				}
 				if(o instanceof FireRing) {
 					if(((FireRing) o).getRectangle().intersects(rect)) {
 						this.recieveDamage(1);
@@ -254,6 +264,11 @@ public class Crate extends Observable implements Obstacle {
 					}
 					}
 				}
+				if(o instanceof SpikePit) {
+					if(((SpikePit) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
+					}
+				}
 				if(o instanceof FireRing) {
 					if(((FireRing) o).getRectangle().intersects(rect)) {
 						this.recieveDamage(1);
@@ -312,6 +327,11 @@ public class Crate extends Observable implements Obstacle {
 						rect = new CrateRectangle(location.col - 25, location.row - 25);
 						return false;
 					}
+					}
+				}
+				if(o instanceof SpikePit) {
+					if(((SpikePit) o).getRectangle().intersects(rect)) {
+						this.recieveDamage(1);
 					}
 				}
 				if(o instanceof FireRing) {
