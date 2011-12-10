@@ -206,7 +206,6 @@ public abstract class Map extends Observable implements Observer {
 				setChanged();
 			}
 			if (s.equals("Boom")) {
-				System.out.println("something");
 				notifyObservers();
 				setChanged();
 			}
@@ -259,7 +258,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -270,7 +269,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -284,7 +283,7 @@ public abstract class Map extends Observable implements Observer {
 						p.collided();
 						projectileList.remove(p);
 						h.recieveDamage(p.getDamage());
-						notifyObservers();
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 						setChanged();
 						break;
 					}
@@ -299,7 +298,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -314,7 +313,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -328,7 +327,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(p.getLocation());
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
@@ -343,7 +342,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
@@ -385,7 +384,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -396,7 +395,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -410,7 +409,7 @@ public abstract class Map extends Observable implements Observer {
 						p.collided();
 						projectileList.remove(p);
 						h.recieveDamage(p.getDamage());
-						notifyObservers();
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 						setChanged();
 						break;
 					}
@@ -426,7 +425,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -441,7 +440,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -455,7 +454,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers();
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
@@ -538,6 +537,7 @@ public abstract class Map extends Observable implements Observer {
 					FireRing c = (FireRing) obs;
 					if (rect.intersects(c.getRectangle())) {
 						p.recieveDamage(0);
+						
 					}
 				}
 				// SpikePit's can not kill the AI either for difficulty purposes
@@ -603,6 +603,7 @@ public abstract class Map extends Observable implements Observer {
 					FireRing c = (FireRing) obs;
 					if (rect.intersects(c.getRectangle())) {
 						p.recieveDamage(1);
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 					}
 				}
 				// If the PlayerTank collides with a SpikePit it will die
@@ -610,6 +611,7 @@ public abstract class Map extends Observable implements Observer {
 					SpikePit c = (SpikePit) obs;
 					if (rect.intersects(c.getRectangle())) {
 						p.recieveDamage(1);
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 					}
 				}
 			}

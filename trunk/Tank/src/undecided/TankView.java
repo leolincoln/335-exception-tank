@@ -211,9 +211,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
-		for (Explosion p : explosionList) {
-			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row, null);
-		}
+
 		for (Item p : itemList) {
 			if (p instanceof SpeedBoost) {
 				SpeedBoost s = (SpeedBoost) p;
@@ -282,6 +280,9 @@ public class TankView extends MasterViewPanel implements Observer {
 				ProjectileRectangle rect = s.getRectangle();
 				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 			}
+		}
+		for (Explosion p : explosionList) {
+			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row, null);
 		}
 		
 		if (won == true) {
