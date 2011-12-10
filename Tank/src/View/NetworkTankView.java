@@ -80,7 +80,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		gold = new ImageIcon("images/gold.png").getImage();
 
 		this.map = new NetWorkMap1();
-		model = new NetworkTankModel(m, map, i);
+		model = new NetworkTankModel(m, i);
 		tankList = map.getPlayers();
 		projectileList = map.getProjectiles();
 		obstacleList = map.getObstacles();
