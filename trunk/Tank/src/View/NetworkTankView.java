@@ -47,12 +47,11 @@ import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
 
-/*import undecided.TankView.Handlerclass;
- import undecided.TankView.moveAndShootListener;*/
 
-public class NetWorkTankView extends MasterViewPanel implements Observer {
 
-	public NetWorkTankModel model;
+public class NetworkTankView extends MasterViewPanel implements Observer {
+
+	public NetworkTankModel model;
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
@@ -67,10 +66,10 @@ public class NetWorkTankView extends MasterViewPanel implements Observer {
 	private boolean won, lost;
 	Map map;
 
-	public NetWorkTankView(MasterView m) {
+	public NetworkTankView(MasterView m) {
 		super(m);
 		this.map = new Level1();
-		model = new NetWorkTankModel(m, map);
+		model = new NetworkTankModel(m, map);
 		tankList = map.getPlayers();
 		projectileList = map.getProjectiles();
 		obstacleList = map.getObstacles();

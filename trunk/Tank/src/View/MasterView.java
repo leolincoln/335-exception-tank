@@ -150,7 +150,7 @@ public class MasterView extends JFrame {
 			this.setSize(1000, 750);
 			previousPane = currentPane;
 			
-			currentPane = new NetWorkTankView(this);
+			currentPane = new NetworkTankView(this);
 			body.removeAll();
 			body.add(currentPane, "NETWORKTANKVIEW");
 			currentPane.requestFocus();
