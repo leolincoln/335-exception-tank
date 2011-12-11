@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import undecided.Level1;
 import undecided.PlayerTank;
 import undecided.Point;
 
@@ -29,176 +30,82 @@ public class HostModel {
 	public MasterView m;
 	// dont forget to set the p after changing to network tank view.
 	public PlayerTank p;
+	public boolean connected = false;
 
 	public HostModel(HostView hv, MasterView m) {
 		this.hv = hv;
 		this.m = m;
+		p = new PlayerTank(new Point(-100, -100), new Level1());
 
-		ipList = new ArrayList<String>();
 		try {
-			setUpHost();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			host = new ServerSocket(4000);
+			client = host.accept();
+			out = new ObjectOutputStream(client.getOutputStream());
+			in = new ObjectInputStream(client.getInputStream());
+			connected = true;
+			sendObject("Welcome!");
+			Thread receiver = new ReceivingThread();
+			receiver.start();
+			hv.hm=this;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
-
-	/**
-	 * 
-	 * @throws IOException
-	 * @name setUpHost this method sets up the host to serversocket 4000. then
-	 *       prints connecting.
-	 */
-	public void setUpHost() throws IOException {
-		host = new ServerSocket(4000);
-		String ip = InetAddress.getLocalHost().toString();
-		ipList.add(ip);
-		System.out.println("Connecting");
-		JOptionPane.showMessageDialog(null, "connecting");
+	
+	public void setPlayer(PlayerTank p) {
+		this.p = p;
 	}
 
-	/**
-	 * this method sets the connection to start, call Thread connect and Thread
-	 * waitforConnection
-	 */
-	public void connectionStart() {
-
-		Thread connect = new Connect();
-		connect.start();
-
-		Thread connection = new WaitForConnection();
-		connection.start();
-	}
-
-	/**
-	 * 
-	 * this class will try to read the client from serverSocket. eventually the
-	 * client socket will be determined.
-	 * 
-	 */
-	private class Connect extends Thread implements Runnable {
+	public class ReceivingThread extends Thread {
 		public void run() {
-
-			while (client == null) {
+			while (connected) {
 				try {
-					System.out.println("trying to read the connection");
-
-					client = host.accept();
-
-					if (client != null) {
-						System.out.println(client);
+					Object o = in.readObject();
+					if (o instanceof String) {
+						String s = (String) o;
+						if (s.equals("ready")) {
+							hv.start.setEnabled(true);
+						}
+						if (s.equals("up")) {
+							p.moveUp();
+						}
+						if (s.equals("down")) {
+							p.moveDown();
+						}
+						if (s.equals("left")) {
+							p.moveLeft();
+						}
+						if (s.equals("right")) {
+							p.moveRight();
+						}
+					}
+					if (o instanceof SimpleShoot) {
+						SimpleShoot ss = (SimpleShoot) o;
+						p.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
 
 					}
-
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+
 			}
 		}
 	}
 
 	public void sendObject(Object o) {
-		if (out == null) {
-			try {
-				out = new ObjectOutputStream(client.getOutputStream());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		hv.hm=this;
-			try {
-				out.writeObject(o);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-	}
-
-	/**
-	 * this class reads all incoming messages. it will try reading from the
-	 * client socket. after reading the first string, its going to call send
-	 * object.
-	 * 
-	 */
-	private class WaitForConnection extends Thread implements Runnable {
-		
-
-		public void run() {
-			in = null;
-			while (in == null) {
-				try {
-					if (client != null)
-						in = new ObjectInputStream(client.getInputStream());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			while (true) {
-				System.out.println("waiting still waiting");
-				if (client != null)
-					try {
-						System.out.println("Succesfully connected");
-						System.out.println(client);
-
-						if (first) {
-							sendObject("Welcome!");
-							first = false;
-							System.out.println("sending welcome");
-						}
-
-						Object command = in.readObject();
-						if (command instanceof String) {
-							if (command.equals("connected")) {
-								JOptionPane.showMessageDialog(null,
-										"Successfully connected to "
-												+ client.getInetAddress()
-														.toString());
-							} else if (command.equals("ready")) {
-								System.out.println("ready received");
-								hv.start.setEnabled(true);
-							} else if (command.equals("up")) {
-								System.out.println("up");
-								p.moveUp();
-							} else if (command.equals("down")) {
-								p.moveDown();
-								System.out.println("down");
-							} else if (command.equals("left")) {
-								p.moveLeft();
-							} else if (command.equals("right")) {
-								p.moveRight();
-							} else if (command.equals("quit")) {
-								out.close();
-								in.close();
-								client.close();
-								break;
-							}
-						} else if (command instanceof SimpleShoot) {
-							SimpleShoot ss = (SimpleShoot) command;
-							p.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
-						}
-
-					} catch (IOException ioe) {
-						ioe.printStackTrace();
-						m.changeView(Views.TITLE, null);
-						interrupt();
-
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			}
-		}
-	}
-
-	
-	public void clientStart()  {
 		try {
-			out.writeObject("start");
+			out.writeObject(o);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
+
 }
