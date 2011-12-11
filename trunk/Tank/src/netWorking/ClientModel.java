@@ -141,7 +141,8 @@ public class ClientModel extends Observable implements Observer {
 				}
 
 				catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("IOException");
+					System.out.println(unKnown);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -186,6 +187,10 @@ public class ClientModel extends Observable implements Observer {
 		}
 
 	}
+	/**
+	 * sending object o to the remote host
+	 * @param o
+	 */
 
 	public void sendObject(Object o) {
 		try {
