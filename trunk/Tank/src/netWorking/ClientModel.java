@@ -10,7 +10,6 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
-
 import javax.swing.JOptionPane;
 
 import undecided.PlayerTank;
@@ -26,8 +25,9 @@ public class ClientModel extends Observable implements Observer {
 	public ObjectInputStream in;
 	private Object unKnown;
 	private MasterView m;
-	//dont forget to set the p after changing to network tank view. 
+	// dont forget to set the p after changing to network tank view.
 	public PlayerTank p;
+	public boolean connected = false;
 
 	public ClientModel(MasterView m, Object o) {
 		ip = "127.0.0.1";
@@ -38,7 +38,6 @@ public class ClientModel extends Observable implements Observer {
 		try {
 			System.out.println("Trying to connect to remote host on " + ip);
 			socket = new Socket(ip, 4000);
-
 			listenStart();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -64,7 +63,6 @@ public class ClientModel extends Observable implements Observer {
 	public void connected() {
 		Thread connected = new ConnectSender();
 		connected.start();
-		connected.interrupt();
 	}
 
 	@Override
@@ -75,11 +73,11 @@ public class ClientModel extends Observable implements Observer {
 
 	private class ConnectSender extends Thread implements Runnable {
 		public void run() {
-			try {
-				out = new ObjectOutputStream(socket.getOutputStream());
-				out.writeObject(new String("connected"));
-				System.out.println("connected sent to host");
-				this.interrupt();
+			try { 
+					out = new ObjectOutputStream(socket.getOutputStream());
+					out.writeObject(new String("connected"));
+					System.out.println("connected sent to host");
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -108,16 +106,22 @@ public class ClientModel extends Observable implements Observer {
 		@Override
 		public void run() {
 
+			while (in == null) {
+				try {
+					in = new ObjectInputStream(socket.getInputStream());
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 			while (true) {
 				System.out.println("Trying to read");
 				try {
-					in = null;
-					in = new ObjectInputStream(socket.getInputStream());
-					if (in != null)
-						unKnown = in.readObject();
+					unKnown = in.readObject();
 					System.out.println(in);
 				}
-				catch(SocketException e){
+
+				catch (SocketException e) {
 					System.out.println("Socket Exception, connection lost");
 					m.changeView(Views.TITLE, null);
 				}
@@ -128,8 +132,6 @@ public class ClientModel extends Observable implements Observer {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					m.changeView(Views.TITLE, null);
-					interrupt();
-
 				}
 
 				if (unKnown != null) {
@@ -139,7 +141,6 @@ public class ClientModel extends Observable implements Observer {
 								JOptionPane.showMessageDialog(null,
 										"Connected to host!");
 								first = false;
-
 							}
 						} else if (unKnown.equals("start")) {
 							JOptionPane.showMessageDialog(null,
@@ -154,20 +155,12 @@ public class ClientModel extends Observable implements Observer {
 						} else if (unKnown.equals("right")) {
 							p.moveRight();
 						}
-					}
-					else
-					{
+					} else {
 						SimpleShoot ss = (SimpleShoot) unKnown;
-						p.shoot(new Point(ss.c,ss.r), ss.x, ss.y);
+						p.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
 					}
 				}
-				try {
-					sleep(3);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 
-					System.out.println("interrupted thread listen");
-				}
 			}
 
 		}
@@ -182,9 +175,9 @@ public class ClientModel extends Observable implements Observer {
 
 	public void sendObject(Object o) {
 		try {
-			
+
 			out.writeObject(o);
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
