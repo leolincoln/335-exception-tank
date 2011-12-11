@@ -27,7 +27,7 @@ import netWorking.HostModel;
  * 
  */
 public class LanView extends MasterViewPanel {
-	private String ip1 = "192.168.1.10";
+	private String ip = "192.168.1.10";
 
 	private static final long serialVersionUID = 1L;
 	private JPanel northPane, buttonPane, centerPane;
@@ -75,8 +75,12 @@ public class LanView extends MasterViewPanel {
 		 * for(String ip : HostModel.ipList) { hostsInfo.addElement(); }
 		 */
 		hostsInfo = new DefaultListModel();
-		hostsInfo.addElement(ip1);
+		hostsInfo.addElement(ip);
 
+		
+		
+		
+		
 		hostList = new JList(hostsInfo);
 		hostList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
 		hostList.addListSelectionListener(new HostSelectionListener());

@@ -76,11 +76,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	private int i;
 
 	// if i=0, then its the host, if i=1, then its the client
-	public NetworkTankView(MasterView m, int i) {
+	public NetworkTankView(MasterView m, int i,Object o) {
 		super(m);
 		this.i = i;
-		// if(i==0) hm =
-		// else cm =
+		
 
 		camo = new ImageIcon("images/camo.png").getImage();
 		wheel = new ImageIcon("images/wheel-md.png").getImage();
@@ -118,6 +117,15 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		this.setVisible(true);
 		System.out.println(model.getMap().getPlayers());
 		this.requestFocus();
+		
+		 if(i==0) {
+			 hm = (HostModel)o;
+			 hm.p=model.getMap().getPlayers().getFirst();
+		 }
+		 else {
+			 cm =(ClientModel)o;
+			 cm.p=model.getMap().getPlayers().getFirst();
+		 }
 
 	}
 
@@ -321,31 +329,31 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		public void keyPressed(KeyEvent e) {
 			int keyEvent = e.getKeyCode();
 			if (keyEvent == KeyEvent.VK_W) {
-//				if (i == 0) {
-//					hm.sendObject("up");
-//				} else
-//					cm.sendObject("up");
-//				player.moveUp();
+				if (i == 0) {
+					hm.sendObject("up");
+				} else
+					cm.sendObject("up");
+				player.moveUp();
 			}
 			if (keyEvent == KeyEvent.VK_S) {
-//				if (i == 0) {
-//					hm.sendObject("down");
-//				} else
-//					cm.sendObject("down");
+				if (i == 0) {
+					hm.sendObject("down");
+				} else
+					cm.sendObject("down");
 				player.moveDown();
 			}
 			if (keyEvent == KeyEvent.VK_A) {
-//				if (i == 0) {
-//					hm.sendObject("left");
-//				} else
-//					cm.sendObject("left");
+				if (i == 0) {
+					hm.sendObject("left");
+				} else
+					cm.sendObject("left");
 				player.moveLeft();
 			}
 			if (keyEvent == KeyEvent.VK_D) {
-//				if (i == 0) {
-//					hm.sendObject("right");
-//				} else
-//					cm.sendObject("right");
+				if (i == 0) {
+					hm.sendObject("right");
+				} else
+					cm.sendObject("right");
 				player.moveRight();
 			}
 
