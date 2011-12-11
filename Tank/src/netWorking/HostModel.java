@@ -3,6 +3,7 @@ package netWorking;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -85,25 +86,25 @@ public class HostModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	private class WaitForConnection extends Thread implements Runnable {
 		boolean first = true;
 
-		public void run() {
+		public void  run() {
 			while (true) {
 				System.out.println("waiting still waiting");
 				if (client != null)
 					try {
 						System.out.println("Succesfully connected");
 						System.out.println(client);
-						in = new ObjectInputStream(client.getInputStream());
+						if(first) in = new ObjectInputStream(client.getInputStream());
+						if(first)out = new ObjectOutputStream(client.getOutputStream());
 						if (first) {
 							sendObject("Welcome!");
 							first = false;
 						}
-						
+						sleep(10);
 						Object command = in.readObject();
 						if (command instanceof String) {
 							if (command.equals("connected")) {
@@ -127,13 +128,19 @@ public class HostModel {
 							SimpleShoot ss = (SimpleShoot) command;
 							p.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
 						}
+						
+					}catch (StreamCorruptedException e){
+						System.out.println("stream corruppted");
 
 					} catch (IOException ioe) {
-						ioe.printStackTrace();
+						System.out.println("connection lost");
 						m.changeView(Views.TITLE, null);
 						interrupt();
 
 					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -141,27 +148,7 @@ public class HostModel {
 		}
 	}
 
-	public void welcomeStart() {
-		try {
-			out = new ObjectOutputStream(client.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Thread welcome = new WelcomeMessage();
-		welcome.start();
-	}
 
-	private class WelcomeMessage extends Thread implements Runnable {
-
-		public void run() {
-			try {
-				out.writeObject(new String("Welcome!"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	public void clientStart() throws IOException {
 		out.writeObject(new String("start"));
