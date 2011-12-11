@@ -80,9 +80,7 @@ public class HostModel {
 
 	public void sendObject(Object o) {
 		try {
-			out = new ObjectOutputStream(client.getOutputStream());
 			out.writeObject(o);
-			out.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -144,7 +142,12 @@ public class HostModel {
 	}
 
 	public void welcomeStart() {
-
+		try {
+			out = new ObjectOutputStream(client.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Thread welcome = new WelcomeMessage();
 		welcome.start();
 	}
@@ -153,9 +156,7 @@ public class HostModel {
 
 		public void run() {
 			try {
-				out = new ObjectOutputStream(client.getOutputStream());
 				out.writeObject(new String("Welcome!"));
-				out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -163,9 +164,6 @@ public class HostModel {
 	}
 
 	public void clientStart() throws IOException {
-		out = new ObjectOutputStream(client.getOutputStream());
 		out.writeObject(new String("start"));
-		out.close();
-
 	}
 }
