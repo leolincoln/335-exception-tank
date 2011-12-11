@@ -188,11 +188,11 @@ public class MasterView extends JFrame {
 				this.setLocation(50, 50);
 				this.setSize(640, 400);
 			}
-			repaint();
+			repaint();  
 			break;
 		case TANKVIEW:
 			if (currentLevel == 1) {
-				currentPane = new TankView(this, new Level5());
+				currentPane = new TankView(this, new Level1());
 			}
 			if (currentLevel == 2) {
 				currentPane = new TankView(this, new Level2());

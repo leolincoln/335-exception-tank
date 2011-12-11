@@ -60,7 +60,7 @@ public class Crate extends Observable implements Obstacle {
 			rect = new CrateRectangle(-1, -1);// removing off field
 			map.getObstacles().remove(this);
 		}
-
+		
 	}
 
 	/**
@@ -267,6 +267,7 @@ public class Crate extends Observable implements Obstacle {
 				if(o instanceof SpikePit) {
 					if(((SpikePit) o).getRectangle().intersects(rect)) {
 						this.recieveDamage(1);
+						
 					}
 				}
 				if(o instanceof FireRing) {
@@ -332,6 +333,8 @@ public class Crate extends Observable implements Obstacle {
 				if(o instanceof SpikePit) {
 					if(((SpikePit) o).getRectangle().intersects(rect)) {
 						this.recieveDamage(1);
+						notifyObservers(new Point(location.row - 12,location.col - 12));
+						setChanged();
 					}
 				}
 				if(o instanceof FireRing) {

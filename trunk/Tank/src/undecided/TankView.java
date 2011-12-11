@@ -281,9 +281,7 @@ public class TankView extends MasterViewPanel implements Observer {
 				g.drawImage(rect.getImage(), rect.xCoord(), rect.yCoord(), null);
 			}
 		}
-		for (Explosion p : explosionList) {
-			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row, null);
-		}
+		 
 		
 		if (won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
