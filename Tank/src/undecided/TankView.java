@@ -250,7 +250,7 @@ public class TankView extends MasterViewPanel implements Observer {
 				FireRing fr = (FireRing) p;
 				FireRingRectangle frRect = fr.getRectangle();
 				g.setColor(frRect.setColor());
-				g.drawImage(frRect.getImage(), frRect.xCoord(),
+				g.drawImage(fr.getImage(), frRect.xCoord(),
 						frRect.yCoord(), null);
 			}
 			if (p instanceof TNT) {// for instance of TNT

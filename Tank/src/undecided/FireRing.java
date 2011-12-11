@@ -1,8 +1,11 @@
 package undecided;
 
+import java.awt.Image;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
+
+import javax.swing.ImageIcon;
 
 import rectangles.FireRingRectangle;
 
@@ -16,6 +19,7 @@ public class FireRing extends Observable implements Obstacle {
 	private boolean moveable;
 	private Map map;
 	private EnemyTank enemy;
+	private Image fireImage;
 
 	/**
 	 * Class constructor
@@ -28,6 +32,7 @@ public class FireRing extends Observable implements Obstacle {
 		tick = 0;
 		location = p;
 		this.map = map;
+		fireImage = new ImageIcon("images/fireRing.png").getImage();
 		health = -1;// can't be destroyed
 		// 25 is to offset for the size so it's not off the field
 		d = Direction.NORTH;
@@ -47,6 +52,10 @@ public class FireRing extends Observable implements Obstacle {
 	public void recieveDamage(int dmg) {
 		health = health - dmg;
 
+	}
+	
+	public Image getImage() {
+		return fireImage;
 	}
 
 	/**
@@ -379,6 +388,12 @@ public class FireRing extends Observable implements Obstacle {
 					}
 				}
 				move(d);
+				if(tick % 20 == 0) {
+					fireImage = new ImageIcon("images/fireRing2.png").getImage();
+				}
+				if(tick % 20 == 10) {
+					fireImage = new ImageIcon("images/fireRing.png").getImage();
+				}
 
 				if (!moveable) {
 					tick = 100;
