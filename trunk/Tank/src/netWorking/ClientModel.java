@@ -88,7 +88,6 @@ public class ClientModel extends Observable implements Observer {
 	private class ReadySender extends Thread implements Runnable {
 		public void run() {
 			try {
-				out = new ObjectOutputStream(socket.getOutputStream());
 				out.writeObject(new String("ready"));
 				System.out.println("Ready sent to host");
 			} catch (IOException e) {
@@ -178,9 +177,9 @@ public class ClientModel extends Observable implements Observer {
 
 	public void sendObject(Object o) {
 		try {
-			out = new ObjectOutputStream(socket.getOutputStream());
+			
 			out.writeObject(o);
-			out.close();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
