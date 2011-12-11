@@ -51,7 +51,7 @@ public class PlayerTank extends Observable {
 		activeBoost = false;
 		d = Direction.EAST;
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tank.png").getImage();
+		img = new ImageIcon("images/tankSOUTH.png").getImage();
 
 	}
 
@@ -100,7 +100,6 @@ public class PlayerTank extends Observable {
 
 	public void setHealth(int x) {
 		if(x == 2) {
-			img = new ImageIcon("images/tankShield.png").getImage();
 			activeShield = true;
 		}
 		health = x;
@@ -137,7 +136,12 @@ public class PlayerTank extends Observable {
 		d = Direction.NORTH;
 		p = new Point(p.row - this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tankNorth.png").getImage();
+		if(health == 1) {
+			img = new ImageIcon("images/tankNORTH.png").getImage();
+			}
+			if(health == 2) {
+			img = new ImageIcon("images/tankShieldNORTH.png").getImage();
+			}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
@@ -200,7 +204,12 @@ public class PlayerTank extends Observable {
 		d = Direction.SOUTH;
 		p = new Point(p.row + this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tank.png").getImage();
+		if(health == 1) {
+		img = new ImageIcon("images/tankSOUTH.png").getImage();
+		}
+		if(health == 2) {
+		img = new ImageIcon("images/tankShieldSOUTH.png").getImage();
+		}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
@@ -263,7 +272,12 @@ public class PlayerTank extends Observable {
 		d = Direction.EAST;
 		p = new Point(p.row, p.col + this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tankEast.png").getImage();
+		if(health == 1) {
+		img = new ImageIcon("images/tankEAST.png").getImage();
+		}
+		if(health == 2) {
+			img = new ImageIcon("images/tankShieldEAST.png").getImage();
+		}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
@@ -343,7 +357,12 @@ public class PlayerTank extends Observable {
 		d = Direction.WEST;
 		p = new Point(p.row, p.col - this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tankWest.png").getImage();
+		if(health == 1) {
+			img = new ImageIcon("images/tankWEST.png").getImage();
+			}
+			if(health == 2) {
+			img = new ImageIcon("images/tankShieldWEST.png").getImage();
+			}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
@@ -452,10 +471,10 @@ public class PlayerTank extends Observable {
 				health = 1;
 			}
 			if(timePassed % 2 == 0) {
-				img = new ImageIcon("images/tank.png").getImage(); 
+				img = new ImageIcon("images/tank" + d + ".png").getImage(); 
 			}
 			if(timePassed %2 == 1) {
-				img = new ImageIcon("images/tankShield.png").getImage(); 
+				img = new ImageIcon("images/tankShield" + d + ".png").getImage(); 
 				
 			}
 			timePassed++;

@@ -219,6 +219,8 @@ public class MasterView extends JFrame {
 			this.setSize(1200, 750);
 			this.setLocationRelativeTo(null);
 			if (currentLevel == 6) {
+				playerLives = 3;
+				currentLevel = 1;
 				changeView(Views.TITLE, null);
 			}
 			// this.setExtendedState(this.MAXIMIZED_BOTH);

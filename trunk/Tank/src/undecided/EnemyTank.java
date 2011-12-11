@@ -1,6 +1,7 @@
 package undecided;
 
 import java.awt.Image;
+
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
@@ -21,18 +22,19 @@ public class EnemyTank extends Observable {
 	private int health;
 	private Direction d;
 	private Image img;
-	private boolean moveable;
+	private boolean moveable, activeBoost;
 	private Map map;
 
 	public EnemyTank(Point p, Map map) {
 		health = 1;
 		this.p = p;
 		this.map = map;
+		activeBoost = false;
 		d = Direction.NORTH;
 		speed = 1;
 		moveable = true;
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tankEnemyEast.png").getImage();
+		img = new ImageIcon("images/tankEnemyEAST.png").getImage();
 		EnemyThread et = new EnemyThread();
 		et.start();
 
@@ -74,12 +76,18 @@ public class EnemyTank extends Observable {
 		return img;
 	}
 
-	public boolean moveUp() {
+	public synchronized boolean moveUp() {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.NORTH;
 		p = new Point(p.row - this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
+		if(health == 1) {
+			img = new ImageIcon("images/tankEnemyNORTH.png").getImage();
+		}
+		if(health == 2) {
+			img = new ImageIcon("images/tankShieldNORTH.png").getImage();
+		}
 		for (int i = 0; i < players.size(); i++) {
 			PlayerTank e = players.get(i);
 			if (e.getRectangle().intersects(t)) {
@@ -151,7 +159,6 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
-		img = new ImageIcon("images/tankEnemyNorth.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -162,12 +169,18 @@ public class EnemyTank extends Observable {
 	 * 
 	 * @return Point returns the point that is below the tank's current position
 	 */
-	public boolean moveDown() {
+	public synchronized boolean moveDown() {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.SOUTH;
 		p = new Point(p.row + this.speed, p.col);
 		t = new TankRectangle(p.col - 25, p.row - 25);
+		if(health == 1) {
+			img = new ImageIcon("images/tankEnemySOUTH.png").getImage();
+		}
+		if(health == 2) {
+			img = new ImageIcon("images/tankShieldSOUTH.png").getImage();
+		}
 		for (int i = 0; i < players.size(); i++) {
 			PlayerTank e = players.get(i);
 			if (e.getRectangle().intersects(t)) {
@@ -240,7 +253,6 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
-		img = new ImageIcon("images/tankEnemySouth.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -252,12 +264,18 @@ public class EnemyTank extends Observable {
 	 * @return Point returns the point that is to the right of the tank's
 	 *         current position
 	 */
-	public boolean moveRight() {
+	public synchronized boolean moveRight() {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.EAST;
 		p = new Point(p.row, p.col + this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
+		if(health == 1) {
+			img = new ImageIcon("images/tankEnemyEAST.png").getImage();
+		}
+		if(health == 2) {
+			img = new ImageIcon("images/tankShieldEAST.png").getImage();
+		}
 		for (int i = 0; i < players.size(); i++) {
 			PlayerTank e = players.get(i);
 			if (e.getRectangle().intersects(t)) {
@@ -331,7 +349,6 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
-		img = new ImageIcon("images/tankEnemyEast.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -343,12 +360,18 @@ public class EnemyTank extends Observable {
 	 * @return Point returns the point that is to the left of the tank's current
 	 *         position
 	 */
-	public boolean moveLeft() {
+	public synchronized boolean moveLeft() {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<PlayerTank> players = map.getPlayers();
 		d = Direction.WEST;
 		p = new Point(p.row, p.col - this.speed);
 		t = new TankRectangle(p.col - 25, p.row - 25);
+		if(health == 1) {
+			img = new ImageIcon("images/tankEnemyWest.png").getImage();
+		}
+		if(health == 2) {
+			img = new ImageIcon("images/tankShieldWEST.png").getImage();
+		}
 		for (int i = 0; i < players.size(); i++) {
 			PlayerTank e = players.get(i);
 			if (e.getRectangle().intersects(t)) {
@@ -422,7 +445,6 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
-		img = new ImageIcon("images/tankEnemyWest.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -535,13 +557,59 @@ public class EnemyTank extends Observable {
 		}
 
 	}
+	private class ImmuneThread extends Thread {
+		private int timePassed;
+		
+		public ImmuneThread() {
+			timePassed = 0;
+		}
+		
+		@Override
+		public void run() {
+			while(timePassed < 17) {
+			if(timePassed < 16) {
+				health = 10000;
+	
+			}
+			if(timePassed == 16) {
+				health = 1;
+			}
+			if(timePassed % 2 == 0) {
+				img = new ImageIcon("images/tankEnemy" + d + ".png").getImage(); 
+			}
+			if(timePassed %2 == 1) {
+				img = new ImageIcon("images/tankShield" + d + ".png").getImage(); 
+				
+			}
+			timePassed++;
+			try {
+				Thread.sleep(125);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	}
 
 	public void recieveDamage(int i) {
 		health = health - i;
 		if (isDead()) {
 			map.getEnemies().remove(this);
 		}
+		else if (health == 1) {
+			ImmuneThread it = new ImmuneThread();
+			it.start();
+		}
 
+	}
+
+	public boolean isActiveBoost() {
+		return activeBoost;
+	}
+
+	public void setActiveBoost(boolean activeBoost) {
+		this.activeBoost = activeBoost;
 	}
 
 	

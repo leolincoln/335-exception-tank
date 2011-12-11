@@ -587,7 +587,9 @@ public abstract class Map extends Observable implements Observer {
 				if (i instanceof SpeedBoost) {
 					SpeedBoost c = (SpeedBoost) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
+						if(!p.isActiveBoost()) {
 						c.activateEffect(p);
+						}
 						itemList.remove(c);
 						notifyObservers();
 						setChanged();
