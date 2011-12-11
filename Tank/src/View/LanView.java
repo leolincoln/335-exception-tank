@@ -76,10 +76,8 @@ public class LanView extends MasterViewPanel {
 		 */
 		hostsInfo = new DefaultListModel();
 		hostsInfo.addElement(ip);
+		hostsInfo.addElement("127.0.0.1");
 
-		
-		
-		
 		
 		hostList = new JList(hostsInfo);
 		hostList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
@@ -168,7 +166,6 @@ public class LanView extends MasterViewPanel {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("IP sent is: " + ip);
 			m.changeView(Views.CLIENT, ip);
-
 		}
 
 	}
