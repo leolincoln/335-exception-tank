@@ -23,7 +23,7 @@ public abstract class Map extends Observable implements Observer {
 	private LinkedList<Obstacle> obstacleList;
 	public LinkedList<PlayerTank> tankList;
 	public LinkedList<EnemyTank> enemyList;
-	private LinkedList<Projectile> projectileList;
+	public LinkedList<Projectile> projectileList;
 	private LinkedList<Item> itemList;
 	private LinkedList<Explosion> explosionList;
 	private PlayerTank player;

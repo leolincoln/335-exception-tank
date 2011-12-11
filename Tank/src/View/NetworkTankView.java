@@ -60,10 +60,11 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
-	private PlayerTank enemy;
+	private EnemyTank enemy;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
+	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Item> itemList;
 	private JPanel panel;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
@@ -77,6 +78,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		wheel = new ImageIcon("images/wheel-md.png").getImage();
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
+		System.out.println("i is "+i);
 		model = new NetworkTankController(m, i);
 		model.addObserver(this);
 	
@@ -86,18 +88,13 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		tankList = model.getMap().getPlayers();
 		projectileList = model.getMap().getProjectiles();
 		obstacleList = model.getMap().getObstacles();
-		
+		enemyList = model.getMap().getEnemies();
 		this.setFocusable(true);
 
-		if(i==0) {
+		
 			player = tankList.getFirst();
-			enemy = tankList.getLast();
-		}
-		else if(i==1) {
-			player = tankList.getLast();
-			enemy = tankList.getFirst();
-		}
-
+			enemy = enemyList.getFirst();
+		
 		//add(panel);
 		// adding the movement and
 		addKeyListener(new moveAndShootListener());
@@ -144,7 +141,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		@Override
 		public synchronized void run() {
 			while (exists) {
-				if (model.getMap().getPlayers().size() == 1) {
+				if (model.getMap().getPlayers().size() == 0) {
 					lost = true;
 					repaint();
 					try {
@@ -181,6 +178,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		obstacleList = model.getMap().getObstacles();
 		tankList = model.getMap().getPlayers();
 		projectileList = model.getMap().getProjectiles();
+		enemyList = model.getMap().getEnemies();
 		
 		for (int i = 0; i < model.getMap().getObstacles().size(); i++) {
 			Obstacle p = obstacleList.get(i);
@@ -218,7 +216,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
-		
+		for (EnemyTank p : enemyList) {
+			TankRectangle tRect = p.getRectangle();
+			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
 		for (Projectile p : projectileList) {
 			if (p instanceof PlayerProjectile) {
 				PlayerProjectile s = (PlayerProjectile) p;
@@ -384,6 +385,9 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		 * 
 		 */
 		public void mousePressed(MouseEvent arg0) {
+			player=model.getMap().getPlayers().getFirst();
+			
+			System.out.println("mouseevent recorded");
 			int count = 0;
 			for (Projectile p : model.getMap().getProjectiles()) {
 				if (p instanceof PlayerProjectile) {
@@ -402,11 +406,13 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				// create a new shot, with position relative to location of
 				// tank,
 				// the speed in the x and y directions
+				
 				player.shoot(
 						new Point(player.getLocation().row, player
 								.getLocation().col),
 						(int) (xdiff * (5 / length)),
 						(int) (ydiff * (5 / length)));
+				
 				// player.shoot();
 			}
 		}
