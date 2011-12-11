@@ -60,10 +60,10 @@ public class TitleView extends MasterViewPanel {
 
 		// adding top banner to container
 		JLabel banner = new JLabel(new ImageIcon("images/TANKSTITLEVIEW.png"));
-		c.fill = GridBagConstraints.VERTICAL;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridwidth = 3;
+		//c.fill = GridBagConstraints.VERTICAL;
+		//c.fill = GridBagConstraints.HORIZONTAL;
+		//c.weightx = 0.0;
+		//c.gridwidth = 3;
 		c.gridx = 0;// specifying to be top, left component
 		c.gridy = 0;
 		//this.add(banner, c);
@@ -74,8 +74,8 @@ public class TitleView extends MasterViewPanel {
 		newGame = new JButton("SINGLEPLAYER");
 		newGame.addActionListener(new newGameListener());
 		d.anchor = GridBagConstraints.CENTER;
-		// d.fill = GridBagConstraints.HORIZONTAL;
-		// d.fill = GridBagConstraints.VERTICAL;
+		d.fill = GridBagConstraints.HORIZONTAL;
+		d.fill = GridBagConstraints.VERTICAL;
 		d.ipady = 5;
 		d.weightx = 0;
 		d.gridx = 0;
