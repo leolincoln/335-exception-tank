@@ -32,7 +32,7 @@ public class EnemyTank extends Observable {
 		speed = 1;
 		moveable = true;
 		t = new TankRectangle(p.col - 25, p.row - 25);
-		img = new ImageIcon("images/tankEnemy.png").getImage();
+		img = new ImageIcon("images/tankEnemyEast.png").getImage();
 		EnemyThread et = new EnemyThread();
 		et.start();
 
@@ -151,6 +151,7 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
+		img = new ImageIcon("images/tankEnemyNorth.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -239,6 +240,7 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
+		img = new ImageIcon("images/tankEnemySouth.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -329,6 +331,7 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
+		img = new ImageIcon("images/tankEnemyEast.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
@@ -419,6 +422,7 @@ public class EnemyTank extends Observable {
 			moveable = false;
 			return false;
 		}
+		img = new ImageIcon("images/tankEnemyWest.png").getImage();
 		notifyObservers(this);
 		setChanged();
 		moveable = true;
