@@ -81,13 +81,15 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		
 		model = new NetworkTankController(m, i);
 		model.addObserver(this);
-		tankList = model.getMap().getPlayers();
-		projectileList = model.getMap().getProjectiles();
-		obstacleList = model.getMap().getObstacles();
+		
 	
 		GameThread gt = new GameThread();
 		gt.start();
-
+		
+		tankList = model.getMap().getPlayers();
+		projectileList = model.getMap().getProjectiles();
+		obstacleList = model.getMap().getObstacles();
+		
 		this.setFocusable(true);
 
 		if(i==0) player = tankList.getFirst();
@@ -98,7 +100,8 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		addKeyListener(new moveAndShootListener());
 		// creating the mouse handler
 		Handlerclass handler = new Handlerclass();
-		// adding mouse actions to be detected on	the java panel								
+		// adding mouse actions to be detected on	the java panel	
+		
 		this.addMouseListener(handler);
 										
 		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
