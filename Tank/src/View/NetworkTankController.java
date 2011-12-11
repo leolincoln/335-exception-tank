@@ -170,13 +170,14 @@ public class NetworkTankController extends Observable implements Observer {
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
-
+				
 			} else {
 				
 				// The xCoord will be set to -1 when the Projectile goes off the screen. This will make sure it is properly removed from the map.
 				
 				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
+					
 				}
 				
 				// The projectile will destroy any item it collides with

@@ -34,7 +34,7 @@ import undecided.TankView;
  */
 public class MasterView extends JFrame {
 	public static int currentLevel, playerLives;
-	JPanel body, currentPane, previousPane;
+	public JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame m;
 	private static final long serialVersionUID = 5104052475766337179L;
