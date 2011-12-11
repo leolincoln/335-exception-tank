@@ -12,9 +12,12 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
+import undecided.EnemyTank;
+import undecided.Level1;
 import undecided.PlayerTank;
 import undecided.Point;
 
+import View.ClientView;
 import View.MasterView;
 import View.Views;
 
@@ -27,8 +30,10 @@ public class ClientModel extends Observable implements Observer {
 	private MasterView m;
 	// dont forget to set the p after changing to network tank view.
 	public PlayerTank p;
+	public EnemyTank e;
 	public boolean connected = false;
-
+	private ClientModel thisModel;
+	private ClientView cv;
 	/**
 	 * 
 	 * @param m
@@ -38,9 +43,11 @@ public class ClientModel extends Observable implements Observer {
 	 *            a new socket it then call listenStart() to start listening to
 	 *            socket. getting input stream if not null
 	 */
-	public ClientModel(MasterView m, Object o) {
+	public ClientModel(ClientView cv,MasterView m, Object o) {
 		ip = "127.0.0.1";
 		this.m = m;
+		p = new PlayerTank(new Point(-100, -100), new Level1());
+		e = new EnemyTank(new Point(-100, -100), new Level1());
 		if (o instanceof String) {
 			ip = (String) o;
 		}
@@ -49,8 +56,10 @@ public class ClientModel extends Observable implements Observer {
 			socket = new Socket(ip, 4000);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
-
-			listenStart();
+			connected = true;
+			Thread listen = new GameListener(this);
+			cv.cm=this;
+			listen.start();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,28 +67,19 @@ public class ClientModel extends Observable implements Observer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		connected();
+		thisModel = this;
 
 	}
-
-	/**
-	 * this method will create a thread called listen as game listener and then
-	 * start it.
-	 */
-	public void listenStart() {
-		Thread listen = new GameListener(this);
-		listen.start();
+	
+	public void setPlayer(PlayerTank p) {
+		this.p = p;
+	}
+	public void setEnemy(EnemyTank e) {
+		this.e = e;
 	}
 
-	public void ready() {
-		Thread send = new ReadySender();
-		send.start();
-	}
 
-	public void connected() {
-		Thread connected = new ConnectSender();
-		connected.start();
-	}
+
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
@@ -87,29 +87,6 @@ public class ClientModel extends Observable implements Observer {
 
 	}
 
-	private class ConnectSender extends Thread implements Runnable {
-		public void run() {
-			try {
-				// out = new ObjectOutputStream(socket.getOutputStream());
-				out.writeObject(new String("connected"));
-				System.out.println("connected sent to host");
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private class ReadySender extends Thread implements Runnable {
-		public void run() {
-			try {
-				out.writeObject(new String("ready"));
-				System.out.println("Ready sent to host");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
 	/**
 	 * 
@@ -137,12 +114,10 @@ public class ClientModel extends Observable implements Observer {
 			// e1.printStackTrace();
 			// }
 			// }
-			while (true) {
+			while (connected) {
 
 				System.out.println("Trying to read");
 				try {
-					// socket.shutdownInput();
-					// in = new ObjectInputStream(socket.getInputStream());
 					Object o = in.readObject();
 					System.out.println(o);
 					if (o instanceof String) {
@@ -156,19 +131,27 @@ public class ClientModel extends Observable implements Observer {
 						}  if (s.equals("start")) {
 							JOptionPane.showMessageDialog(null,
 									"Changing to game view");
-							cm.startGame();
+							m.changeView(Views.NETWORKTANKVIEW, thisModel);
 						}  if (s.equals("up")) {
-							p.moveUp();
+							e.moveUp();
+							notifyObservers(p);
+							setChanged();
 						}  if (s.equals("down")) {
-							p.moveDown();
+							e.moveDown();
+							notifyObservers(p);
+							setChanged();
 						}  if (s.equals("left")) {
-							p.moveLeft();
+							e.moveLeft();
+							notifyObservers(p);
+							setChanged();
 						}  if (s.equals("right")) {
-							p.moveRight();
+							e.moveRight();
+							notifyObservers(p);
+							setChanged();
 						}
 					} if(o instanceof SimpleShoot) {
 						SimpleShoot ss = (SimpleShoot) o;
-						p.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
+						e.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
 
 					}
 				}
@@ -218,9 +201,6 @@ public class ClientModel extends Observable implements Observer {
 
 	}
 
-	public void startGame() {
-		m.changeView(Views.NETWORKTANKVIEW, this);
-		System.out.println(this);
-	}
+
 
 }

@@ -16,6 +16,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import netWorking.ClientModel;
+import netWorking.HostModel;
+
 import undecided.Level1;
 import undecided.Level2;
 import undecided.Level3;
@@ -147,17 +150,25 @@ public class MasterView extends JFrame {
 			break;
 
 		case NETWORKTANKVIEW:
-			this.setBackground(Color.black);
-			this.setSize(1000, 750);
 			previousPane = currentPane;
-			int n=0;
-			if(o instanceof ClientView) n=1;
-			if(o instanceof HostView) n = 0;
-			currentPane = new NetworkTankView(this,n,(Object)o);
+			int n = 0;
+			if(o instanceof ClientModel) {
+				ClientModel c = (ClientModel)o;
+				n = 1;
+				currentPane = new NetworkTankView(this, n, c);
+			}
+			if(o instanceof HostModel) {
+			HostModel c = (HostModel)o;
+				n = 0;
+				currentPane = new NetworkTankView(this, n, c);
+			}
+			
 			System.out.println("changeview with o:"+o);
 			body.removeAll();
 			body.add(currentPane, "NETWORKTANKVIEW");
-			currentPane.requestFocus();
+			currentPane.requestFocusInWindow();
+			this.setBackground(Color.black);
+			this.setSize(1000, 750);
 			this.setLocationRelativeTo(null);
 			// this.setExtendedState(this.MAXIMIZED_BOTH);
 

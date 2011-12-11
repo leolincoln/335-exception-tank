@@ -594,9 +594,10 @@ public class NetworkTankController extends Observable implements Observer {
 					}
 				}
 			}
+				
 			notifyObservers();
 			setChanged();
-		}
+				}
 		if (o instanceof Crate) {
 			Crate c = (Crate) o;
 			c.recieveDamage(1);
