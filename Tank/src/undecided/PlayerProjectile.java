@@ -48,8 +48,9 @@ public class PlayerProjectile extends Observable  implements Projectile {
 		
 		thisMissle = this;
 		
+		
 		Thread pt = new ProjectileThread();// creating new thread for the
-											// projectile's movement
+		System.out.println("Thread created");									// projectile's movement
 		pt.start();// beginning the projectile's movement
 	}
 	
@@ -122,7 +123,6 @@ public class PlayerProjectile extends Observable  implements Projectile {
 
 		public synchronized void run() {
 			while (exists) {
-
 				int x = p.col;
 				int y = p.row;
 				x = x + xspeed;// incrementing location of new point!!!

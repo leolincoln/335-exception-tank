@@ -123,6 +123,9 @@ public class ClientModel extends Observable implements Observer {
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					m.changeView(Views.TITLE, null);
+					interrupt();
+
 				}
 
 				if (unKnown != null) {
