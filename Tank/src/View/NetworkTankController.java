@@ -13,6 +13,7 @@ import undecided.EnemyTank;
 import undecided.FireRing;
 import undecided.ImmovableBlock;
 import undecided.Item;
+import undecided.Level1;
 import undecided.Map;
 import undecided.Obstacle;
 import undecided.PlayerProjectile;
@@ -31,7 +32,7 @@ public class NetworkTankController extends Observable implements Observer {
 	private LinkedList<Item> itemList;
 	private PlayerTank player,enemy;
 	int i;
-	NetWorkMap1 map;
+	Map map;
 	MasterView m;
 	private int playerScore, enemyScore;
 
@@ -42,7 +43,7 @@ public class NetworkTankController extends Observable implements Observer {
 		itemList = new LinkedList<Item>();
 		playerScore=0;
 		enemyScore = 0;
-		this.map =new NetWorkMap1();
+		map = new Level1();
 		addPlayers();
 		map.setUpMap();
 		this.m = m;

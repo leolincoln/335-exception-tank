@@ -261,6 +261,9 @@ public class TankView extends MasterViewPanel implements Observer {
 			}
 
 		}
+		for (Explosion p : explosionList) {
+			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row, null);
+		}
 		for (PlayerTank p : tankList) {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
