@@ -36,7 +36,7 @@ import undecided.TankView;
  * 
  */
 public class MasterView extends JFrame {
-	public static int currentLevel, playerLives;
+	public static int currentLevel, playerLives,playerScore,enemyScore;
 	public JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame m;

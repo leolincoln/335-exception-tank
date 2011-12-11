@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 
 import netWorking.ClientModel;
 import netWorking.HostModel;
+import netWorking.SimpleShoot;
 
 import rectangles.BubbleShieldRectangle;
 import rectangles.CrateRectangle;
@@ -62,6 +63,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	private Graphics dbg;
 	private PlayerTank player;
 	private EnemyTank enemy;
+	private Map map;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
@@ -79,18 +81,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	public NetworkTankView(MasterView m, int i,Object o) {
 		super(m);
 		this.i = i;
-		if(i == 0) {
-			 hm = (HostModel)o;
-			 hm.setPlayer(player);
-			 hm.setEnemy(enemy);
-			 hm.addObserver(model);
-		 }
-		 if(i == 1) {
-			 cm = (ClientModel)o;
-			 cm.setPlayer(player);
-			 cm.setEnemy(enemy);
-			 cm.addObserver(model);
-		 }
+		model = new NetworkTankController(m, i);
+
+		model.addObserver(this);
+		
 		
 
 		camo = new ImageIcon("images/camo.png").getImage();
@@ -98,9 +92,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
 		System.out.println("i is " + i);
-		model = new NetworkTankController(m, i);
-
-		model.addObserver(this);
+		
 
 		GameThread gt = new GameThread();
 		gt.start();
@@ -114,7 +106,21 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		player = tankList.getFirst();
 		player.addObserver(model);
 		enemy = enemyList.getFirst();
+		enemy.setSpeed(5);
 		enemy.addObserver(model);
+		if(i == 0) {
+			 hm = (HostModel)o;
+			 hm.setPlayer(player);
+			 hm.setEnemy(enemy);
+			 hm.addObserver(model);
+		 }
+		 if(i == 1) {
+			 cm = (ClientModel)o;
+			 cm.setPlayer(player);
+			 cm.setEnemy(enemy);
+			 cm.addObserver(model);
+		 }
+		 map = model.getMap();
 		// add(panel);
 		// adding the movement and
 		addKeyListener(new moveAndShootListener());
@@ -170,18 +176,27 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					} catch (InterruptedException e) {
 
 					}
-					m.changeView(Views.NETWORKTANKVIEW, 3);
+					if(i==0)m.changeView(Views.NETWORKTANKVIEW,hm);
+					else m.changeView(Views.NETWORKTANKVIEW,cm);
 					exists = false;
 				} else if (model.getMap().getEnemies().size() == 0) {
 					won = true;
 					repaint();
-					m.changeView(Views.TITLE, null);
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+
+					}
+					if(i==1)m.changeView(Views.NETWORKTANKVIEW,cm);
+					else m.changeView(Views.NETWORKTANKVIEW,hm);
+					exists = false;
 				} else {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
 
 					}
+					
 				}
 
 			}
@@ -457,7 +472,12 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 						(int) (xdiff * (5 / length)),
 						(int) (ydiff * (5 / length)));
 				System.out.println("shoot");
-
+				if(i==1)cm.sendObject(new SimpleShoot(player.getLocation().col, player
+								.getLocation().row, (int) (xdiff * (5 / length)),
+								(int) (ydiff * (5 / length))));
+				else hm.sendObject(new SimpleShoot(player.getLocation().col, player
+						.getLocation().row, (int) (xdiff * (5 / length)),
+						(int) (ydiff * (5 / length))));
 				// player.shoot();
 			}
 		}
