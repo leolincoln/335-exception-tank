@@ -230,7 +230,7 @@ public abstract class Map extends Observable implements Observer {
 			for (int i = 0; i < tankList.size(); i++) {
 				PlayerTank t = tankList.get(i);
 				if (t.getRectangle().intersects(fr.getRectangle())) {
-					notifyObservers(new Point(fr.getLocation().row - 12, fr.getLocation().col - 12));
+					notifyObservers(new Point(t.getLocation().row - 12, t.getLocation().col - 12));
 					t.recieveDamage(1);
 					setChanged();
 					break;
@@ -395,7 +395,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -406,7 +406,7 @@ public abstract class Map extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -419,9 +419,9 @@ public abstract class Map extends Observable implements Observer {
 					if (h.getRectangle().intersects(p.getRectangle())) {
 						p.collided();
 						projectileList.remove(p);
-						h.recieveDamage(p.getDamage());
-						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+						notifyObservers(new Point(h.getLocation().row - 12, h.getLocation().col - 12));
 						setChanged();
+						h.recieveDamage(p.getDamage());
 						break;
 					}
 				}
@@ -435,9 +435,9 @@ public abstract class Map extends Observable implements Observer {
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
-							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
+							c.recieveDamage(p.getDamage());
 							break;
 						}
 					}
@@ -450,9 +450,9 @@ public abstract class Map extends Observable implements Observer {
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
-							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
+							c.recieveDamage(p.getDamage());
 							break;
 						}
 					}
@@ -613,16 +613,16 @@ public abstract class Map extends Observable implements Observer {
 				if (obs instanceof FireRing) {
 					FireRing c = (FireRing) obs;
 					if (rect.intersects(c.getRectangle())) {
-						p.recieveDamage(1);
 						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+						p.recieveDamage(1);
 					}
 				}
 				// If the PlayerTank collides with a SpikePit it will die
 				if (obs instanceof SpikePit) {
 					SpikePit c = (SpikePit) obs;
 					if (rect.intersects(c.getRectangle())) {
-						p.recieveDamage(1);
 						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+						p.recieveDamage(1);
 					}
 				}
 			}

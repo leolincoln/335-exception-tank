@@ -34,7 +34,7 @@ public class EnemyTank extends Observable {
 		t = new TankRectangle(p.col - 25, p.row - 25);
 		img = new ImageIcon("images/tankEnemy.png").getImage();
 		EnemyThread et = new EnemyThread();
-//		et.start();
+		et.start();
 
 	}
 
@@ -492,7 +492,7 @@ public class EnemyTank extends Observable {
 				if (!moveable) {
 					tick = 400;
 				}
-				if (timePassed % 20 == 0 && timePassed != 0) {
+				if (timePassed % 100 == 0 && timePassed != 0) {
 					LinkedList<Projectile> proj = map.getProjectiles();
 					int count = 0;
 					for(Projectile p : proj) {
