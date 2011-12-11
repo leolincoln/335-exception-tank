@@ -1,10 +1,16 @@
 package View;
 
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,6 +28,7 @@ public class TitleView extends MasterViewPanel {
 	JPanel title;
 	JButton newGame, lan, option, exit;
 	JPanel empty1 = new JPanel();
+	GridBagConstraints c, d;
 
 	/**
 	 * Class constructor
@@ -33,12 +40,13 @@ public class TitleView extends MasterViewPanel {
 
 		super(m);
 		setupPanel();
-		setupTop();
-		setupTitle();
-		setupBot();
+		// setupTop();
+		// setupTitle();
+		// setupBot();
 		this.setVisible(true);
 
 	}
+
 
 	/**
 	 * This method sets up the format for the panel itself particularly the
@@ -46,17 +54,73 @@ public class TitleView extends MasterViewPanel {
 	 */
 	public void setupPanel() {
 
-		this.setLayout(new GridLayout(3, 1));
-		// this.setBackground(Color.black);
+		this.setLayout(new GridBagLayout());
+		c = new GridBagConstraints();
 
+
+		// adding top banner to container
+		JLabel banner = new JLabel(new ImageIcon("images/TANKSTITLEVIEW.png"));
+		c.fill = GridBagConstraints.VERTICAL;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.0;
+		c.gridwidth = 3;
+		c.gridx = 0;// specifying to be top, left component
+		c.gridy = 0;
+		//this.add(banner, c);
+
+		d = new GridBagConstraints();
+
+		// adding newGame button
+		newGame = new JButton("SINGLEPLAYER");
+		newGame.addActionListener(new newGameListener());
+		d.anchor = GridBagConstraints.CENTER;
+		// d.fill = GridBagConstraints.HORIZONTAL;
+		// d.fill = GridBagConstraints.VERTICAL;
+		d.ipady = 5;
+		d.weightx = 0;
+		d.gridx = 0;
+		d.gridy = 1;
+		this.add(newGame, d);
+
+		// adding lan button
+		lan = new JButton("LAN");
+		lan.addActionListener(new lanListener());
+		// d.fill = GridBagConstraints.HORIZONTAL;
+		// d.fill = GridBagConstraints.VERTICAL;
+		d.weightx = 0;
+		d.gridx = 1;
+		d.gridy = 1;
+		this.add(lan, d);
+
+		// adding options button
+		option = new JButton("OPTIONS");
+		option.addActionListener(new optionListener());
+		// d.fill = GridBagConstraints.HORIZONTAL;
+		// d.fill = GridBagConstraints.VERTICAL;
+		d.weightx = 0;
+		d.gridx = 2;
+		d.gridy = 1;
+		this.add(option, d);
+
+		// adding exit button
+		exit = new JButton("EXIT");
+		exit.addActionListener(new exitListener());
+		// d.fill = GridBagConstraints.HORIZONTAL;
+		// d.fill = GridBagConstraints.VERTICAL;
+		d.weightx = 0;
+		d.gridx = 3;
+		d.gridy = 1;
+		this.add(exit, d);
+		
 	}
 
 	/**
-	 * This method sets up the top banner for tittle view
+	 * This method sets up the top banner for title view
 	 */
 	public void setupTop() {
 		JLabel banner = new JLabel(new ImageIcon("images/diamondPlate.png"));
 		this.add(banner);
+
 		// this.add(empty1);
 	}
 
@@ -66,20 +130,20 @@ public class TitleView extends MasterViewPanel {
 	 */
 	public void setupTitle() {
 
-		title = new JPanel(new GridLayout(1, 4));
-		newGame = new JButton("SINGLEPLAYER");
-		newGame.addActionListener(new newGameListener());
-		lan = new JButton("LAN");
-		lan.addActionListener(new lanListener());
-		option = new JButton("OPTIONS");
-		option.addActionListener(new optionListener());
-		exit = new JButton("EXIT");
-		exit.addActionListener(new exitListener());
-		title.add(newGame);
-		title.add(lan);
-		title.add(option);
-		title.add(exit);
-		this.add(title);
+		// title = new JPanel(new GridLayout(1, 4));
+		// newGame = new JButton("SINGLEPLAYER");
+		// newGame.addActionListener(new newGameListener());
+		// lan = new JButton("LAN");
+		// lan.addActionListener(new lanListener());
+		// option = new JButton("OPTIONS");
+		// option.addActionListener(new optionListener());
+		// exit = new JButton("EXIT");
+		// exit.addActionListener(new exitListener());
+		// title.add(newGame);
+		// title.add(lan);
+		// title.add(option);
+		// title.add(exit);
+		// this.add(title);
 	}
 
 	/**
