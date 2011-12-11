@@ -48,16 +48,6 @@ public class LanModel {
 
 	}
 
-	private class scanHosts extends Thread {
-
-		public synchronized void run(){
-		while(true){
-			try{
-				
-			}
-		}
-			
-		}
-	}
+	private class scanHosts extends Thread {}
 
 }
