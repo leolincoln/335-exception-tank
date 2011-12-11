@@ -220,6 +220,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
+		
 		for (Projectile p : projectileList) {
 			if (p instanceof PlayerProjectile) {
 				PlayerProjectile s = (PlayerProjectile) p;
