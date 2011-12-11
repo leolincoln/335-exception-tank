@@ -1,4 +1,5 @@
 package undecided;
+import View.NetWorkPlayerTank;
 import java.util.Observable;
 
 import rectangles.ProjectileRectangle;
@@ -43,7 +44,8 @@ public class PlayerProjectile extends Observable  implements Projectile {
 		this.yspeed= y;
 		rect = new ProjectileRectangle(p.col - 3, p.row - 3);// creating new projectile rectangle
 		exists = true;
-		tank = t;
+		 tank = t;
+		
 		thisMissle = this;
 		
 		
