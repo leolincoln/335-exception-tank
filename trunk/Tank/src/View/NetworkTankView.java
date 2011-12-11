@@ -77,11 +77,8 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		wheel = new ImageIcon("images/wheel-md.png").getImage();
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
-
-		
 		model = new NetworkTankController(m, i);
 		model.addObserver(this);
-		
 	
 		GameThread gt = new GameThread();
 		gt.start();
@@ -102,13 +99,13 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		Handlerclass handler = new Handlerclass();
 		// adding mouse actions to be detected on	the java panel	
 		
-		this.addMouseListener(handler);
-										
+		this.addMouseListener(handler);			
 		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
 												
 		this.setVisible(true);
 		System.out.println(model.getMap().getPlayers());
-
+		this.requestFocus();
+		
 	}
 
 	@Override
@@ -119,6 +116,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	}
 
 	public void paint(Graphics g) {
+		
 		try {
 			dbImage = createImage(getWidth(), getHeight());
 			dbg = dbImage.getGraphics();
@@ -140,7 +138,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		@Override
 		public synchronized void run() {
 			while (exists) {
-				if (model.getMap().getPlayers().size() == 0) {
+				if (model.getMap().getPlayers().size() == 1) {
 					lost = true;
 					repaint();
 					try {
@@ -178,7 +176,6 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		tankList = model.getMap().getPlayers();
 		projectileList = model.getMap().getProjectiles();
 		
-		
 		for (int i = 0; i < model.getMap().getObstacles().size(); i++) {
 			Obstacle p = obstacleList.get(i);
 			if (p instanceof SpikePit) {// for instance of SpikePit
@@ -192,12 +189,14 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				CrateRectangle cRect = c.getRectangle();
 				g.drawImage(cRect.getImage(), cRect.xCoord(), cRect.yCoord(),
 						null);
+				System.out.println("printing crate.");
 			}
 			if (p instanceof ImmovableBlock) {// for instance of immovableBlock
 				ImmovableBlock ib = (ImmovableBlock) p;
 				ImmovableBlockRectangle ibRect = ib.getRectangle();
 				g.drawImage(ibRect.getImage(), ibRect.xCoord(),
 						ibRect.yCoord(), null);
+				System.out.println("printing block");
 			}
 		
 			if (p instanceof TNT) {// for instance of TNT
@@ -205,6 +204,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				TNTRectangle tntRect = tnt.getRectangle();
 				g.drawImage(tntRect.getImage(), tntRect.xCoord(),
 						tntRect.yCoord(), null);
+				System.out.println("printing TNT");
 			}
 
 		}
@@ -227,20 +227,23 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		}
 		if (won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
-			String jb = "Mission Complete!";
+			String jb = "Win!";
 			AttributedString att = new AttributedString(jb);
 			att.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
 		}
+		
 		if (lost == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
-			String jb = "Mission Failed!";
+			String jb = "Fail!";
 			AttributedString att = new AttributedString(jb);
 			att.addAttribute(TextAttribute.FOREGROUND, Color.RED);
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
 		}
+		
+		
 		for(int i = 0; i < 700; i += 50) {
 			for(int j = 985; j < 1200; j += 50) {
 				if(i == 150 || i == 200 || i == 350 || i == 400) {

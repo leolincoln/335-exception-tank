@@ -30,41 +30,40 @@ public class NetworkTankController extends Observable implements Observer {
 	private LinkedList<PlayerTank> tankList;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Item> itemList;
-	private PlayerTank player,enemy;
+	private PlayerTank player, enemy;
 	int i;
 	Map map;
 	MasterView m;
 	private int playerScore, enemyScore;
 
-	public NetworkTankController(MasterView m,int i) {
+	public NetworkTankController(MasterView m, int i) {
 		obstacleList = new LinkedList<Obstacle>();
 		tankList = new LinkedList<PlayerTank>();
 		projectileList = new LinkedList<Projectile>();
 		itemList = new LinkedList<Item>();
-		playerScore=0;
+		playerScore = 0;
 		enemyScore = 0;
 		map = new Level1();
 		addPlayers();
-		map.setUpMap();
 		this.m = m;
-		this.i=i;
-		
-		
-		
+		this.i = i;
+
 	}
-	
-	public int getPlayerScore(){
-	
+
+	public int getPlayerScore() {
 		return playerScore;
 	}
-	public int getEnemyScore(){
+
+	public int getEnemyScore() {
 		return enemyScore;
 	}
-	
-	public void addPlayers(){
+
+	public void addPlayers() {
+		map.tankList.remove();
 		setPlayerStart(map.playerStart());
 		setEnemyStart(map.enemyStart());
 	}
+
 	public void setEnemyStart(Point p) {
 		enemy = new PlayerTank(p, map);
 		enemy.addObserver(this);
@@ -72,15 +71,16 @@ public class NetworkTankController extends Observable implements Observer {
 	}
 
 	public void setPlayerStart(Point p) {
-		
 		player = new PlayerTank(p, map);
 		player.addObserver(this);
 		map.tankList.add(player);
+	}
+
+	public Map getMap() {
+		return map;
 
 	}
-public Map getMap(){
-	return map;
-}
+
 	public boolean isOver() {
 		if (player.isDead() || enemy.isDead()) {
 			return true;
@@ -90,17 +90,19 @@ public Map getMap(){
 	}
 
 	public synchronized void update(Observable v, Object o) {
+		
 		projectileList = getMap().getProjectiles();
 		tankList = getMap().getPlayers();
 		obstacleList = getMap().getObstacles();
-		if(getMap().getItems()!=null) itemList = getMap().getItems();
+		if (getMap().getItems() != null)
+			itemList = getMap().getItems();
 		if (o instanceof String) {
 			String s = (String) o;
 			if (s.equals("moveCrate")) {
 				notifyObservers();
 				setChanged();
 			}
-			
+
 			if (s.equals("moveTNT")) {
 				notifyObservers();
 				setChanged();
@@ -109,7 +111,7 @@ public Map getMap(){
 
 		if (o instanceof PlayerProjectile) {
 			PlayerProjectile p = (PlayerProjectile) o;
-			
+
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
@@ -143,7 +145,6 @@ public Map getMap(){
 					}
 				}
 
-				
 				for (Obstacle obs : obstacleList) {
 					if (obs instanceof Crate) {
 						Crate c = (Crate) obs;
@@ -196,7 +197,7 @@ public Map getMap(){
 				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
 				}
-				//item list 
+				// item list
 				for (Item i : itemList) {
 					if (i instanceof BubbleShield) {
 						BubbleShield c = (BubbleShield) i;
@@ -209,7 +210,7 @@ public Map getMap(){
 							break;
 						}
 					}
-					//not sure if the speedboost is going to be shown. 
+					// not sure if the speedboost is going to be shown.
 					if (i instanceof SpeedBoost) {
 						SpeedBoost c = (SpeedBoost) i;
 						if (c.getRectangle().intersects(p.getRectangle())) {

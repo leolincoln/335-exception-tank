@@ -103,7 +103,7 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.changeView(Views.TANKVIEW,0);
+			m.changeView(Views.NETWORKTANKVIEW,0);
 
 		}
 
@@ -120,7 +120,7 @@ public class TitleView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.changeView(Views.OPTION,null);
+			m.changeView(Views.NETWORKTANKVIEW,0);
 
 		}
 
