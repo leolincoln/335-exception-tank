@@ -109,7 +109,6 @@ public class HostView extends MasterViewPanel implements Observer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 			m.changeView(Views.NETWORKTANKVIEW,hm);
 		}
 	}
