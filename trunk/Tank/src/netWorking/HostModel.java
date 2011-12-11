@@ -43,6 +43,12 @@ public class HostModel {
 
 	}
 
+	/**
+	 * 
+	 * @throws IOException
+	 * @name setUpHost this method sets up the host to serversocket 4000. then
+	 *       prints connecting.
+	 */
 	public void setUpHost() throws IOException {
 		host = new ServerSocket(4000);
 		String ip = InetAddress.getLocalHost().toString();
@@ -51,6 +57,10 @@ public class HostModel {
 		JOptionPane.showMessageDialog(null, "connecting");
 	}
 
+	/**
+	 * this method sets the connection to start, call Thread connect and Thread
+	 * waitforConnection
+	 */
 	public void connectionStart() {
 
 		Thread connect = new Connect();
@@ -60,41 +70,66 @@ public class HostModel {
 		connection.start();
 	}
 
+	/**
+	 * 
+	 * this class will try to read the client from serverSocket. eventually the
+	 * client socket will be determined.
+	 * 
+	 */
 	private class Connect extends Thread implements Runnable {
 		public void run() {
-			try {
-				System.out.println("trying to read the connection");
 
-				client = host.accept();
+			while (client == null) {
+				try {
+					System.out.println("trying to read the connection");
 
-				if (client != null) {
-					System.out.println(client);
+					client = host.accept();
 
-					this.interrupt();
+					if (client != null) {
+						System.out.println(client);
+
+					}
+
+				} catch (IOException e) {
 				}
-
-			} catch (IOException e) {
 			}
 		}
 	}
 
 	public void sendObject(Object o) {
-		try {
-			out.writeObject(o);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (out == null) {
+			try {
+				out = new ObjectOutputStream(client.getOutputStream());
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
+			try {
+				out.writeObject(o);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
 
+	/**
+	 * this class reads all incoming messages. it will try reading from the
+	 * client socket. after reading the first string, its going to call send
+	 * object.
+	 * 
+	 */
 	private class WaitForConnection extends Thread implements Runnable {
 		boolean first = true;
+
 		public void run() {
-			in=null;
+			in = null;
 			while (in == null) {
 				try {
-					in = new ObjectInputStream(client.getInputStream());
+					if (client != null)
+						in = new ObjectInputStream(client.getInputStream());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -130,18 +165,16 @@ public class HostModel {
 								p.moveLeft();
 							} else if (command.equals("right")) {
 								p.moveRight();
-							}
-							else if(command.equals("quit")){
+							} else if (command.equals("quit")) {
 								out.close();
 								in.close();
 								client.close();
 								break;
 							}
-						} else if(command instanceof SimpleShoot){
+						} else if (command instanceof SimpleShoot) {
 							SimpleShoot ss = (SimpleShoot) command;
 							p.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
 						}
-						
 
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
@@ -156,28 +189,7 @@ public class HostModel {
 		}
 	}
 
-	public void welcomeStart() {
-		try {
-			out = new ObjectOutputStream(client.getOutputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Thread welcome = new WelcomeMessage();
-		welcome.start();
-	}
-
-	private class WelcomeMessage extends Thread implements Runnable {
-
-		public void run() {
-			try {
-				out.writeObject(new String("Welcome!"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
+	
 	public void clientStart() throws IOException {
 		out.writeObject(new String("start"));
 	}

@@ -28,7 +28,13 @@ public class ClientModel extends Observable implements Observer {
 	// dont forget to set the p after changing to network tank view.
 	public PlayerTank p;
 	public boolean connected = false;
-
+/**
+ * 
+ * @param m MasterView
+ * @param o ip address
+ * this class constructor takes in m and o  and creats a new socket
+ * it then call listenStart() to start listening to socket. getting input stream if not null
+ */
 	public ClientModel(MasterView m, Object o) {
 		ip = "127.0.0.1";
 		this.m = m;
@@ -49,7 +55,10 @@ public class ClientModel extends Observable implements Observer {
 		connected();
 
 	}
-
+/**
+ * this method will create a thread called listen as game listener
+ * and then start it. 
+ */
 	public void listenStart() {
 		Thread listen = new GameListener(this);
 		listen.start();
@@ -94,7 +103,12 @@ public class ClientModel extends Observable implements Observer {
 			}
 		}
 	}
-
+/**
+ * 
+ * this class will create a thread, tryint to read the input, and interpret the messages. 
+ * 
+ *
+ */
 	private class GameListener extends Thread implements Runnable, Observer {
 		private ClientModel cm;
 		private boolean first = true;
