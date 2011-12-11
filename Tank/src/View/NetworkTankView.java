@@ -122,11 +122,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			 hm = (HostModel)o;
 			 hm.p=model.getMap().getPlayers().getFirst();
 		 }
-		 else {
+		 if(i == 1) {
 			 cm =(ClientModel)o;
 			 cm.p=model.getMap().getPlayers().getFirst();
 		 }
-
 	}
 
 	@Override

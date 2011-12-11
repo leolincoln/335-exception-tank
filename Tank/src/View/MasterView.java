@@ -150,9 +150,9 @@ public class MasterView extends JFrame {
 			this.setBackground(Color.black);
 			this.setSize(1000, 750);
 			previousPane = currentPane;
-			int n;
+			int n=0;
 			if(o instanceof ClientView) n=1;
-			else n=0;
+			if(o instanceof HostView) n = 0;
 			currentPane = new NetworkTankView(this,n,(Object)o);
 			System.out.println("changeview with o:"+o);
 			body.removeAll();
