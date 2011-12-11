@@ -52,6 +52,7 @@ public class NetworkTankController extends Observable implements Observer {
 		map.projectileList = new LinkedList<Projectile>();
 		this.projectileList = map.projectileList;
 		addPlayers();
+		map.addObserver(this);
 
 	}
 
@@ -111,24 +112,26 @@ public class NetworkTankController extends Observable implements Observer {
 		itemList = new LinkedList<Item>();
 		enemyList = new LinkedList<EnemyTank>();
 
-		// Creates a new explosion at the passed Point
 
+		
+		//Creates a new explosion at the passed Point
+		
 		if (o instanceof Point) {
-			Point p = (Point) o;
+			Point p = (Point)o;
 			Explosion e = new Explosion(p, getMap());
 			getMap().addExplosion(e);
 		}
-
-		// Calls for the view to be repainted whenever a PlayerTank or EnemyTank
-		// is pushing a crate or TNT
-
+		
+		
+		// Calls for the view to be repainted whenever a PlayerTank or EnemyTank is pushing a crate or TNT
+		
 		if (o instanceof String) {
 			String s = (String) o;
 			if (s.equals("moveCrate")) {
 				notifyObservers();
 				setChanged();
 			}
-
+			
 			if (s.equals("moveTNT")) {
 				notifyObservers();
 				setChanged();
@@ -138,18 +141,16 @@ public class NetworkTankController extends Observable implements Observer {
 				setChanged();
 			}
 		}
-
-		/*
-		 * Whenever a FireRing moves it is passed to this method which then
-		 * determines whether or not it has collided with the player
-		 */
+		
+		/* Whenever a FireRing moves it is passed to this method which then determines whether or not
+		 it has collided with the player
+		*/
 		if (o instanceof FireRing) {
 			FireRing fr = (FireRing) o;
 			for (int i = 0; i < tankList.size(); i++) {
 				PlayerTank t = tankList.get(i);
 				if (t.getRectangle().intersects(fr.getRectangle())) {
-					notifyObservers(new Point(t.getLocation().row - 12,
-							t.getLocation().col - 12));
+					notifyObservers(new Point(t.getLocation().row - 12, t.getLocation().col - 12));
 					t.recieveDamage(1);
 					setChanged();
 					break;
@@ -158,42 +159,37 @@ public class NetworkTankController extends Observable implements Observer {
 			notifyObservers();
 			setChanged();
 		}
-
-		// Adds the created PlayerProjectile to the map whenever the player's
-		// shoot method is called. If there is
-		// already a PlayerProjectile on the map this will keep track of that
-		// projectile's location and will determine
+		
+		// Adds the created PlayerProjectile to the map whenever the player's shoot method is called. If there is 
+		// already a PlayerProjectile on the map this will keep track of that projectile's location and will determine 
 		// whether or not it has collided with any objects.
 
 		if (o instanceof PlayerProjectile) {
 			PlayerProjectile p = (PlayerProjectile) o;
-			System.out.println("printing projectile");
+
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
 
 			} else {
-
-				// The xCoord will be set to -1 when the Projectile goes off the
-				// screen. This will make sure it is properly removed from the
-				// map.
-
+				
+				// The xCoord will be set to -1 when the Projectile goes off the screen. This will make sure it is properly removed from the map.
+				
 				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
 				}
-
+				
 				// The projectile will destroy any item it collides with
-
+				
 				for (Item i : itemList) {
-
+					
 					if (i instanceof BubbleShield) {
 						BubbleShield c = (BubbleShield) i;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -204,8 +200,7 @@ public class NetworkTankController extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(c.getLocation().row - 12,
-									c.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -216,92 +211,80 @@ public class NetworkTankController extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
 					}
 				}
-
-				// Removes the EnemyTank if it is hit by the PlayerTank's
-				// projectile
-
+				
+				//Removes the EnemyTank if it is hit by the PlayerTank's projectile
+				
 				for (EnemyTank h : enemyList) {
 					if (h.getRectangle().intersects(p.getRectangle())) {
 						p.collided();
 						projectileList.remove(p);
 						h.recieveDamage(p.getDamage());
-						notifyObservers(new Point(p.getLocation().row - 12,
-								p.getLocation().col - 12));
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 						setChanged();
 						break;
 					}
 				}
 				for (Obstacle obs : obstacleList) {
-
-					// Crate's are destroyed when a projectile collides with
-					// them
-
+					
+					// Crate's are destroyed when a projectile collides with them
+					
 					if (obs instanceof Crate) {
 						Crate c = (Crate) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
 					}
-
-					// TNT's are destroyed when a projectile collides with them,
-					// they also create a blast radius
-					// that will cause any object somewhat near the exploded TNT
-					// to take damage
-
+					
+					// TNT's are destroyed when a projectile collides with them, they also create a blast radius
+					// that will cause any object somewhat near the exploded TNT to take damage
+					
 					if (obs instanceof TNT) {
 						TNT c = (TNT) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 						}
 					}
-
-					// ImmovableBlock's can not be destroyed. If a projectile
-					// collides with one, the projectile is removed.
-
+					
+					//ImmovableBlock's can not be destroyed. If a projectile collides with one, the projectile is removed.
+					
 					if (obs instanceof ImmovableBlock) {
 						ImmovableBlock c = (ImmovableBlock) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
 						}
 					}
 
-					// FireRing's can not be destroyed. If a projectile collides
-					// with one, the projectile is removed.
-
+					//FireRing's can not be destroyed. If a projectile collides with one, the projectile is removed.
+					
 					if (obs instanceof FireRing) {
 						FireRing c = (FireRing) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
@@ -314,13 +297,11 @@ public class NetworkTankController extends Observable implements Observer {
 				setChanged();
 			}
 		}
-
-		// Adds the created EnemyProjectile to the map whenever the enemy's
-		// shoot method is called. If there is
-		// already a EnemyProjectile on the map this will keep track of that
-		// projectile's location and will determine
+		
+		// Adds the created EnemyProjectile to the map whenever the enemy's shoot method is called. If there is 
+		// already a EnemyProjectile on the map this will keep track of that projectile's location and will determine 
 		// whether or not it has collided with any objects.
-
+		
 		if (o instanceof EnemyProjectile) {
 			EnemyProjectile p = (EnemyProjectile) o;
 
@@ -329,17 +310,15 @@ public class NetworkTankController extends Observable implements Observer {
 				p.addObserver(this);
 
 			} else {
-
-				// The xCoord will be set to -1 when the Projectile goes off the
-				// screen. This will make sure it is properly removed from the
-				// map.
-
+				
+				// The xCoord will be set to -1 when the Projectile goes off the screen. This will make sure it is properly removed from the map.
+				
 				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
 				}
-
+				
 				// The projectile will destroy any item it collides with
-
+				
 				for (Item i : itemList) {
 					if (i instanceof BubbleShield) {
 						BubbleShield c = (BubbleShield) i;
@@ -347,8 +326,7 @@ public class NetworkTankController extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(c.getLocation().row - 12,
-									c.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -359,8 +337,7 @@ public class NetworkTankController extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(c.getLocation().row - 12,
-									c.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -371,23 +348,20 @@ public class NetworkTankController extends Observable implements Observer {
 							p.collided();
 							projectileList.remove(p);
 							itemList.remove(c);
-							notifyObservers(new Point(c.getLocation().row - 12,
-									c.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
 					}
 				}
-
-				// Removes the PlayerTank if it is hit by the EnemyTank's
-				// projectile
-
+				
+				//Removes the PlayerTank if it is hit by the EnemyTank's projectile
+				
 				for (PlayerTank h : tankList) {
 					if (h.getRectangle().intersects(p.getRectangle())) {
 						p.collided();
 						projectileList.remove(p);
-						notifyObservers(new Point(h.getLocation().row - 12,
-								h.getLocation().col - 12));
+						notifyObservers(new Point(h.getLocation().row - 12, h.getLocation().col - 12));
 						setChanged();
 						h.recieveDamage(p.getDamage());
 						break;
@@ -395,69 +369,60 @@ public class NetworkTankController extends Observable implements Observer {
 				}
 
 				for (Obstacle obs : obstacleList) {
-
-					// Crate's are destroyed when a projectile collides with
-					// them
-
+					
+					// Crate's are destroyed when a projectile collides with them
+					
 					if (obs instanceof Crate) {
 						Crate c = (Crate) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
-							notifyObservers(new Point(c.getLocation().row - 12,
-									c.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							c.recieveDamage(p.getDamage());
 							break;
 						}
 					}
-
-					// TNT's are destroyed when a projectile collides with them,
-					// they also create a blast radius
-					// that will cause any object somewhat near the exploded TNT
-					// to take damage
-
+					
+					// TNT's are destroyed when a projectile collides with them, they also create a blast radius
+					// that will cause any object somewhat near the exploded TNT to take damage
+					
 					if (obs instanceof TNT) {
 						TNT c = (TNT) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
-							notifyObservers(new Point(c.getLocation().row - 12,
-									c.getLocation().col - 12));
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							c.recieveDamage(p.getDamage());
 							break;
 						}
 					}
-
-					// ImmovableBlock's can not be destroyed. If a projectile
-					// collides with one, the projectile is removed.
-
+					
+					// ImmovableBlock's can not be destroyed. If a projectile collides with one, the projectile is removed.
+					
 					if (obs instanceof ImmovableBlock) {
 						ImmovableBlock c = (ImmovableBlock) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
 						}
 					}
-
-					// FireRing's can not be destroyed. If a projectile collides
-					// with one, the projectile is removed.
-
+					
+					//FireRing's can not be destroyed. If a projectile collides with one, the projectile is removed.
+					
 					if (obs instanceof FireRing) {
 						FireRing c = (FireRing) obs;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
 							c.recieveDamage(p.getDamage());
-							notifyObservers(new Point(p.getLocation().row - 12,
-									p.getLocation().col - 12));
+							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 							setChanged();
 							break;
 
@@ -470,24 +435,21 @@ public class NetworkTankController extends Observable implements Observer {
 				setChanged();
 			}
 		}
-
-		// Whenever the EnemyTank moves this will check to see if it has
-		// collided with anything. Depeding
-		// on the object it has collided with the proper action will occur.
-
+		
+		// Whenever the EnemyTank moves this will check to see if it has collided with anything. Depeding 
+		// on the object it has collided with the proper action will occur. 
+		
 		if (o instanceof EnemyTank) {
 			EnemyTank p = (EnemyTank) o;
 			TankRectangle rect = p.getRectangle();
-
-			// When the EnemyTank collides with an item it will activate the
-			// item's effect on that EnemyTank
-
+			
+			// When the EnemyTank collides with an item it will activate the item's effect on that EnemyTank
+			
 			for (Item i : itemList) {
 				if (i instanceof BubbleShield) {
 					BubbleShield c = (BubbleShield) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
-						// Can not have more than one BubbleShield active at a
-						// time
+						// Can not have more than one BubbleShield active at a time
 						if (p.getHealth() == 1) {
 							c.activateEffect(p);
 						}
@@ -538,7 +500,7 @@ public class NetworkTankController extends Observable implements Observer {
 					FireRing c = (FireRing) obs;
 					if (rect.intersects(c.getRectangle())) {
 						p.recieveDamage(0);
-
+						
 					}
 				}
 				// SpikePit's can not kill the AI either for difficulty purposes
@@ -552,11 +514,10 @@ public class NetworkTankController extends Observable implements Observer {
 			notifyObservers();
 			setChanged();
 		}
-
-		// Whenever the EnemyTank moves this will check to see if it has
-		// collided with anything. Depeding
-		// on the object it has collided with the proper action will occur.
-
+		
+		// Whenever the EnemyTank moves this will check to see if it has collided with anything. Depeding 
+		// on the object it has collided with the proper action will occur. 
+		
 		if (o instanceof PlayerTank) {
 			PlayerTank p = (PlayerTank) o;
 			TankRectangle rect = p.getRectangle();
@@ -577,8 +538,8 @@ public class NetworkTankController extends Observable implements Observer {
 				if (i instanceof SpeedBoost) {
 					SpeedBoost c = (SpeedBoost) i;
 					if (c.getRectangle().intersects(p.getRectangle())) {
-						if (!p.isActiveBoost()) {
-							c.activateEffect(p);
+						if(!p.isActiveBoost()) {
+						c.activateEffect(p);
 						}
 						itemList.remove(c);
 						notifyObservers();
@@ -616,8 +577,7 @@ public class NetworkTankController extends Observable implements Observer {
 				if (obs instanceof FireRing) {
 					FireRing c = (FireRing) obs;
 					if (rect.intersects(c.getRectangle())) {
-						notifyObservers(new Point(p.getLocation().row - 12,
-								p.getLocation().col - 12));
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 						p.recieveDamage(1);
 					}
 				}
@@ -625,8 +585,7 @@ public class NetworkTankController extends Observable implements Observer {
 				if (obs instanceof SpikePit) {
 					SpikePit c = (SpikePit) obs;
 					if (rect.intersects(c.getRectangle())) {
-						notifyObservers(new Point(p.getLocation().row - 12,
-								p.getLocation().col - 12));
+						notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
 						p.recieveDamage(1);
 					}
 				}
