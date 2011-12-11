@@ -100,7 +100,6 @@ public class HostModel {
 		if (out == null) {
 			try {
 				out = new ObjectOutputStream(client.getOutputStream());
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
