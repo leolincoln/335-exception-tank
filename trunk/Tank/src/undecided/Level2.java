@@ -6,7 +6,7 @@ import java.util.Observer;
 
 public class Level2 extends Map implements Observer {
 	
-	private ItemCreator creator; 
+	private ItemCreator creator;
 	
 	public Level2() {
 		super();
@@ -115,6 +115,7 @@ public class Level2 extends Map implements Observer {
 		// TODO Auto-generated method stub
 		return 2;
 	}
+
 
 
 }

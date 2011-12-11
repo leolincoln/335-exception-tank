@@ -6,12 +6,14 @@ import java.util.Observer;
 
 public class Level4 extends Map implements Observer {
 	
-	private ItemCreator creator; 
+	private ItemCreator creator;
+
 	
 	public Level4() {
 		super();
 		creator = new ItemCreator(this);
 		creator.start();
+		
 	}
 	
 	public void setUpMap() {
@@ -84,4 +86,5 @@ public class Level4 extends Map implements Observer {
 	}
 
 
+	
 }

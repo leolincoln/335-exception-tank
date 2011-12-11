@@ -7,11 +7,13 @@ import java.util.Observer;
 public class Level5 extends Map implements Observer {
 	
 	private ItemCreator creator; 
+
 	
 	public Level5() {
 		super();
 		creator = new ItemCreator(this);
 		creator.start();
+	
 	}
 	
 	public void setUpMap() {
@@ -123,6 +125,9 @@ public class Level5 extends Map implements Observer {
 		// TODO Auto-generated method stub
 		return 5;
 	}
+
+
+	
 
 
 }
