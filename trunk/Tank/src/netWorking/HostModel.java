@@ -106,6 +106,7 @@ public class HostModel {
 				e.printStackTrace();
 			}
 		}
+		hv.hm=this;
 			try {
 				out.writeObject(o);
 			} catch (IOException e) {
@@ -156,6 +157,7 @@ public class HostModel {
 														.toString());
 							} else if (command.equals("ready")) {
 								System.out.println("ready received");
+								
 								hv.start.setEnabled(true);
 							} else if (command.equals("up")) {
 								p.moveUp();
