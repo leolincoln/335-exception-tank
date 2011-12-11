@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
@@ -115,6 +116,10 @@ public class ClientModel extends Observable implements Observer {
 					if (in != null)
 						unKnown = in.readObject();
 					System.out.println(in);
+				}
+				catch(SocketException e){
+					System.out.println("Socket Exception, connection lost");
+					m.changeView(Views.TITLE, null);
 				}
 
 				catch (IOException e) {
