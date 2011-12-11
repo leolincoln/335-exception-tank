@@ -120,7 +120,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		System.out.println("changed to netWorkTankView!");
 		 if(i==0) {
 			 hm = (HostModel)o;
-			 hm.p=model.getMap().getPlayers().getFirst();
+			 hm.setPlayer(player);
 		 }
 		 if(i == 1) {
 			 cm =(ClientModel)o;

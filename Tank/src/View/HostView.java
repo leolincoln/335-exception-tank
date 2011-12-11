@@ -23,11 +23,11 @@ public class HostView extends MasterViewPanel implements Observer {
 	public JButton ready, start;
 	public JTextField hostNameText, clientNameText;
 	public HostModel hm;
-	
+
 	/**
 	 * 
 	 */
-	
+
 	private static final long serialVersionUID = 1L;
 
 	public HostView(MasterView m) {
@@ -37,15 +37,13 @@ public class HostView extends MasterViewPanel implements Observer {
 		buildClientPanel();
 		this.setVisible(true);
 		HostModel hm = new HostModel(this, m);
-		
-		hm.connectionStart();
 		System.out.println(hm);
 		// TODO Auto-generated constructor stub
 	}
 
 	public void buildMain() {
 		this.setLayout(new GridLayout(1, 2));
-		
+
 	}
 
 	public void buildHostPanel() {
@@ -79,11 +77,11 @@ public class HostView extends MasterViewPanel implements Observer {
 		clientTop = new JLabel("CLIENT");
 		clientNamePane = new JPanel(new GridLayout(1, 2));
 		clientName = new JLabel("clientName: ");
-		
+
 		clientNameText = new JTextField();
 		clientNameText.setText("Enter Name here");
 		clientNameText.setSize(10, 10);
-		
+
 		clientNamePane.add(clientName);
 		clientNamePane.add(clientNameText);
 
@@ -106,8 +104,8 @@ public class HostView extends MasterViewPanel implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			System.out.println(hm);
-				hm.clientStart();
-			m.changeView(Views.NETWORKTANKVIEW,hm);
+
+			m.changeView(Views.NETWORKTANKVIEW, hm);
 		}
 	}
 
