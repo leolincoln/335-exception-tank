@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
-import View.NetWorkMap1;
+
 
 import rectangles.TankRectangle;
 
@@ -43,7 +43,8 @@ public abstract class Map extends Observable implements Observer {
 		itemList = new LinkedList<Item>();
 		setPlayerStart(playerStart());
 		setEnemyStart(enemyStart());
-		if(!(this instanceof NetWorkMap1)) setUpMap();
+		setUpMap();
+	
 	}
 	
 	/**
