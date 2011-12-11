@@ -33,7 +33,7 @@ public class PlayerTank extends Observable {
 	private Direction d;
 	private Image img;
 	private Map map;
-	private boolean activeShield, activeBoost;
+	private boolean activeShield, activeBoost, activeIceBlock;
 
 	/**
 	 * Class constructor
@@ -48,6 +48,7 @@ public class PlayerTank extends Observable {
 		this.map = map;
 		activeShield = false;
 		activeBoost = false;
+		activeIceBlock = false;
 		d = Direction.EAST;
 		t = new TankRectangle(p.col - 25, p.row - 25);
 		img = new ImageIcon("images/tankSOUTH.png").getImage();
@@ -114,8 +115,15 @@ public class PlayerTank extends Observable {
 	 *            ice, or sand
 	 */
 	public void setSpeed(int x) {
+		if(x == 0) {
+			activeIceBlock = true;
+			img = new ImageIcon("images/tankFrozen" + d + ".png").getImage();
+			speed = 0;
+		}
+		else {
+		activeIceBlock = false;
 		speed = x;
-
+		}
 	}
 
 	/**
@@ -139,9 +147,12 @@ public class PlayerTank extends Observable {
 		if(health == 1) {
 			img = new ImageIcon("images/tankNORTH.png").getImage();
 			}
-			if(health == 2) {
+		if(health == 2) {
 			img = new ImageIcon("images/tankShieldNORTH.png").getImage();
 			}
+		if(activeIceBlock) {
+			img = new ImageIcon("images/tankFrozenNORTH.png").getImage();
+		}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
@@ -210,6 +221,9 @@ public class PlayerTank extends Observable {
 		if(health == 2) {
 		img = new ImageIcon("images/tankShieldSOUTH.png").getImage();
 		}
+		if(activeIceBlock) {
+			img = new ImageIcon("images/tankFrozenSOUTH.png").getImage();
+		}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
@@ -277,6 +291,9 @@ public class PlayerTank extends Observable {
 		}
 		if(health == 2) {
 			img = new ImageIcon("images/tankShieldEAST.png").getImage();
+		}
+		if(activeIceBlock) {
+			img = new ImageIcon("images/tankFrozenEAST.png").getImage();
 		}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
@@ -362,6 +379,9 @@ public class PlayerTank extends Observable {
 			}
 			if(health == 2) {
 			img = new ImageIcon("images/tankShieldWEST.png").getImage();
+			}
+			if(activeIceBlock) {
+				img = new ImageIcon("images/tankFrozenWEST.png").getImage();
 			}
 		for(int i = 0; i < enemies.size(); i++) {
 			EnemyTank e = enemies.get(i);
