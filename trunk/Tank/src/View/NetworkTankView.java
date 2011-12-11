@@ -19,6 +19,9 @@ import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import netWorking.ClientModel;
+import netWorking.HostModel;
+
 import rectangles.BubbleShieldRectangle;
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
@@ -48,58 +51,72 @@ import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
 
-
-
 public class NetworkTankView extends MasterViewPanel implements Observer {
 
-	public NetworkTankModel model;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public NetworkTankController model;
 	private Image dbImage;
 	private Graphics dbg;
 	private PlayerTank player;
-	private PlayerTank enemy;
+	private EnemyTank enemy;
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<Obstacle> obstacleList;
 	private LinkedList<PlayerTank> tankList;
+	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Item> itemList;
 	private JPanel panel;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost;
-	Map map;
 	private Image camo, wheel, steel, gold;
-	
+	private HostModel hm;
+	private ClientModel cm;
+	private int i;
+
 	// if i=0, then its the host, if i=1, then its the client
-	public NetworkTankView(MasterView m,int i) {
+	public NetworkTankView(MasterView m, int i) {
 		super(m);
+		this.i = i;
+		// if(i==0) hm =
+		// else cm =
+
 		camo = new ImageIcon("images/camo.png").getImage();
 		wheel = new ImageIcon("images/wheel-md.png").getImage();
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
+		System.out.println("i is " + i);
+		model = new NetworkTankController(m, i);
+		model.map.addObserver(this);
+		model.addObserver(this);
 
-		this.map = new Level1();
-		model = new NetworkTankModel(m, map, i);
-		tankList = map.getPlayers();
-		projectileList = map.getProjectiles();
-		obstacleList = map.getObstacles();
-	
-		itemList = map.getItems();
 		GameThread gt = new GameThread();
 		gt.start();
 
+		tankList = model.getMap().getPlayers();
+		projectileList = model.getMap().getProjectiles();
+		obstacleList = model.getMap().getObstacles();
+		enemyList = model.getMap().getEnemies();
 		this.setFocusable(true);
 
-		if(i==0) player = tankList.getFirst();
-		if(i==1) player = tankList.getLast();
-		add(panel);
+		player = tankList.getFirst();
+		enemy = enemyList.getFirst();
+
+		// add(panel);
 		// adding the movement and
 		addKeyListener(new moveAndShootListener());
 		// creating the mouse handler
 		Handlerclass handler = new Handlerclass();
-		// adding mouse actions to be detected on	the java panel								
+		// adding mouse actions to be detected on the java panel
+
 		this.addMouseListener(handler);
-										
-		this.addMouseMotionListener(handler);// adding mouse motion to be detected on the java panel
-												
+		this.addMouseMotionListener(handler);// adding mouse motion to be
+												// detected on the java panel
+
 		this.setVisible(true);
+		System.out.println(model.getMap().getPlayers());
+		this.requestFocus();
 
 	}
 
@@ -132,8 +149,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		@Override
 		public synchronized void run() {
 			while (exists) {
-
-				if (map.getPlayers().size() == 1) {
+				if (model.getMap().getPlayers().size() == 0) {
 					lost = true;
 					repaint();
 					try {
@@ -141,10 +157,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					} catch (InterruptedException e) {
 
 					}
-					m.changeView(Views.NETWORKTANKVIEW,3);
+					m.changeView(Views.NETWORKTANKVIEW, 3);
 					exists = false;
-				} else if (map.getEnemies().size() == 0) {
-					
+				} else if (model.getMap().getEnemies().size() == 0) {
+
 				} else {
 					try {
 						Thread.sleep(10);
@@ -167,22 +183,12 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
+		obstacleList = model.getMap().getObstacles();
+		tankList = model.getMap().getPlayers();
+		projectileList = model.getMap().getProjectiles();
+		enemyList = model.getMap().getEnemies();
 
-		for (Item p : itemList) {
-			if (p instanceof SpeedBoost) {
-				SpeedBoost s = (SpeedBoost) p;
-				SpeedBoostRectangle tRect = s.getRectangle();
-				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
-						null);
-			}
-			if (p instanceof BubbleShield) {
-				BubbleShield s = (BubbleShield) p;
-				BubbleShieldRectangle tRect = s.getRectangle();
-				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
-						null);
-			}
-		}
-		for (int i = 0; i < obstacleList.size(); i++) {
+		for (int i = 0; i < model.getMap().getObstacles().size(); i++) {
 			Obstacle p = obstacleList.get(i);
 			if (p instanceof SpikePit) {// for instance of SpikePit
 				SpikePit sp = (SpikePit) p;
@@ -195,19 +201,22 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				CrateRectangle cRect = c.getRectangle();
 				g.drawImage(cRect.getImage(), cRect.xCoord(), cRect.yCoord(),
 						null);
+				System.out.println("printing crate.");
 			}
 			if (p instanceof ImmovableBlock) {// for instance of immovableBlock
 				ImmovableBlock ib = (ImmovableBlock) p;
 				ImmovableBlockRectangle ibRect = ib.getRectangle();
 				g.drawImage(ibRect.getImage(), ibRect.xCoord(),
 						ibRect.yCoord(), null);
+				System.out.println("printing block");
 			}
-		
+
 			if (p instanceof TNT) {// for instance of TNT
 				TNT tnt = (TNT) p;
 				TNTRectangle tntRect = tnt.getRectangle();
 				g.drawImage(tntRect.getImage(), tntRect.xCoord(),
 						tntRect.yCoord(), null);
+				System.out.println("printing TNT");
 			}
 
 		}
@@ -215,7 +224,11 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			TankRectangle tRect = p.getRectangle();
 			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
 		}
-		
+		for (EnemyTank p : enemyList) {
+			TankRectangle tRect = p.getRectangle();
+			g.drawImage(p.getImage(), tRect.xCoord(), tRect.yCoord(), null);
+		}
+
 		for (Projectile p : projectileList) {
 			if (p instanceof PlayerProjectile) {
 				PlayerProjectile s = (PlayerProjectile) p;
@@ -230,67 +243,72 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		}
 		if (won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
-			String jb = "Mission Complete!";
+			String jb = "Win!";
 			AttributedString att = new AttributedString(jb);
 			att.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW);
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
 		}
+
 		if (lost == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
-			String jb = "Mission Failed!";
+			String jb = "Fail!";
 			AttributedString att = new AttributedString(jb);
 			att.addAttribute(TextAttribute.FOREGROUND, Color.RED);
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 400, 350);
 		}
-		for(int i = 0; i < 700; i += 50) {
-			for(int j = 985; j < 1200; j += 50) {
-				if(i == 150 || i == 200 || i == 350 || i == 400) {
+
+		for (int i = 0; i < 700; i += 50) {
+			for (int j = 985; j < 1200; j += 50) {
+				if (i == 150 || i == 200 || i == 350 || i == 400) {
 					g.drawImage(steel, j, i, null);
+				} else {
+					g.drawImage(camo, j, i, null);
 				}
-				else {
-				g.drawImage(camo, j, i, null);
-			}
 			}
 		}
-		for(int i = 0; i < 700; i += 20) {
-			for(int j = 985; j < 1200; j += 20) {
-				if(i == 0 || i == 680 || j == 985 || j == 1165) {
+
+		for (int i = 0; i < 700; i += 20) {
+			for (int j = 985; j < 1200; j += 20) {
+				if (i == 0 || i == 680 || j == 985 || j == 1165) {
 					g.drawImage(gold, j, i, null);
 				}
 			}
-			}
-	
+		}
+
 		Font font = new Font("Times New Roman", Font.BOLD, 20);
 		String score = "Score Board";
 		AttributedString att = new AttributedString(score);
 		att.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att.getIterator(), 1018, 44);
-		
-		for(int i = 0; i < MasterView.playerLives; i++) {
-			for(int j = 0; j < MasterView.playerLives * 50; j += 55) {
-			g.drawImage(wheel, 1005 + j, 65, null);
+
+		for (int i = 0; i < MasterView.playerLives; i++) {
+			for (int j = 0; j < MasterView.playerLives * 50; j += 55) {
+				g.drawImage(wheel, 1005 + j, 65, null);
 			}
 		}
-		String curr = "Current Level: " + map.getLevelNumber();
+
+		String curr = "Current Level: ";
 		AttributedString att3 = new AttributedString(curr);
 		att3.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att3.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att3.getIterator(), 1013, 300);
-		
+
 		String item = "Active Items";
 		AttributedString att6 = new AttributedString(item);
 		att6.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att6.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att6.getIterator(), 1030, 485);
-		
-		if(player.isActiveShield()) {
-			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020, 515, null);
+
+		if (player.isActiveShield()) {
+			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020,
+					515, null);
 		}
-		if(player.isActiveBoost()) {
-			g.drawImage(new SpeedBoostRectangle(-10, -10).getImage(), 1100, 515, null);
+		if (player.isActiveBoost()) {
+			g.drawImage(new SpeedBoostRectangle(-10, -10).getImage(), 1100,
+					515, null);
 		}
 	}
 
@@ -300,17 +318,37 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		public void keyPressed(KeyEvent e) {
 			int keyEvent = e.getKeyCode();
 			if (keyEvent == KeyEvent.VK_W) {
+				if (i == 0) {
+					hm.sendObject("up");
+				} else
+					cm.sendObject("up");
 				player.moveUp();
 			}
 			if (keyEvent == KeyEvent.VK_S) {
+				if (i == 0) {
+					hm.sendObject("down");
+				} else
+					cm.sendObject("down");
 				player.moveDown();
 			}
 			if (keyEvent == KeyEvent.VK_A) {
+				if (i == 0) {
+					hm.sendObject("left");
+				} else
+					cm.sendObject("left");
 				player.moveLeft();
 			}
 			if (keyEvent == KeyEvent.VK_D) {
+				if (i == 0) {
+					hm.sendObject("right");
+				} else
+					cm.sendObject("right");
 				player.moveRight();
 			}
+
+			System.out.println("player location: "
+					+ player.getRectangle().xCoord() + " , "
+					+ player.getRectangle().yCoord());
 
 		}
 
@@ -374,8 +412,11 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		 * 
 		 */
 		public void mousePressed(MouseEvent arg0) {
+			player = model.getMap().getPlayers().getFirst();
+
+			System.out.println("mouseevent recorded");
 			int count = 0;
-			for (Projectile p : map.getProjectiles()) {
+			for (Projectile p : model.getMap().getProjectiles()) {
 				if (p instanceof PlayerProjectile) {
 					count++;
 				}
@@ -392,11 +433,14 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				// create a new shot, with position relative to location of
 				// tank,
 				// the speed in the x and y directions
+
 				player.shoot(
 						new Point(player.getLocation().row, player
 								.getLocation().col),
 						(int) (xdiff * (5 / length)),
 						(int) (ydiff * (5 / length)));
+				System.out.println("shoot" + player.getLocation().row);
+
 				// player.shoot();
 			}
 		}

@@ -110,7 +110,7 @@ public class HostView extends MasterViewPanel implements Observer {
 				e.printStackTrace();
 			}
 			
-			m.changeView(Views.NETWORKTANKVIEW,null);
+			m.changeView(Views.NETWORKTANKVIEW,0);
 		}
 	}
 
