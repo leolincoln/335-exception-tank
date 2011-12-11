@@ -28,6 +28,7 @@ public abstract class Map extends Observable implements Observer {
 	private LinkedList<Explosion> explosionList;
 	private PlayerTank player;
 	private EnemyTank enemy;
+	private Terrain terrain;
 	
 	/**
 	 * 		Every time a new map is constructed the lists are reset so that objects from the previos
@@ -44,6 +45,7 @@ public abstract class Map extends Observable implements Observer {
 		setPlayerStart(playerStart());
 		setEnemyStart(enemyStart());
 		setUpMap();
+		
 	
 	}
 	
@@ -80,13 +82,14 @@ public abstract class Map extends Observable implements Observer {
 	
 	public abstract Point playerStart();
 	
+	
 	/**
 	 * 		This method will vary for each constructed level and returns the point at
 	 * 		which the enemy tank will originally start at when the level begins.
 	 * 
 	 * @return Point 
 	 */
-
+	
 	public abstract Point enemyStart();
 	
 	/**
@@ -102,6 +105,7 @@ public abstract class Map extends Observable implements Observer {
 	 * @return This method returns the number of the current level the player is on.
 	 */
 	public abstract int getLevelNumber();
+	
 	
 	public void addObstacle(Obstacle o) {
 		obstacleList.add(o);
@@ -638,6 +642,7 @@ public abstract class Map extends Observable implements Observer {
 		}
 
 	}
+	
 	/**
 	 * 
 	 * @return Returns the list containing this map's obstacles

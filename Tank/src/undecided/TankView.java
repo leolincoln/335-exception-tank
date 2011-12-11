@@ -63,6 +63,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost, gameOver;
 	private Image camo, wheel, steel, gold, grass, ice, sand;
+	
 
 	/**
 	 * Class constructor
@@ -350,11 +351,24 @@ public class TankView extends MasterViewPanel implements Observer {
 			}
 			}
 		}
+		for(int i = 690; i < 900; i += 20) {
+			for(int j = 0; j < 1200; j += 20) {
+				
+					g.drawImage(gold, j, i, null);
+				
+			}
+			}
 		for(int i = 0; i < 700; i += 20) {
 			for(int j = 985; j < 1200; j += 20) {
 				if(i == 0 || i == 680 || j == 985 || j == 1165) {
 					g.drawImage(gold, j, i, null);
 				}
+			}
+			}
+		for(int i = 0; i < 900; i += 20) {
+			for(int j = 1180; j < 1500; j += 20) {
+					g.drawImage(gold, j, i, null);
+				
 			}
 			}
 	

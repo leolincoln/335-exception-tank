@@ -8,7 +8,8 @@ import java.util.Observer;
 public class Level1 extends Map implements Observer {
 	
 	
-	private ItemCreator creator; 
+	private ItemCreator creator;
+
 	
 	public Level1() {
 		super();
@@ -91,4 +92,5 @@ public class Level1 extends Map implements Observer {
 		// TODO Auto-generated method stub
 		return 1;
 	}
+	
 }

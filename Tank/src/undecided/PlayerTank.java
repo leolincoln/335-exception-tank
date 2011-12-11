@@ -44,7 +44,6 @@ public class PlayerTank extends Observable {
 	 */
 	public PlayerTank(Point p, Map map) {
 		this.p = p;
-		speed = 5;
 		health = 1;
 		this.map = map;
 		activeShield = false;
@@ -52,6 +51,7 @@ public class PlayerTank extends Observable {
 		d = Direction.EAST;
 		t = new TankRectangle(p.col - 25, p.row - 25);
 		img = new ImageIcon("images/tankSOUTH.png").getImage();
+		speed = 5;
 
 	}
 
