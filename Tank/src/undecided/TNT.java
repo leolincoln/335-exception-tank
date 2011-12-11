@@ -89,7 +89,7 @@ public class TNT extends Observable implements Obstacle {
 				if(t.getRectangle().intersects(b)) {
 					notifyObservers(new Point(t.getLocation().row - 12, t.getLocation().col - 12));
 					setChanged();
-					t.recieveDamage(1);
+					t.recieveDamage(0);
 					i = 0;
 				}
 			}
