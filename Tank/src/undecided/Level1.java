@@ -84,7 +84,7 @@ public class Level1 extends Map implements Observer {
 
 	@Override
 	public Point enemyStart() {
-		return new Point(100, 900);
+		return new Point(110, 880);
 	}
 
 	@Override

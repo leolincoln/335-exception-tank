@@ -1,5 +1,5 @@
 package undecided;
-import View.NetWorkPlayerTank;
+
 import java.util.Observable;
 
 import rectangles.ProjectileRectangle;
@@ -47,7 +47,6 @@ public class PlayerProjectile extends Observable  implements Projectile {
 		 tank = t;
 		
 		thisMissle = this;
-		
 		
 		Thread pt = new ProjectileThread();// creating new thread for the
 											// projectile's movement

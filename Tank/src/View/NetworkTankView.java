@@ -89,8 +89,14 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		
 		this.setFocusable(true);
 
-		if(i==0) player = tankList.getFirst();
-		else if(i==1) player = tankList.getLast();
+		if(i==0) {
+			player = tankList.getFirst();
+			enemy = tankList.getLast();
+		}
+		else if(i==1) {
+			player = tankList.getLast();
+			enemy = tankList.getFirst();
+		}
 
 		//add(panel);
 		// adding the movement and
@@ -254,6 +260,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			}
 			}
 		}
+		
 		for(int i = 0; i < 700; i += 20) {
 			for(int j = 985; j < 1200; j += 20) {
 				if(i == 0 || i == 680 || j == 985 || j == 1165) {
@@ -274,6 +281,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			g.drawImage(wheel, 1005 + j, 65, null);
 			}
 		}
+		
 		String curr = "Current Level: " ;
 		AttributedString att3 = new AttributedString(curr);
 		att3.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
@@ -311,6 +319,8 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			if (keyEvent == KeyEvent.VK_D) {
 				player.moveRight();
 			}
+
+			System.out.println("player location: "+player.getRectangle().xCoord()+" , "+player.getRectangle().yCoord());
 
 		}
 

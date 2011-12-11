@@ -36,9 +36,12 @@ public class EnemyTank extends Observable {
 		moveable = true;
 		t = new TankRectangle(p.col - 25, p.row - 25);
 		img = new ImageIcon("images/tankEnemyEAST.png").getImage();
+		
+
+	}
+	public void startEnemyTank(){
 		EnemyThread et = new EnemyThread();
 		et.start();
-
 	}
 
 	public Point getLocation() {
