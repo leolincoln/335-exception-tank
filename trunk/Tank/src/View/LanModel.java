@@ -11,7 +11,7 @@ import javax.swing.DefaultListModel;
 
 import undecided.PlayerTank;
 
-public class LanModel {
+public class LanModel  {
 	ArrayList<String> hostList;
 	private ServerSocket Socket;
 	private MasterView m;

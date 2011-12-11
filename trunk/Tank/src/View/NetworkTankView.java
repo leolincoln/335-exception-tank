@@ -79,6 +79,18 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	public NetworkTankView(MasterView m, int i,Object o) {
 		super(m);
 		this.i = i;
+		if(i == 0) {
+			 hm = (HostModel)o;
+			 hm.setPlayer(player);
+			 hm.setEnemy(enemy);
+			 hm.addObserver(model);
+		 }
+		 if(i == 1) {
+			 cm = (ClientModel)o;
+			 cm.setPlayer(player);
+			 cm.setEnemy(enemy);
+			 cm.addObserver(model);
+		 }
 		
 
 		camo = new ImageIcon("images/camo.png").getImage();
@@ -118,14 +130,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		System.out.println(model.getMap().getPlayers());
 		this.requestFocus();
 		System.out.println("changed to netWorkTankView!");
-		 if(i==0) {
-			 hm = (HostModel)o;
-			 hm.setPlayer(player);
-		 }
-		 if(i == 1) {
-			 cm =(ClientModel)o;
-			 cm.p=model.getMap().getPlayers().getFirst();
-		 }
+		 repaint();
 	}
 
 	@Override

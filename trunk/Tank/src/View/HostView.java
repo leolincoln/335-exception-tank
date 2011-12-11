@@ -106,6 +106,7 @@ public class HostView extends MasterViewPanel implements Observer {
 			System.out.println(hm);
 
 			m.changeView(Views.NETWORKTANKVIEW, hm);
+			hm.sendObject("start");
 		}
 	}
 

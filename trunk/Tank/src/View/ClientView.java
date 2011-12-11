@@ -32,7 +32,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 
 	public ClientView(MasterView m,Object o) {
 		super(m);
-		cm = new ClientModel(m,o);
+		cm = new ClientModel(this, m,o);
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
@@ -110,8 +110,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			ready.setEnabled(false);
-			cm.ready();
-			cm.listenStart();
+			cm.sendObject("ready");
 		}
 	}
 
