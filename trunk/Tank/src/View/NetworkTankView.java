@@ -88,7 +88,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		gold = new ImageIcon("images/gold.png").getImage();
 		System.out.println("i is " + i);
 		model = new NetworkTankController(m, i);
-		model.map.addObserver(this);
+
 		model.addObserver(this);
 
 		GameThread gt = new GameThread();
@@ -101,8 +101,9 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		this.setFocusable(true);
 
 		player = tankList.getFirst();
+		player.addObserver(model);
 		enemy = enemyList.getFirst();
-
+		enemy.addObserver(model);
 		// add(panel);
 		// adding the movement and
 		addKeyListener(new moveAndShootListener());
@@ -160,7 +161,9 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					m.changeView(Views.NETWORKTANKVIEW, 3);
 					exists = false;
 				} else if (model.getMap().getEnemies().size() == 0) {
-
+					won = true;
+					repaint();
+					m.changeView(Views.TITLE, null);
 				} else {
 					try {
 						Thread.sleep(10);
@@ -318,31 +321,31 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		public void keyPressed(KeyEvent e) {
 			int keyEvent = e.getKeyCode();
 			if (keyEvent == KeyEvent.VK_W) {
-				if (i == 0) {
-					hm.sendObject("up");
-				} else
-					cm.sendObject("up");
-				player.moveUp();
+//				if (i == 0) {
+//					hm.sendObject("up");
+//				} else
+//					cm.sendObject("up");
+//				player.moveUp();
 			}
 			if (keyEvent == KeyEvent.VK_S) {
-				if (i == 0) {
-					hm.sendObject("down");
-				} else
-					cm.sendObject("down");
+//				if (i == 0) {
+//					hm.sendObject("down");
+//				} else
+//					cm.sendObject("down");
 				player.moveDown();
 			}
 			if (keyEvent == KeyEvent.VK_A) {
-				if (i == 0) {
-					hm.sendObject("left");
-				} else
-					cm.sendObject("left");
+//				if (i == 0) {
+//					hm.sendObject("left");
+//				} else
+//					cm.sendObject("left");
 				player.moveLeft();
 			}
 			if (keyEvent == KeyEvent.VK_D) {
-				if (i == 0) {
-					hm.sendObject("right");
-				} else
-					cm.sendObject("right");
+//				if (i == 0) {
+//					hm.sendObject("right");
+//				} else
+//					cm.sendObject("right");
 				player.moveRight();
 			}
 
@@ -425,11 +428,13 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			if (count == 0) {
 				// finding difference in player and target location
 				int xdiff = arg0.getX() - player.getLocation().col;
+				System.out.println(xdiff);
+				
 				int ydiff = arg0.getY() - player.getLocation().row;
-
+				System.out.println(ydiff);
 				// calculating the distance between the player and the mouse
 				double length = Math.sqrt(xdiff * xdiff + ydiff * ydiff);
-
+				
 				// create a new shot, with position relative to location of
 				// tank,
 				// the speed in the x and y directions
@@ -439,7 +444,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 								.getLocation().col),
 						(int) (xdiff * (5 / length)),
 						(int) (ydiff * (5 / length)));
-				System.out.println("shoot" + player.getLocation().row);
+				System.out.println("shoot");
 
 				// player.shoot();
 			}

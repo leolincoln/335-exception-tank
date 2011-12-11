@@ -106,11 +106,11 @@ public class NetworkTankController extends Observable implements Observer {
 	}
 
 	public synchronized void update(Observable v, Object o) {
-		obstacleList = new LinkedList<Obstacle>();
-		tankList = new LinkedList<PlayerTank>();
-		projectileList = new LinkedList<Projectile>();
-		itemList = new LinkedList<Item>();
-		enemyList = new LinkedList<EnemyTank>();
+		obstacleList = getMap().getObstacles();
+		tankList = getMap().getPlayers();
+		projectileList = getMap().getProjectiles();
+		if(getMap().getItems()!=null)itemList = getMap().getItems();
+		enemyList = getMap().getEnemies();
 
 
 		
@@ -309,13 +309,16 @@ public class NetworkTankController extends Observable implements Observer {
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
-
+				notifyObservers();
+				setChanged();
 			} else {
 				
 				// The xCoord will be set to -1 when the Projectile goes off the screen. This will make sure it is properly removed from the map.
 				
 				if (p.getRectangle().xCoord() <= 0) {
 					projectileList.remove(p);
+					notifyObservers();
+					setChanged();
 				}
 				
 				// The projectile will destroy any item it collides with
