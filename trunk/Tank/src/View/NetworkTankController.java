@@ -89,12 +89,17 @@ public Map getMap(){
 	}
 
 	public synchronized void update(Observable v, Object o) {
+		projectileList = getMap().getProjectiles();
+		tankList = getMap().getPlayers();
+		obstacleList = getMap().getObstacles();
+		if(getMap().getItems()!=null) itemList = getMap().getItems();
 		if (o instanceof String) {
 			String s = (String) o;
 			if (s.equals("moveCrate")) {
 				notifyObservers();
 				setChanged();
 			}
+			
 			if (s.equals("moveTNT")) {
 				notifyObservers();
 				setChanged();
@@ -103,7 +108,7 @@ public Map getMap(){
 
 		if (o instanceof PlayerProjectile) {
 			PlayerProjectile p = (PlayerProjectile) o;
-
+			
 			if (!projectileList.contains(p)) {
 				projectileList.add(p);
 				p.addObserver(this);
