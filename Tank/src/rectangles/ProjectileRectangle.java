@@ -22,12 +22,12 @@ public class ProjectileRectangle extends Rectangle {
 	private Direction d;
 
 	public ProjectileRectangle(int x, int y) {
-		this.setSize(new Dimension(6, 6));
+		this.setSize(new Dimension(10, 10));
 		this.setLocation(x, y);
 		this.x = x;
 		this.y = y;
-		this.w = 6;
-		this.h = 6;
+		this.w = 10;
+		this.h = 10;
 
 	}
 
