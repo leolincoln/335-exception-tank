@@ -6,6 +6,7 @@ import java.util.Random;
 import rectangles.BubbleShieldRectangle;
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
+import rectangles.IceBlockRectangle;
 import rectangles.ImmovableBlockRectangle;
 import rectangles.SpeedBoostRectangle;
 import rectangles.SpikePitRectangle;
@@ -16,6 +17,7 @@ public class ItemCreator extends Thread {
 	
 	private BubbleShield b;
 	private SpeedBoost s;
+	private IceBlock ice;
 	private boolean exists;
 	private Map map;
 	
@@ -29,7 +31,7 @@ public class ItemCreator extends Thread {
 	
 		while(exists) {
 			Random rnd = new Random();
-			int creation = rnd.nextInt(400) + 1;
+			int creation = rnd.nextInt(600) + 1;
 			if(creation == 1 || creation == 2) {
 				if(!hasBubbleShield()) {
 					if(spawnBubbleShield()) {
@@ -44,6 +46,13 @@ public class ItemCreator extends Thread {
 					}
 				}
 			}
+			if(creation == 5 || creation == 6) {
+				if(!hasIceBlock()) {
+					if(spawnIceBlock()) {
+						map.getItems().add(ice);
+					}
+				}
+			}
 			if(map.isOver()) {
 				exists = false;
 			}
@@ -54,6 +63,92 @@ public class ItemCreator extends Thread {
 			}
 		}
 	}
+
+	private boolean spawnIceBlock() {
+		Random rnd = new Random();
+		int x = rnd.nextInt(600) + 25;
+		int y = rnd.nextInt(875) + 25;
+		ice = new IceBlock(new Point(x, y), map);
+		IceBlockRectangle rect = ice.getRectangle();
+		LinkedList<Obstacle> obs = map.getObstacles();
+		LinkedList<PlayerTank> tank = map.getPlayers();
+		LinkedList<Item> item = map.getItems();
+		for (PlayerTank p : tank) {
+			TankRectangle tRect = p.getRectangle();
+			if(tRect.intersects(rect)) {
+				return false;
+			}
+			
+		}
+		for (Item p : item) {
+			if(p instanceof BubbleShield) {
+			BubbleShield s = (BubbleShield)p;
+			BubbleShieldRectangle tRect = s.getRectangle();
+			if(tRect.intersects(rect)) {
+				return false;
+			}
+			
+			
+		}
+			if(p instanceof SpeedBoost) {
+				SpeedBoost s = (SpeedBoost)p;
+				SpeedBoostRectangle tRect = s.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
+			
+		}
+		for (int i = 0; i < obs.size(); i++) {
+			Obstacle p = obs.get(i);
+			if (p instanceof Crate) {// for instance of crate
+				Crate c = (Crate) p;
+				CrateRectangle tRect = c.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
+			if (p instanceof ImmovableBlock) {// for instance of immovableBlock
+				ImmovableBlock ib = (ImmovableBlock) p;
+				ImmovableBlockRectangle tRect = ib.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
+			if (p instanceof SpikePit) {// for instance of SpikePit
+				SpikePit sp = (SpikePit) p;
+				SpikePitRectangle tRect = sp.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
+			if (p instanceof FireRing) {// for instance of fireRing
+				FireRing fr = (FireRing) p;
+				FireRingRectangle tRect = fr.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
+			if (p instanceof TNT) {// for instance of TNT
+				TNT tnt = (TNT) p;
+				TNTRectangle tRect = tnt.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
+
+		}
+		return true;
+		
+		
+	}
+
 
 	private boolean spawnSpeedBoost() {
 		Random rnd = new Random();
@@ -80,6 +175,14 @@ public class ItemCreator extends Thread {
 			}
 			
 		}
+			if(p instanceof IceBlock) {
+				IceBlock s = (IceBlock)p;
+				IceBlockRectangle tRect = s.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
 			
 		}
 		for (int i = 0; i < obs.size(); i++) {
@@ -147,14 +250,22 @@ public class ItemCreator extends Thread {
 			
 		}
 		for (Item p : item) {
-			if(p instanceof BubbleShield) {
-			BubbleShield s = (BubbleShield)p;
-			BubbleShieldRectangle tRect = s.getRectangle();
+			if(p instanceof SpeedBoost) {
+			SpeedBoost s = (SpeedBoost)p;
+			SpeedBoostRectangle tRect = s.getRectangle();
 			if(tRect.intersects(rect)) {
 				return false;
 			}
 			
 		}
+			if(p instanceof IceBlock) {
+				IceBlock s = (IceBlock)p;
+				IceBlockRectangle tRect = s.getRectangle();
+				if(tRect.intersects(rect)) {
+					return false;
+				}
+				
+			}
 			
 		}
 		for (int i = 0; i < obs.size(); i++) {
@@ -204,6 +315,15 @@ public class ItemCreator extends Thread {
 		return true;
 		
 		
+	}
+	private boolean hasIceBlock() {
+		LinkedList<Item> item = map.getItems();
+		for(int i = 0; i < item.size(); i++) {
+			if(item.get(i) instanceof IceBlock) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean hasSpeedBoost() {

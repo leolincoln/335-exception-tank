@@ -28,6 +28,7 @@ import View.Views;
 import rectangles.BubbleShieldRectangle;
 import rectangles.CrateRectangle;
 import rectangles.FireRingRectangle;
+import rectangles.IceBlockRectangle;
 import rectangles.ImmovableBlockRectangle;
 import rectangles.ProjectileRectangle;
 import rectangles.SpeedBoostRectangle;
@@ -251,6 +252,12 @@ public class TankView extends MasterViewPanel implements Observer {
 			if (p instanceof SpeedBoost) {
 				SpeedBoost s = (SpeedBoost) p;
 				SpeedBoostRectangle tRect = s.getRectangle();
+				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
+						null);
+			}
+			if (p instanceof IceBlock) {
+				IceBlock s = (IceBlock) p;
+				IceBlockRectangle tRect = s.getRectangle();
 				g.drawImage(tRect.getImage(), tRect.xCoord(), tRect.yCoord(),
 						null);
 			}

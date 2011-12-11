@@ -190,23 +190,6 @@ public abstract class Map extends Observable implements Observer {
 			this.addExplosion(e);
 		}
 		
-		// Adds a new BubbleShield to the map if it was successfully created in the ItemCreator thread
-		
-		if (o instanceof BubbleShield) {
-			BubbleShield b = (BubbleShield) o;
-			itemList.add(b);
-			notifyObservers();
-			setChanged();
-		}
-		
-		// Adds a new SpeedBoost to the map if it was successfully created in the ItemCreator thread
-		
-		if (o instanceof SpeedBoost) {
-			SpeedBoost b = (SpeedBoost) o;
-			itemList.add(b);
-			notifyObservers();
-			setChanged();
-		}
 		
 		// Calls for the view to be repainted whenever a PlayerTank or EnemyTank is pushing a crate or TNT
 		
@@ -275,6 +258,17 @@ public abstract class Map extends Observable implements Observer {
 							projectileList.remove(p);
 							itemList.remove(c);
 							notifyObservers(new Point(p.getLocation().row - 12, p.getLocation().col - 12));
+							setChanged();
+							break;
+						}
+					}
+					if (i instanceof IceBlock) {
+						IceBlock c = (IceBlock) i;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							itemList.remove(c);
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
 							setChanged();
 							break;
 						}
@@ -396,6 +390,17 @@ public abstract class Map extends Observable implements Observer {
 				for (Item i : itemList) {
 					if (i instanceof BubbleShield) {
 						BubbleShield c = (BubbleShield) i;
+						if (c.getRectangle().intersects(p.getRectangle())) {
+							p.collided();
+							projectileList.remove(p);
+							itemList.remove(c);
+							notifyObservers(new Point(c.getLocation().row - 12, c.getLocation().col - 12));
+							setChanged();
+							break;
+						}
+					}
+					if (i instanceof IceBlock) {
+						IceBlock c = (IceBlock) i;
 						if (c.getRectangle().intersects(p.getRectangle())) {
 							p.collided();
 							projectileList.remove(p);
@@ -532,6 +537,16 @@ public abstract class Map extends Observable implements Observer {
 						break;
 					}
 				}
+				if (i instanceof IceBlock) {
+					IceBlock c = (IceBlock) i;
+					if (c.getRectangle().intersects(p.getRectangle())) {
+						c.activateEffect(p);
+						itemList.remove(c);
+						notifyObservers();
+						setChanged();
+						break;
+					}
+				}
 			}
 			for (Obstacle obs : obstacleList) {
 				// This tank will push the crate if the crate is movable
@@ -594,6 +609,16 @@ public abstract class Map extends Observable implements Observer {
 						if(!p.isActiveBoost()) {
 						c.activateEffect(p);
 						}
+						itemList.remove(c);
+						notifyObservers();
+						setChanged();
+						break;
+					}
+				}
+				if (i instanceof IceBlock) {
+					IceBlock c = (IceBlock) i;
+					if (c.getRectangle().intersects(p.getRectangle())) {
+						c.activateEffect(p);
 						itemList.remove(c);
 						notifyObservers();
 						setChanged();
