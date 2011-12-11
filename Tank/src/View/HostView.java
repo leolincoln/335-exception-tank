@@ -37,7 +37,9 @@ public class HostView extends MasterViewPanel implements Observer {
 		buildClientPanel();
 		this.setVisible(true);
 		HostModel hm = new HostModel(this, m);
+		
 		hm.connectionStart();
+		System.out.println(hm);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -103,6 +105,7 @@ public class HostView extends MasterViewPanel implements Observer {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			System.out.println(hm);
 			try {
 				hm.clientStart();
 			} catch (IOException e) {
