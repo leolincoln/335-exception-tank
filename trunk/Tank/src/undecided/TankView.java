@@ -62,7 +62,7 @@ public class TankView extends MasterViewPanel implements Observer {
 	private LinkedList<Explosion> explosionList;
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost, gameOver;
-	private Image camo, wheel, steel, gold;
+	private Image camo, wheel, steel, gold, grass;
 
 	/**
 	 * Class constructor
@@ -76,6 +76,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		wheel = new ImageIcon("images/wheel-md.png").getImage();
 		steel = new ImageIcon("images/steel.png").getImage();
 		gold = new ImageIcon("images/gold.png").getImage();
+		grass = new ImageIcon("images/grass.png").getImage();
 		won = false;
 		lost = false;
 		gameOver = false;
@@ -211,6 +212,21 @@ public class TankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
+		for(int i = 0; i < 700; i+= 50) {
+			for(int j = 0; j < 1200; j += 50) {
+				g.drawImage(grass, j, i, null);
+			}
+		}
+		
+		for (int i = 0; i < obstacleList.size(); i++) {
+			Obstacle p = obstacleList.get(i);
+			if (p instanceof SpikePit) {// for instance of SpikePit
+				SpikePit sp = (SpikePit) p;
+				SpikePitRectangle spRect = sp.getRectangle();
+				g.drawImage(spRect.getImage(), spRect.xCoord(),
+						spRect.yCoord(), null);
+			}
+		}
 
 		for (Item p : itemList) {
 			if (p instanceof SpeedBoost) {
@@ -228,12 +244,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		}
 		for (int i = 0; i < obstacleList.size(); i++) {
 			Obstacle p = obstacleList.get(i);
-			if (p instanceof SpikePit) {// for instance of SpikePit
-				SpikePit sp = (SpikePit) p;
-				SpikePitRectangle spRect = sp.getRectangle();
-				g.drawImage(spRect.getImage(), spRect.xCoord(),
-						spRect.yCoord(), null);
-			}
+
 			if (p instanceof Crate) {// for instance of crate
 				Crate c = (Crate) p;
 				CrateRectangle cRect = c.getRectangle();

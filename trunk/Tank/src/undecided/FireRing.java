@@ -15,7 +15,7 @@ public class FireRing extends Observable implements Obstacle {
 	private FireRingRectangle rect;// shape for crate controlling collisions
 	private Point location;// location of fire ring
 	private Direction d;
-	private int tick;
+	private int tick, tick2;
 	private boolean moveable;
 	private Map map;
 	private EnemyTank enemy;
@@ -30,6 +30,7 @@ public class FireRing extends Observable implements Obstacle {
 	public FireRing(Point p, Map map) {
 		moveable = true;
 		tick = 0;
+		tick2 = 0;
 		location = p;
 		this.map = map;
 		fireImage = new ImageIcon("images/fireRing.png").getImage();
@@ -388,10 +389,28 @@ public class FireRing extends Observable implements Obstacle {
 					}
 				}
 				move(d);
-				if(tick % 20 == 0) {
+				if(tick2 % 32 == 4) {
 					fireImage = new ImageIcon("images/fireRing2.png").getImage();
 				}
-				if(tick % 20 == 10) {
+				if(tick2 % 32 == 8) {
+					fireImage = new ImageIcon("images/fireRing3.png").getImage();
+				}
+				if(tick2 % 32 == 12) {
+					fireImage = new ImageIcon("images/fireRing4.png").getImage();
+				}
+				if(tick2 % 32 == 16) {
+					fireImage = new ImageIcon("images/fireRing5.png").getImage();
+				}
+				if(tick2 % 32 == 20) {
+					fireImage = new ImageIcon("images/fireRing6.png").getImage();
+				}
+				if(tick2 % 32 == 24) {
+					fireImage = new ImageIcon("images/fireRing7.png").getImage();
+				}
+				if(tick2 % 32 == 28) {
+					fireImage = new ImageIcon("images/fireRing8.png").getImage();
+				}
+				if(tick2 % 32 == 0) {
 					fireImage = new ImageIcon("images/fireRing.png").getImage();
 				}
 
@@ -412,6 +431,7 @@ public class FireRing extends Observable implements Obstacle {
 				} catch (Exception e) {
 
 				}
+				tick2++;
 
 			}
 
