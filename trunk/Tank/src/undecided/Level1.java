@@ -72,8 +72,7 @@ public class Level1 extends Map implements Observer {
 			SpikePit s = new SpikePit(new Point(615, i), this);
 			addObstacle(s);
 		}
-		BubbleShield b = new BubbleShield(new Point(100, 850));
-		addItem(b);
+		
 		
 	}
 
