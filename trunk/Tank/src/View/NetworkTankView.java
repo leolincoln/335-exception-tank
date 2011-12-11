@@ -117,7 +117,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		this.setVisible(true);
 		System.out.println(model.getMap().getPlayers());
 		this.requestFocus();
-		
+		System.out.println("changed to netWorkTankView!");
 		 if(i==0) {
 			 hm = (HostModel)o;
 			 hm.p=model.getMap().getPlayers().getFirst();

@@ -112,7 +112,6 @@ public class ClientModel extends Observable implements Observer {
 	private class GameListener extends Thread implements Runnable, Observer {
 		private ClientModel cm;
 		private boolean first = true;
-
 		public GameListener(ClientModel cm) {
 			this.cm = cm;
 		}
@@ -143,6 +142,8 @@ public class ClientModel extends Observable implements Observer {
 				catch (IOException e) {
 					System.out.println("IOException");
 					System.out.println(unKnown);
+					break;
+					
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
