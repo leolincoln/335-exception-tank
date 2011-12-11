@@ -91,6 +91,7 @@ public class TankView extends MasterViewPanel implements Observer {
 		obstacleList = currentMap.getObstacles();
 		enemyList = currentMap.getEnemies();
 		itemList = currentMap.getItems();
+		currentMap.enemyList.getFirst().startEnemyTank();
 		GameThread gt = new GameThread();
 		gt.start();
 

@@ -225,10 +225,12 @@ public class PlayerTank extends Observable {
 			img = new ImageIcon("images/tankFrozenSOUTH.png").getImage();
 		}
 		for(int i = 0; i < enemies.size(); i++) {
+			
 			EnemyTank e = enemies.get(i);
 			if(e.getRectangle().intersects(t)) {
 				p = new Point(p.row - this.speed, p.col);
 				t = new TankRectangle(p.col - 25, p.row - 25);
+				System.out.println("stopped at enemy");
 				return false;
 			}
 		}
@@ -239,6 +241,7 @@ public class PlayerTank extends Observable {
 				if (b.getRectangle().intersects(t)) {
 					p = new Point(p.row - this.speed, p.col);
 					t = new TankRectangle(p.col - 25, p.row - 25);
+					System.out.println("stopped at obs");
 					return false;
 				}
 
@@ -249,6 +252,7 @@ public class PlayerTank extends Observable {
 					if(!c.move(d)) {
 						p = new Point(p.row - this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						System.out.println("stopped at crate");
 						return false;
 					}
 				}
@@ -259,6 +263,7 @@ public class PlayerTank extends Observable {
 					if(!c.move(d)) {
 						p = new Point(p.row - this.speed, p.col);
 						t = new TankRectangle(p.col - 25, p.row - 25);
+						System.out.println("stopped at crate");
 						return false;
 					}
 				}
@@ -268,6 +273,7 @@ public class PlayerTank extends Observable {
 		if (p.row > 665) {
 			p = new Point(p.row - this.speed, p.col);
 			t = new TankRectangle(p.col - 25, p.row - 25);
+			System.out.println("stopped at row");
 			return false;
 		}
 		notifyObservers(this);

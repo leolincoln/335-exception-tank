@@ -44,6 +44,7 @@ public class NetworkTankController extends Observable implements Observer {
 		playerScore = 0;
 		enemyScore = 0;
 		map = new Level1();
+		
 		addPlayers();
 		this.m = m;
 		this.i = i;
@@ -59,6 +60,7 @@ public class NetworkTankController extends Observable implements Observer {
 	}
 
 	public void addPlayers() {
+		map.enemyList.remove();
 		map.tankList.remove();
 		setPlayerStart(map.playerStart());
 		setEnemyStart(map.enemyStart());
