@@ -189,7 +189,7 @@ public class ClientModel extends Observable implements Observer {
 	}
 
 	public void startGame() {
-		m.changeView(Views.NETWORKTANKVIEW, 1);
+		m.changeView(Views.NETWORKTANKVIEW, this);
 	}
 
 }
