@@ -106,12 +106,7 @@ public class HostView extends MasterViewPanel implements Observer {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			System.out.println(hm);
-			try {
 				hm.clientStart();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			m.changeView(Views.NETWORKTANKVIEW,hm);
 		}
 	}

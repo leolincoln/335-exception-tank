@@ -113,7 +113,6 @@ public class ClientView extends MasterViewPanel implements Observer {
 			cm.ready();
 			cm.listenStart();
 		}
-
 	}
 
 	@Override

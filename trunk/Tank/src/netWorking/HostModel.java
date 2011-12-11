@@ -18,7 +18,7 @@ import View.MasterView;
 import View.Views;
 
 public class HostModel {
-
+	boolean first = true;
 	private ServerSocket host;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
@@ -122,7 +122,7 @@ public class HostModel {
 	 * 
 	 */
 	private class WaitForConnection extends Thread implements Runnable {
-		boolean first = true;
+		
 
 		public void run() {
 			in = null;
@@ -145,6 +145,7 @@ public class HostModel {
 						if (first) {
 							sendObject("Welcome!");
 							first = false;
+							System.out.println("sending welcome");
 						}
 
 						Object command = in.readObject();
@@ -158,9 +159,11 @@ public class HostModel {
 								System.out.println("ready received");
 								hv.start.setEnabled(true);
 							} else if (command.equals("up")) {
+								System.out.println("up");
 								p.moveUp();
 							} else if (command.equals("down")) {
 								p.moveDown();
+								System.out.println("down");
 							} else if (command.equals("left")) {
 								p.moveLeft();
 							} else if (command.equals("right")) {
@@ -190,7 +193,12 @@ public class HostModel {
 	}
 
 	
-	public void clientStart() throws IOException {
-		out.writeObject(new String("start"));
+	public void clientStart()  {
+		try {
+			out.writeObject("start");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
