@@ -9,7 +9,16 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 
 import rectangles.TankRectangle;
-
+/**
+ * This class is the enemy tank and will control its AI, health, movements, etc.
+ * 
+ * @author Team Exception
+ * 
+ * @extends Observable
+ * 
+ * @see PlayerTank, TankView
+ * 
+ */
 public class EnemyTank extends Observable {
 	// X and Y coordinates for the Tank's location
 	private Point p;
@@ -25,7 +34,17 @@ public class EnemyTank extends Observable {
 	private Image img;
 	private boolean moveable, activeBoost, activeIceBlock;
 	private Map map;
-
+	/**
+	 * This is the class constructor for the EnemeyTank class. It contains
+	 * values such as its health, location, and which map it is on.
+	 * 
+	 * @category constructor
+	 * 
+	 * @param p
+	 *            the location at which it is to be assigned
+	 * @param map
+	 *            the map on which it is on
+	 */
 	public EnemyTank(Point p, Map map) {
 		health = 1;
 		this.p = p;
@@ -55,6 +74,10 @@ public class EnemyTank extends Observable {
 		
 
 	}
+	/**
+	 * This method will start the thread that will begin the enemy tank's
+	 * movement across the map.
+	 */
 	public void startEnemyTank(){
 		EnemyThread et = new EnemyThread();
 		et.start();
@@ -62,19 +85,40 @@ public class EnemyTank extends Observable {
 	public int getHuman() {
 		return human;
 	}
-
+	/**
+	 * This method will return the EnemyTank location
+	 * 
+	 * @return the EnemyTank's location
+	 */
 	public Point getLocation() {
 		return p;
 	}
-
+	/**
+	 * This method will set the location of the EnemyTank
+	 * 
+	 * @param p
+	 *            the location to which the EnemyTank is to be set
+	 */
 	public void setLocation(Point p) {
 		this.p = p;
 	}
-
+	/**
+	 * This method will return the current speed of the EnemyTank.
+	 * 
+	 * @return the speed of the tank (int)
+	 * 
+	 */
 	public int getSpeed() {
 		return speed;
 	}
-
+	/**
+	 * This method will set the speed depending on the terrain it is on.
+	 * Depending if the terrain is ice, grass, or sand, the speed will be set to
+	 * either 7, 5, or 3 respectively.
+	 * 
+	 * @param speed
+	 *            rate at which the tank will move across the screen
+	 */
 	public void setSpeed(int speed) {
 		if(speed == 0) {
 			this.speed = 0;
@@ -86,11 +130,20 @@ public class EnemyTank extends Observable {
 			this.speed = speed;
 	}
 	}
-
+	/**
+	 * This method will return the rectangle that controls the collisions for
+	 * the EnemyTank.
+	 * 
+	 * @return rectangle controlling collisions for the EnemyTank
+	 */
 	public TankRectangle getRectangle() {
 		return t;
 	}
-
+	/**
+	 * This method will return the current health of the EnemyTank
+	 * 
+	 * @return current health of the EnemyTank
+	 */
 	public int getHealth() {
 		return health;
 	}
@@ -106,7 +159,12 @@ public class EnemyTank extends Observable {
 	public Image getImage() {
 		return img;
 	}
-
+	/**
+	 * This method will move the EnemyTank up and will avoid hitting other
+	 * obstacles such as crates, fire rings, spike pits, and immovable objects.
+	 * 
+	 * @return whether it has successfully moved up
+	 */
 	public synchronized boolean moveUp() {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<PlayerTank> players = map.getPlayers();
@@ -203,8 +261,10 @@ public class EnemyTank extends Observable {
 	}
 
 	/**
+	 * This method will move the EnemyTank down and will avoid hitting other
+	 * obstacles such as crates, fire rings, spike pits, and immovable objects.
 	 * 
-	 * @return Point returns the point that is below the tank's current position
+	 * @return whether it has successfully moved down
 	 */
 	public synchronized boolean moveDown() {
 		LinkedList<Obstacle> obs = map.getObstacles();
@@ -304,9 +364,10 @@ public class EnemyTank extends Observable {
 	}
 
 	/**
+	 * This method will move the EnemyTank left and will avoid hitting other
+	 * obstacles such as crates, fire rings, spike pits, and immovable objects.
 	 * 
-	 * @return Point returns the point that is to the right of the tank's
-	 *         current position
+	 * @return whether it has successfully moved left
 	 */
 	public synchronized boolean moveRight() {
 		LinkedList<Obstacle> obs = map.getObstacles();
@@ -520,7 +581,23 @@ public class EnemyTank extends Observable {
 	public boolean isDead() {
 		return health == 0;
 	}
-
+	/**
+	 * 
+	 * @author Team Exception
+	 * 
+	 *         This inner class will control the movements of the EnemyTank
+	 *         using a thread. It will dynamically calculate where the Player's
+	 *         Tank is and shoot in its direction at all times. It will also
+	 *         move around the field avoiding obstacles (that will be done from
+	 *         the move methods in the main class).
+	 * 
+	 * @category inner class
+	 * 
+	 * @extends Thread
+	 * 
+	 * @see Thread
+	 * 
+	 */
 	private class EnemyThread extends Thread {
 		private int tick, timePassed;
 		private boolean exists;
@@ -615,12 +692,24 @@ public class EnemyTank extends Observable {
 		}
 
 	}
+	/**
+	 * This is the class constructor for the ImmuneThread class and simply
+	 * sets the timePassed to 0
+	 * 
+	 * @category constructor
+	 */
 	private class ImmuneThread extends Thread {
 		private int timePassed;
 		
 		public ImmuneThread() {
 			timePassed = 0;
 		}
+		/**
+		 * This method runs the ImmuneThread and delays the tanks movement
+		 * accordingly
+		 * 
+		 * @overide run() in Thread
+		 */
 		
 		@Override
 		public void run() {
@@ -650,6 +739,13 @@ public class EnemyTank extends Observable {
 	}
 	}
 
+	/**
+	 * This method deals damage to the EnemyTank depending on the input
+	 * parameter.
+	 * 
+	 * @param i
+	 *            damage to be dealt to the EnemyTank
+	 */
 	public void recieveDamage(int i) {
 		health = health - i;
 		if (isDead()) {
@@ -661,10 +757,20 @@ public class EnemyTank extends Observable {
 		}
 
 	}
-
+	/**
+	 * Returns if the EnemyTanks currently has an ActiveBoost on
+	 * 
+	 * @return if EnemyTank currently has an active boost
+	 */
 	public boolean isActiveBoost() {
 		return activeBoost;
 	}
+	/**
+	 * Sets the active boost to the input parameter.
+	 * 
+	 * @param activeBoost
+	 *            a speed boost for the tank that has this item active
+	 */
 
 	public void setActiveBoost(boolean activeBoost) {
 		this.activeBoost = activeBoost;

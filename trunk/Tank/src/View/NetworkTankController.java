@@ -26,7 +26,14 @@ import undecided.Projectile;
 import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
-
+/**
+ * this is the class controlling the networkview. 
+ * it works like map, but not quite. 
+ * 
+ * @author TeamException
+ * @extends Observable
+ * @implements Observer
+ */
 public class NetworkTankController extends Observable implements Observer {
 
 	private LinkedList<Obstacle> obstacleList;
@@ -120,6 +127,11 @@ public class NetworkTankController extends Observable implements Observer {
 		}
 	}
 
+	/**
+	 * this class updates whenever the obstacles or tank or projectiles are changing. 
+	 * @param v the observable class
+	 * @param o the Object thats parsing. 
+	 */
 	public synchronized void update(Observable v, Object o) {
 		obstacleList = getMap().getObstacles();
 		tankList = getMap().getPlayers();

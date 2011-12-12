@@ -21,7 +21,13 @@ import undecided.Point;
 import View.ClientView;
 import View.MasterView;
 import View.Views;
-
+/**
+ * this class is the clientmodel that uses for clientview. 
+ * @author TeamException
+ * @impelments Observer
+ * @extends Observable
+ * 
+ */
 public class ClientModel extends Observable implements Observer {
 	String ip;
 	public Socket socket = null;

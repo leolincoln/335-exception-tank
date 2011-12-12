@@ -38,17 +38,22 @@ import rectangles.TankRectangle;
 
 /**
  * 
+ * This class is the primary battle view in which the player controls a single
+ * tank that can move through the arrow keys and shoot through the mouse.
+ * 
  * @author Team Exception
  * 
- *         This class is the primary battle view in which the player controls a
- *         single tank that can move through the arrow keys and shoot through
- *         the mouse.
+ * @extends MasterViewPanel
+ * 
+ * @implements Observer
+ * 
+ * @see MasterViewPanel, MasterView, LanView, TitleView
  * 
  */
 public class TankView extends MasterViewPanel implements Observer {
 
+	// declaring instance varaibles
 	private static final long serialVersionUID = 1L;
-
 	private JPanel panel;
 	private Map currentMap;
 	private Image dbImage;
@@ -64,12 +69,19 @@ public class TankView extends MasterViewPanel implements Observer {
 	java.util.Vector<Projectile> pVector; // a vector of projectiles
 	private boolean won, lost, gameOver;
 	private Image camo, wheel, steel, gold, grass, ice, sand;
-	
 
 	/**
-	 * Class constructor
+	 * This is the class constructor for the TankView Class. It contains a call
+	 * to the superclass MasterView and the map to which the TankView is to
+	 * include. It not only contains the battlefield that the tanks will fight
+	 * on but also the amount of lives the player still has (this will be
+	 * campaign mode), the level the user is on, and the active items on the
+	 * field.
 	 * 
-	 * @ param m this is the masterview
+	 * @param m
+	 *            this is the MasterView
+	 * @param map
+	 *            the map to which this TankView is to include
 	 */
 	public TankView(MasterView m, Map map) {
 		super(m);
@@ -112,12 +124,15 @@ public class TankView extends MasterViewPanel implements Observer {
 	}
 
 	/**
+	 * This is basically the private inner class that handles the mouse listener
+	 * and mouse motion listener methods that controls the direction and whether
+	 * or not the tank is shooting.
 	 * 
 	 * @author Team Exception
 	 * 
-	 *         This is basically the private inner class that handles the mouse
-	 *         listener and mouse motion listener methods that controls the
-	 *         direction and whether or not the tank is shooting.
+	 * @implements MouseListener, MouseMotionListener
+	 * 
+	 * @see MouseListener, MouseMotionListener
 	 * 
 	 */
 	private class Handlerclass implements MouseListener, MouseMotionListener {
@@ -153,10 +168,12 @@ public class TankView extends MasterViewPanel implements Observer {
 		}
 
 		/**
+		 * This method implements the MouseMotionListener and whenever the mouse
+		 * is pressed, it will calculate the best fit direction in which the
+		 * projectile is to travel.
+		 * 
 		 * @param arg0
 		 *            mouse event argument
-		 * 
-		 * 
 		 */
 		public void mousePressed(MouseEvent arg0) {
 			int count = 0;
@@ -197,6 +214,9 @@ public class TankView extends MasterViewPanel implements Observer {
 
 	/**
 	 * This method paints the TankView graphics when called.
+	 * 
+	 * @param g
+	 *            Graphics component for this panel
 	 */
 	public void paint(Graphics g) {
 		try {
@@ -210,6 +230,9 @@ public class TankView extends MasterViewPanel implements Observer {
 	}
 
 	/**
+	 * This method will paint all the components of the TankView when called
+	 * including obstacles, items, the tanks, and the field background along
+	 * with the score board on the right hand side of the screen.
 	 * 
 	 * @param g
 	 *            graphics component that java uses to paint components. It will
@@ -217,28 +240,28 @@ public class TankView extends MasterViewPanel implements Observer {
 	 *            in the tank list, and all the objects in the obstacle list.
 	 */
 	public void paintComponent(Graphics g) {
-		if(MasterView.currentLevel == 1 || MasterView.currentLevel == 2) {
-		for(int i = 0; i < 700; i+= 50) {
-			for(int j = 0; j < 1200; j += 50) {
-				g.drawImage(grass, j, i, null);
+		if (MasterView.currentLevel == 1 || MasterView.currentLevel == 2) {
+			for (int i = 0; i < 700; i += 50) {
+				for (int j = 0; j < 1200; j += 50) {
+					g.drawImage(grass, j, i, null);
+				}
 			}
 		}
-		}
-		if(MasterView.currentLevel == 3 || MasterView.currentLevel == 4) {
-			for(int i = 0; i < 700; i+= 50) {
-				for(int j = 0; j < 1200; j += 50) {
+		if (MasterView.currentLevel == 3 || MasterView.currentLevel == 4) {
+			for (int i = 0; i < 700; i += 50) {
+				for (int j = 0; j < 1200; j += 50) {
 					g.drawImage(sand, j, i, null);
 				}
 			}
-			}
-		if(MasterView.currentLevel == 5) {
-			for(int i = 0; i < 700; i+= 50) {
-				for(int j = 0; j < 1200; j += 50) {
+		}
+		if (MasterView.currentLevel == 5) {
+			for (int i = 0; i < 700; i += 50) {
+				for (int j = 0; j < 1200; j += 50) {
 					g.drawImage(ice, j, i, null);
 				}
 			}
-			}
-		
+		}
+
 		for (int i = 0; i < obstacleList.size(); i++) {
 			Obstacle p = obstacleList.get(i);
 			if (p instanceof SpikePit) {// for instance of SpikePit
@@ -288,8 +311,8 @@ public class TankView extends MasterViewPanel implements Observer {
 				FireRing fr = (FireRing) p;
 				FireRingRectangle frRect = fr.getRectangle();
 				g.setColor(frRect.setColor());
-				g.drawImage(fr.getImage(), frRect.xCoord(),
-						frRect.yCoord(), null);
+				g.drawImage(fr.getImage(), frRect.xCoord(), frRect.yCoord(),
+						null);
 			}
 			if (p instanceof TNT) {// for instance of TNT
 				TNT tnt = (TNT) p;
@@ -320,10 +343,10 @@ public class TankView extends MasterViewPanel implements Observer {
 			}
 		}
 		for (Explosion p : explosionList) {
-			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row, null);
+			g.drawImage(p.getImage(), p.getLocation().col, p.getLocation().row,
+					null);
 		}
-		 
-		
+
 		if (won == true) {
 			Font font = new Font("Times New Roman", Font.BOLD, 28);
 			String jb = "Mission Complete!";
@@ -348,48 +371,47 @@ public class TankView extends MasterViewPanel implements Observer {
 			att.addAttribute(TextAttribute.FONT, font);
 			g.drawString(att.getIterator(), 370, 350);
 		}
-		
-		for(int i = 0; i < 700; i += 50) {
-			for(int j = 985; j < 1200; j += 50) {
-				if(i == 150 || i == 200 || i == 350 || i == 400) {
+
+		for (int i = 0; i < 700; i += 50) {
+			for (int j = 985; j < 1200; j += 50) {
+				if (i == 150 || i == 200 || i == 350 || i == 400) {
 					g.drawImage(steel, j, i, null);
+				} else {
+					g.drawImage(camo, j, i, null);
 				}
-				else {
-				g.drawImage(camo, j, i, null);
-			}
 			}
 		}
-		for(int i = 690; i < 900; i += 20) {
-			for(int j = 0; j < 1200; j += 20) {
-				
-					g.drawImage(gold, j, i, null);
-				
+		for (int i = 690; i < 900; i += 20) {
+			for (int j = 0; j < 1200; j += 20) {
+
+				g.drawImage(gold, j, i, null);
+
 			}
-			}
-		for(int i = 0; i < 700; i += 20) {
-			for(int j = 985; j < 1200; j += 20) {
-				if(i == 0 || i == 680 || j == 985 || j == 1165) {
+		}
+		for (int i = 0; i < 700; i += 20) {
+			for (int j = 985; j < 1200; j += 20) {
+				if (i == 0 || i == 680 || j == 985 || j == 1165) {
 					g.drawImage(gold, j, i, null);
 				}
 			}
+		}
+		for (int i = 0; i < 900; i += 20) {
+			for (int j = 1180; j < 1500; j += 20) {
+				g.drawImage(gold, j, i, null);
+
 			}
-		for(int i = 0; i < 900; i += 20) {
-			for(int j = 1180; j < 1500; j += 20) {
-					g.drawImage(gold, j, i, null);
-				
-			}
-			}
-	
+		}
+
 		Font font = new Font("Times New Roman", Font.BOLD, 20);
 		String lives = "Lives Remaning";
 		AttributedString att = new AttributedString(lives);
 		att.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att.getIterator(), 1018, 44);
-		
-		for(int i = 0; i < MasterView.playerLives; i++) {
-			for(int j = 0; j < MasterView.playerLives * 50; j += 55) {
-			g.drawImage(wheel, 1005 + j, 65, null);
+
+		for (int i = 0; i < MasterView.playerLives; i++) {
+			for (int j = 0; j < MasterView.playerLives * 50; j += 55) {
+				g.drawImage(wheel, 1005 + j, 65, null);
 			}
 		}
 		String curr = "Current Level: " + currentMap.getLevelNumber();
@@ -397,34 +419,44 @@ public class TankView extends MasterViewPanel implements Observer {
 		att3.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att3.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att3.getIterator(), 1013, 300);
-		
+
 		String item = "Active Items";
 		AttributedString att6 = new AttributedString(item);
 		att6.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
 		att6.addAttribute(TextAttribute.FONT, font);
 		g.drawString(att6.getIterator(), 1030, 485);
-		
-		
-		if(player.isActiveShield()) {
-			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020, 515, null);
+
+		if (player.isActiveShield()) {
+			g.drawImage(new BubbleShieldRectangle(-10, -10).getImage(), 1020,
+					515, null);
 		}
-		if(player.isActiveBoost()) {
-			g.drawImage(new SpeedBoostRectangle(-10, -10).getImage(), 1100, 515, null);
+		if (player.isActiveBoost()) {
+			g.drawImage(new SpeedBoostRectangle(-10, -10).getImage(), 1100,
+					515, null);
 		}
-		
+
 	}
 
 	/**
+	 * This private inner class controls the player controlled tank allowing it
+	 * to move via key listeners and shoot through the mouse lister. The tank
+	 * will move on key pressed.
 	 * 
 	 * @author Team Exception
 	 * 
-	 *         This private inner class controls the player controlled tank
-	 *         allowing it to move via key listeners and shoot through the mouse
-	 *         lister. The tank will move on key pressed.
+	 * @see KeyListener
 	 * 
 	 */
 	private class moveAndShootListener implements KeyListener {
 
+		/**
+		 * This method will call the methods to move the PlayerTank depending on
+		 * which key is pressed. NOTE: The keys for up, down, right, and left
+		 * movement are w, s, d, and s respectively.
+		 * 
+		 * @param e
+		 *            keyaction event for when a key is pressed
+		 */
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int keyEvent = e.getKeyCode();
@@ -458,20 +490,40 @@ public class TankView extends MasterViewPanel implements Observer {
 	/**
 	 * This method will be notified when the observed are called and will either
 	 * remove dead obstacles and repaint the projectiles.
+	 * 
+	 * @param v
+	 *            observable variable
+	 * 
+	 * @param o
+	 *            object that is to be analyzed for update
 	 */
 	public synchronized void update(Observable v, Object o) {
 		if (o == null) {
 			repaint();
 		}
-		if(o instanceof Point) {
-			Point p = (Point)o;
+		if (o instanceof Point) {
+			Point p = (Point) o;
 			Explosion et = new Explosion(p, currentMap);
 			currentMap.addExplosion(et);
-			
+
 		}
 
 	}
 
+	/**
+	 * This method will deal with the primary tank view thread. When the battle
+	 * is to begin, this thread is started, constructing the map, turning on the
+	 * ItemCreator, and the AI tank movement.
+	 * 
+	 * @category inner class
+	 * 
+	 * @author Team Exception
+	 * 
+	 * @extends Thread
+	 * 
+	 * @see Map, ItemCreator, PlayerTank, EnemyTank
+	 * 
+	 */
 	private class GameThread extends Thread {
 
 		private boolean exists;
@@ -480,6 +532,9 @@ public class TankView extends MasterViewPanel implements Observer {
 			exists = true;
 		}
 
+		/**
+		 * This method is the thread that is to be run
+		 */
 		@Override
 		public synchronized void run() {
 			while (exists) {
@@ -487,16 +542,16 @@ public class TankView extends MasterViewPanel implements Observer {
 				if (currentMap.getPlayers().size() == 0) {
 					lost = true;
 					MasterView.playerLives--;
-					if(MasterView.playerLives == -1) {
+					if (MasterView.playerLives == -1) {
 						lost = false;
 						gameOver = true;
 						repaint();
 						try {
 							Thread.sleep(3000);
 						} catch (InterruptedException e) {
-						
+
 						}
-						
+
 						m.changeView(Views.TITLE, null);
 						MasterView.currentLevel = 1;
 						MasterView.playerLives = 3;

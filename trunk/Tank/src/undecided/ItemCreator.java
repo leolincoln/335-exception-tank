@@ -13,6 +13,19 @@ import rectangles.SpikePitRectangle;
 import rectangles.TNTRectangle;
 import rectangles.TankRectangle;
 
+/**
+ * The ItemCreator class will determine when and where items should be created
+ * and placed onto an active map. There are to be no more than one of each type
+ * of item on the field at a time and will never be placed on top of an existing
+ * item, a tank, or obstacle. This will all be done through random generators
+ * and case statements.
+ * 
+ * @author Team Exception
+ * 
+ * @extends Thread
+ * 
+ * @see Thread, BubbleShield, SpeedBoost, IceBlock
+ */
 public class ItemCreator extends Thread {
 	
 	private BubbleShield b;
@@ -20,13 +33,26 @@ public class ItemCreator extends Thread {
 	private IceBlock ice;
 	private boolean exists;
 	private Map map;
-	
+	/**
+	 * This is the class constructor for the ItemCreator class and will simply
+	 * have a map that it is on and know whether it exists or not.
+	 * 
+	 * @param map
+	 *            map to which this ItemCreator is to be assigned.
+	 */
 	public ItemCreator(Map map) {
 		this.map = map;
 		exists = true;
 	}
 	
-
+	/**
+	 * This method runs the thread of the itemCreator. It will choose a random
+	 * number and depending on the value and whether that specific item already
+	 * exists, will call method to try and spawn that specific item on the
+	 * field.
+	 * 
+	 * @see Random, BubbleShield, IceBlock, SpeedBoost
+	 */
 	public synchronized void run() {
 	
 		while(exists) {
@@ -149,7 +175,14 @@ public class ItemCreator extends Thread {
 		
 	}
 
-
+	/**
+	 * This method will actually attempt to spawn an IceBlock. It will create a
+	 * two random number for the x and y coordinates and try to spawn an
+	 * IceBlock at that location. It will do so as long as there is no other
+	 * obstacle, item, or tank.
+	 * 
+	 * @return whether it has successfully added that item
+	 */
 	private boolean spawnSpeedBoost() {
 		Random rnd = new Random();
 		int x = rnd.nextInt(600) + 25;
@@ -316,6 +349,12 @@ public class ItemCreator extends Thread {
 		
 		
 	}
+	/**
+	 * This method determines if there is already an IceBlock in existence on
+	 * the map by traversing an items list.
+	 * 
+	 * @return whether an IceBlock is on the field
+	 */
 	private boolean hasIceBlock() {
 		LinkedList<Item> item = map.getItems();
 		for(int i = 0; i < item.size(); i++) {
@@ -326,26 +365,37 @@ public class ItemCreator extends Thread {
 		return false;
 	}
 
+	/**
+	 * This method determines if there is already a SpeedBoost in existence on
+	 * the map by traversing an items list.
+	 * 
+	 * @return whether a SpeedBoost is on the field
+	 */
 	private boolean hasSpeedBoost() {
 		LinkedList<Item> item = map.getItems();
-		for(int i = 0; i < item.size(); i++) {
-			if(item.get(i) instanceof SpeedBoost) {
+		for (int i = 0; i < item.size(); i++) {
+			if (item.get(i) instanceof SpeedBoost) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+
+	/**
+	 * This method determines if there is already a BubbleShield in existence on
+	 * the map by traversing an items list.
+	 * 
+	 * @return whether a BubbleShield is on the field
+	 */
 	private boolean hasBubbleShield() {
 		LinkedList<Item> item = map.getItems();
-		for(int i = 0; i < item.size(); i++) {
-			if(item.get(i) instanceof BubbleShield) {
+		for (int i = 0; i < item.size(); i++) {
+			if (item.get(i) instanceof BubbleShield) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-
 
 }

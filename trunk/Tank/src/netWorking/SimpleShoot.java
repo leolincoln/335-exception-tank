@@ -1,7 +1,11 @@
 package netWorking;
 
 import java.io.Serializable;
-
+/**this class is a serializable 4 int class for transmitting information
+ * on a enemy projectile. 
+ * @author TeamException
+ * 
+ */
 public class SimpleShoot implements Serializable{
 	/**
 	 * 

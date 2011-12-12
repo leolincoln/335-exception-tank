@@ -15,6 +15,17 @@ import javax.swing.JTextField;
 
 import netWorking.HostModel;
 
+/**
+ * this class is the host view after pressing the button "hostgame" in the lan view
+ * it makes sure that both players agree to go on and play an online game
+ * and make use of its listening thread to call update when anything is sent from 
+ * the lan. 
+ * 
+ * @author TeamException
+ * @implements Observer
+ * @extends masterViewPanel
+ *@see MasterViewPanel
+ */
 public class HostView extends MasterViewPanel implements Observer {
 	private JPanel host, client, hostNamePane, clientNamePane, hostTankPane,
 			clientTankPane;
@@ -46,11 +57,21 @@ public class HostView extends MasterViewPanel implements Observer {
 		System.out.println(hm);
 		// TODO Auto-generated constructor stub
 	}
+	/**
+	 * build the layout for main. 
+	 */
+
 
 	public void buildMain() {
 		this.setLayout(new GridLayout(1, 2));
 
 	}
+	/**
+	 * build the host panel for host. 
+	 * disable the buttons so that the host cannot start the game
+	 * unless the client agreed to do so.  
+	 */
+
 
 	public void buildHostPanel() {
 		host = new JPanel(new GridLayout(4, 1));
@@ -104,6 +125,11 @@ public class HostView extends MasterViewPanel implements Observer {
 		client.add(ready);
 		this.add(client);
 	}
+	/**
+	 * @category innerClass
+	 * this class listens to the start and change the view to networkTankView. 
+	 * WHere the actual game starts.  
+	 */
 
 	private class startListener implements ActionListener {
 

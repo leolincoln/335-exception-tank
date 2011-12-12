@@ -9,14 +9,19 @@ import java.util.Observer;
 import rectangles.TankRectangle;
 
 /**
+ * The map class is the class that keeps track of all objects that are on the
+ * board. It observes everything so that it can tell the view whenever some
+ * action occurs that changes the state of the game. It also allows for the
+ * creation of unique levels that have obstacles placed in unique locations.
  * 
  * @author Team Exception
  * 
- * 		The map class is the class that keeps track of all objects that are on the board.
- * 		It observes everything so that it can tell the view whenever some action occurs that
- * 		changes the state of the game. It also allows for the creation of unique levels
- * 		that have obstacles placed in unique locations.
- *
+ * @extends Observable
+ * 
+ * @implements Observer
+ * 
+ * @see Level1, Level2, Level3, Level4, Level5, PlayerTank, EnemyTank
+ * 
  */
 public abstract class Map extends Observable implements Observer {
 
@@ -30,10 +35,17 @@ public abstract class Map extends Observable implements Observer {
 	private EnemyTank enemy;
 	private Terrain terrain;
 	
+	// private Terrain terrain;
+
 	/**
-	 * 		Every time a new map is constructed the lists are reset so that objects from the previos
-	 * 		level will not be painted on the screen. The constructor also sets the player and enemy's 
-	 * 		starting points as well as sets up the specified map.
+	 * Every time a new map is constructed the lists are reset so that objects
+	 * from the previous level will not be painted on the screen. The
+	 * constructor also sets the player and enemy's starting points as well as
+	 * sets up the specified map.
+	 * 
+	 * @category constructor
+	 * 
+	 * @see PlayerTank, EnemyTank
 	 */
 	public Map() {
 		obstacleList = new LinkedList<Obstacle>();
@@ -53,63 +65,72 @@ public abstract class Map extends Observable implements Observer {
 	public abstract void startCreator();
 	
 	/**
-	 * @param Item i
+	 * This method adds the specified item to the map which allows it to be
+	 * painted on to the view.
 	 * 
-	 * 		This method adds the specified item to the map which allows it to 
-	 * 		be painted on to the view.
+	 * @param i
+	 *            item to be added to the map
 	 */
 	public void addItem(Item i) {
 		itemList.add(i);
 
 	}
-	
+	/**
+	 * This method adds the explosion to the explosion list on the map in order
+	 * to know which explosions are active on the map.
+	 * 
+	 * @param et
+	 *            explosion to be added to the list
+	 */
 	public void addExplosion(Explosion et) {
 		explosionList.add(et);
 		et.addObserver(this);
 
 	}
 	/**
-	 * 		This abstract method will vary for each constructed level. It will place all 
-	 *  	the obstacles on the board prior to the painting call giving each level a
-	 *  	distinct layout. 
+	 * This abstract method will vary for each constructed level. It will place
+	 * all the obstacles on the board prior to the painting call giving each
+	 * level a distinct layout.
 	 */
-
 	public abstract void setUpMap();
 	
 	/**
-	 * 		This method will vary for each constructed level and returns the point at
-	 * 		which the player will originally start at when the level begins.
+	 * This method will vary for each constructed level and returns the point at
+	 * which the player will originally start at when the level begins.
 	 * 
-	 * @return Point 
+	 * @return location where the PlayerTank is to start
 	 */
 	
 	public abstract Point playerStart();
 	
 	
 	/**
-	 * 		This method will vary for each constructed level and returns the point at
-	 * 		which the enemy tank will originally start at when the level begins.
+	 * This method will vary for each constructed level and returns the point at
+	 * which the enemy tank will originally start at when the level begins.
 	 * 
-	 * @return Point 
+	 * @return location to where the EnemyTank is to start
 	 */
 	
 	public abstract Point enemyStart();
 	
 	/**
-	 * @param Obstacle o
 	 * 
-	 * 		This method adds the passed obstacle to the map. After the obstacle is added
-	 * 		to the map it then adds the map as one of it's observers. This allows the map
-	 * 		to keep track of any important events or movements that occur on the obstacle.
-	 */
-	
-	/**
+	 * This method returns the number of the current level
 	 * 
-	 * @return This method returns the number of the current level the player is on.
+	 * @return number of the current level the player is on.
 	 */
 	public abstract int getLevelNumber();
 	
-	
+	/**
+	 * This method adds the passed obstacle to the map. After the obstacle is
+	 * added to the map it then adds the map as one of it's observers. This
+	 * allows the map to keep track of any important events or movements that
+	 * occur on the obstacle.
+	 * 
+	 * @param o
+	 *            obstacle to be added to the list of observed obstacles
+	 * 
+	 */
 	public void addObstacle(Obstacle o) {
 		obstacleList.add(o);
 		if (o instanceof TNT) {
@@ -134,12 +155,14 @@ public abstract class Map extends Observable implements Observer {
 		}
 
 	}
-	
 	/**
-	 * @param Point p
+	 * Creates the EnemyTank for this map at the passed location. The enemy is
+	 * then added to the map and adds the map as it's observer.
 	 * 
-	 * 		Creates the EnemyTank for this map at the passed location. The enemy is then
-	 * 		added to the map and adds the map as it's observer.
+	 * @param p
+	 *            location to set the EnemyTank
+	 * 
+	 * 
 	 */
 
 	public void setEnemyStart(Point p) {
@@ -149,12 +172,12 @@ public abstract class Map extends Observable implements Observer {
 	}
 	
 	/**
-	 * @param Point p
+	 * Creates the PlayerTank for this map at the passed location. The player is
+	 * then added to the map and adds the map as it's observer.
 	 * 
-	 * 		Creates the PlayerTank for this map at the passed location. The player is then
-	 * 		added to the map and adds the map as it's observer.
+	 * @param point
+	 *            location to set the PlayerTank
 	 */
-
 	public void setPlayerStart(Point p) {
 		player = new PlayerTank(p, this);
 		player.addObserver(this);
@@ -163,8 +186,9 @@ public abstract class Map extends Observable implements Observer {
 	}
 	
 	/**
-	 * 		This method determines whether or not the current map is completed or not. If the enemy has dead
-	 * 		or if the player has died then this method will return true.
+	 * This method determines whether or not the current map is completed or
+	 * not. If the enemy has dead or if the player has died then this method
+	 * will return true.
 	 * 
 	 * @return Returns true if player or enemy is dead.
 	 */
@@ -178,9 +202,12 @@ public abstract class Map extends Observable implements Observer {
 	}
 	
 	/**
-	 * 		This method performs specific actions based on the object that is passed. In general, the update method
-	 * 		handles all collision detection and will perform the necessary action depending on what type of 
-	 * 		collision took place.
+	 * This method performs specific actions based on the object that is passed.
+	 * In general, the update method handles all collision detection and will
+	 * perform the necessary action depending on what type of collision took
+	 * place.
+	 * 
+	 * @see Observable, Obstacle
 	 */
 
 	public synchronized void update(Observable v, Object o) {
@@ -672,8 +699,9 @@ public abstract class Map extends Observable implements Observer {
 	}
 	
 	/**
+	 * This method returns the list containing the map's obstacles
 	 * 
-	 * @return Returns the list containing this map's obstacles
+	 * @return list containing this map's obstacles
 	 */
 	public LinkedList<Obstacle> getObstacles() {
 		return obstacleList;

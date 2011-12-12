@@ -8,7 +8,21 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 
 import rectangles.FireRingRectangle;
-
+/**
+ * This class is the fire ring obstacle. It will randomly roam the map avoiding
+ * other obstacles such as crates and immovable blocks. It has a built in AI
+ * that will not allow it to be stuff in any given location.
+ * 
+ * @author Team Exception
+ * 
+ * @extends Observable
+ * 
+ * @implements Obstacle
+ * 
+ * @see Obstacle, TankView, Crate, SpikePit, TNT, ImmovableBlock
+ * 
+ * @serial
+ */
 public class FireRing extends Observable implements Obstacle {
 
 	private int health;// health of the fire ring (either 0 or 1)
@@ -22,11 +36,17 @@ public class FireRing extends Observable implements Obstacle {
 	private Image fireImage;
 
 	/**
-	 * Class constructor
+	 * This is the class constructor for the fire ring which initialies its
+	 * location, map that it is on, initial image, and the rectangle that will
+	 * project it's location on a map containing all the geometry class shapes
+	 * of all the other objects to control collisions.
 	 * 
 	 * @param p
 	 *            location that the fire ring is to be set
+	 * @param map
+	 *            the map on which this fire ring is on
 	 */
+	
 	public FireRing(Point p, Map map) {
 		moveable = true;
 		tick = 0;
@@ -54,14 +74,20 @@ public class FireRing extends Observable implements Obstacle {
 		health = health - dmg;
 
 	}
-	
+	/**
+	 * This method will return the current image of the fire ring.
+	 * 
+	 * @return the current image of the fire ring
+	 */
 	public Image getImage() {
 		return fireImage;
 	}
 
 	/**
-	 * @return boolean returns whether the obstacle is dead or not and needs to
-	 *         be removed
+	 * This method returns whether the fire ring is to be eliminated from the
+	 * map or not dpending if its health is 0 or not.
+	 * 
+	 * @return whether the obstacle is dead or not and needs to be removed
 	 */
 	public boolean removeObstacle() {
 		if (health == 0) {// if health is 0
@@ -72,7 +98,9 @@ public class FireRing extends Observable implements Obstacle {
 	}
 
 	/**
-	 * @return int returns the health of the fire ring
+	 * This method will return the current health of the fire ring.
+	 * 
+	 * @return returns the health of the fire ring
 	 */
 	public int getHealth() {
 		return this.health;
@@ -92,9 +120,17 @@ public class FireRing extends Observable implements Obstacle {
 	public FireRingRectangle getRectangle() {
 		return rect;
 	}
-
-	// moves the FireRing in the specified Direction if it is possible to move
-	// there
+	/**
+	 * This method moves the FireRing in the specified Direction if it is
+	 * possible to move in that direction. This is the method that actually
+	 * controls whether it moves into another space by determining if the
+	 * desired space it would like to move to has an obstacle or not.
+	 * 
+	 * @param d
+	 *            the direction that the fire ring is to move
+	 * 
+	 * @return if it successfully moved in that direction
+	 */
 	public synchronized boolean move(Direction d) {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<EnemyTank> enemies = map.getEnemies();
