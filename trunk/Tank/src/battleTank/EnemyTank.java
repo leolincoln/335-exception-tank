@@ -222,7 +222,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
-			if(human == 0) {
+			
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
@@ -230,7 +230,7 @@ public class EnemyTank extends Observable {
 						t = new TankRectangle(p.col - 25, p.row - 25);
 						moveable = false;
 						return false;
-				}
+				
 				}
 			}
 			if(human == 0) {
@@ -335,7 +335,6 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
-			if(human == 0) {
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
@@ -345,7 +344,7 @@ public class EnemyTank extends Observable {
 						moveable = false;
 						return false;
 					}
-				}
+				
 				}
 			}
 		}
@@ -438,7 +437,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
-			if(human == 0) {
+		
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
@@ -447,7 +446,7 @@ public class EnemyTank extends Observable {
 						t = new TankRectangle(p.col - 25, p.row - 25);
 						moveable = false;
 						return false;
-					}
+					
 					}
 				}
 			}
@@ -541,7 +540,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
-				if(human == 0) {
+			
 				if (o instanceof FireRing) {
 					FireRing c = (FireRing) o;
 					if (c.getRectangle().intersects(t)) {
@@ -550,7 +549,7 @@ public class EnemyTank extends Observable {
 							t = new TankRectangle(p.col - 25, p.row - 25);
 							moveable = false;
 							return false;
-						}
+						
 					}
 				}
 			}
