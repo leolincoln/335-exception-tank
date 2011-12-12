@@ -58,7 +58,7 @@ public class PlayerProjectile extends Observable implements Projectile {
 		thisMissle = this;
 
 		Thread pt = new ProjectileThread();// creating new thread for the
-		System.out.println("Thread created"); // projectile's movement
+											// projectile's movement
 		pt.start();// beginning the projectile's movement
 	}
 
