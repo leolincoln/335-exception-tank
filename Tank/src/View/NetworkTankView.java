@@ -19,6 +19,26 @@ import java.util.Observer;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import battleTank.BubbleShield;
+import battleTank.Crate;
+import battleTank.EnemyProjectile;
+import battleTank.EnemyTank;
+import battleTank.Explosion;
+import battleTank.FireRing;
+import battleTank.ImmovableBlock;
+import battleTank.Item;
+import battleTank.ItemCreator;
+import battleTank.Level1;
+import battleTank.Map;
+import battleTank.Obstacle;
+import battleTank.PlayerProjectile;
+import battleTank.PlayerTank;
+import battleTank.Point;
+import battleTank.Projectile;
+import battleTank.SpeedBoost;
+import battleTank.SpikePit;
+import battleTank.TNT;
+
 import netWorking.ClientModel;
 import netWorking.HostModel;
 import netWorking.SimpleShoot;
@@ -33,25 +53,6 @@ import rectangles.SpikePitRectangle;
 import rectangles.TNTRectangle;
 import rectangles.TankRectangle;
 
-import undecided.BubbleShield;
-import undecided.Crate;
-import undecided.EnemyProjectile;
-import undecided.EnemyTank;
-import undecided.Explosion;
-import undecided.FireRing;
-import undecided.ImmovableBlock;
-import undecided.Item;
-import undecided.ItemCreator;
-import undecided.Level1;
-import undecided.Map;
-import undecided.Obstacle;
-import undecided.PlayerProjectile;
-import undecided.PlayerTank;
-import undecided.Point;
-import undecided.Projectile;
-import undecided.SpeedBoost;
-import undecided.SpikePit;
-import undecided.TNT;
 /**
  * this is the class controlling the networkview. 
  * it works like map, but not quite. 

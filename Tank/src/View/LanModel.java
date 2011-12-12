@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 
-import undecided.PlayerTank;
+import battleTank.PlayerTank;
+
 /**
  * this class will be monitoring the lanView. 
  *
