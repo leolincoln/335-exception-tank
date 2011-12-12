@@ -27,7 +27,7 @@ public class Level2 extends Map implements Observer {
 	 */
 	public Level2() {
 		super();
-		
+		startCreator();
 	}
 	public void startCreator(){
 		creator = new ItemCreator(this);

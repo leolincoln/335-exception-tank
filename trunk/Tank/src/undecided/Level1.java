@@ -30,7 +30,7 @@ public class Level1 extends Map implements Observer {
 	 */
 	public Level1() {
 		super();
-		
+		startCreator();
 		
 		
 	}

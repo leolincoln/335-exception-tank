@@ -240,7 +240,7 @@ public class MasterView extends JFrame {
 			body.add(currentPane, v.name());
 			if (currentPane instanceof TitleView) {
 				this.setLocation(50, 50);
-				this.setSize(640, 400);
+				this.setSize(640, 600);
 			}
 			repaint();
 			break;

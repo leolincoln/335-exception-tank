@@ -204,7 +204,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					} catch (InterruptedException e) {
 
 					}
-					if(MasterView.enemyScore == 2) {
+					if(MasterView.enemyScore == 5) {
 						defeat = true;
 						lost = false;
 						m.changeView(Views.TITLE, null);
@@ -229,7 +229,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 					} catch (InterruptedException e) {
 
 					}
-					if(MasterView.playerScore == 2) {
+					if(MasterView.playerScore == 5) {
 						victory = true;
 						won = false;
 						if(i == 1) {
