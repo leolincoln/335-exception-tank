@@ -96,7 +96,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 
 		tankList = model.getMap().getPlayers();
 		projectileList = model.getMap().getProjectiles();
-		obstacleList = model.getMap().getObstacles();
+		obstacleList = model.getObstacles();
 		enemyList = model.getMap().getEnemies();
 		this.setFocusable(true);
 		player = tankList.getFirst();
@@ -108,13 +108,13 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			 hm = (HostModel)o;
 			 hm.setPlayer(player);
 			 hm.setEnemy(enemy);
-			 hm.addObserver(model);
+		
 		 }
 		 if(i == 1) {
 			 cm = (ClientModel)o;
 			 cm.setPlayer(player);
 			 cm.setEnemy(enemy);
-			 cm.addObserver(model);
+		
 		 }
 		 map = model.getMap();
 		 panel = new JPanel();
@@ -141,6 +141,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == null) {
 			repaint();
+		}
+		if (arg1 instanceof String) {
+			String s = (String)arg1;
+			System.out.println(s);
 		}
 		if (arg1 instanceof Point) {
 			Point p = (Point)arg1;
@@ -265,8 +269,8 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			}
 		}
 		
-		for (int i = 0; i < model.getMap().getObstacles().size(); i++) {
-			Obstacle p = obstacleList.get(i);
+		for (int i = 0; i < model.getObstacles().size(); i++) {
+			Obstacle p = model.getObstacles().get(i);
 			if (p instanceof SpikePit) {// for instance of SpikePit
 				SpikePit sp = (SpikePit) p;
 				SpikePitRectangle spRect = sp.getRectangle();
@@ -293,6 +297,7 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 				g.drawImage(fr.getImage(), rect.xCoord(),
 						rect.yCoord(), null);
 			}
+			
 
 			if (p instanceof TNT) {// for instance of TNT
 				TNT tnt = (TNT) p;

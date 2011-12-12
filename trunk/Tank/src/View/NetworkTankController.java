@@ -48,25 +48,10 @@ public class NetworkTankController extends Observable implements Observer {
 		playerScore = 0;
 		enemyScore = 0;
 		map = new Arena1();
-		obstacleList = map.getObstacles();
-		for(Obstacle o : obstacleList) {
-			if(o instanceof FireRing) {
-				FireRing fr = (FireRing)o;
-				fr.addObserver(this);
-			}
-			if(o instanceof TNT) {
-				TNT fr = (TNT)o;
-				fr.addObserver(this);
-			}
-			if(o instanceof SpikePit) {
-				SpikePit fr = (SpikePit)o;
-				fr.addObserver(this);
-			}
-			if(o instanceof Crate) {
-				Crate fr = (Crate)o;
-				fr.addObserver(this);
-			}
-
+		obstacleList = new LinkedList<Obstacle>();
+		for(int j = 0; j < map.getObstacles().size(); j++) {
+			Obstacle o = map.getObstacles().get(j);
+			addObstacle(o);
 		}
 		tankList = map.getPlayers();
 		itemList = map.getItems();
@@ -76,6 +61,10 @@ public class NetworkTankController extends Observable implements Observer {
 		addPlayers();
 		map.addObserver(this);
 
+	}
+	public void addObstacle(Obstacle o) {
+		obstacleList.add(o);
+		addObserver(this);
 	}
 
 	public int getPlayerScore() {
@@ -184,7 +173,7 @@ public class NetworkTankController extends Observable implements Observer {
 					break;
 				}
 			}
-			notifyObservers();
+			notifyObservers("Fire " + fr.getLocation().col + " " + fr.getLocation().row);
 			setChanged();
 		}
 		
@@ -635,6 +624,9 @@ public class NetworkTankController extends Observable implements Observer {
 			c.recieveDamage(1);
 		}
 
+	}
+	public LinkedList<Obstacle> getObstacles() {
+		return obstacleList;
 	}
 
 }
