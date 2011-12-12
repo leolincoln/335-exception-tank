@@ -19,7 +19,14 @@ import javax.swing.JPanel;
  * @author Team Exception
  * 
  *         This class creates the TitleView that is the first panel that the
- *         user sees.
+ *         user sees. This includes JButtons that link to a "New Game", "LAN",
+ *         and "Exit". It also includes a banner for the TANKS game. The
+ *         preferred size of this window should be around 640 by 640 pixels.
+ * 
+ * @extends MasterViewPanel (JPanel)
+ * 
+ * @see LanView, TankView, MasterViewPanel
+ * 
  * 
  */
 public class TitleView extends MasterViewPanel {
@@ -31,7 +38,11 @@ public class TitleView extends MasterViewPanel {
 	GridBagConstraints c, d;
 
 	/**
-	 * Class constructor
+	 * Class constructor for the class TitleView. Has a super call to
+	 * MasterView. This calls the setupPanel method that inserts the TANKS game
+	 * banner and the "New Game", "LAN", and "EXIT" buttons.
+	 * 
+	 * @category constructor
 	 * 
 	 * @param m
 	 *            this is the masterview object
@@ -49,8 +60,12 @@ public class TitleView extends MasterViewPanel {
 
 
 	/**
-	 * This method sets up the format for the panel itself particularly the
-	 * layout.
+	 * This method sets up the format for the panel itself using the Java class
+	 * GridBagLayout. The banner is in the top row while the buttons are split
+	 * along the bottom row for this layout.
+	 * 
+	 * @see TitleView, GridBagLayout
+	 * 
 	 */
 	public void setupPanel() {
 
@@ -115,7 +130,7 @@ public class TitleView extends MasterViewPanel {
 	}
 
 	/**
-	 * This method sets up the top banner for title view
+	 * This metho d sets up the top banner for title view
 	 */
 	public void setupTop() {
 		JLabel banner = new JLabel(new ImageIcon("images/diamondPlate.png"));
@@ -176,7 +191,16 @@ public class TitleView extends MasterViewPanel {
 	 * 
 	 * @author Team Exception
 	 * 
-	 *         This allows the user to go the options panel when it is pressed.
+	 *         This private class allows the listener to go to the TankView when
+	 *         clicked (single player). This is done by calling MasterView's
+	 *         "changeView" method.
+	 * 
+	 * @category inner class
+	 * 
+	 * @see TitleView, MasterView, TankView, changeView
+	 * 
+	 * @param arg0
+	 *            ActionEvent for when the "New Game" button is depressed.
 	 * 
 	 */
 	private class optionListener implements ActionListener {
@@ -194,7 +218,15 @@ public class TitleView extends MasterViewPanel {
 	 * @author Team Exception
 	 * 
 	 *         This allows the user to exit the application when the exit button
-	 *         is pressed.
+	 *         is pressed. This is done by calling MasterView's "changeView"
+	 *         method.
+	 * 
+	 * @category inner class
+	 * 
+	 * @see TitleView, MasterView, TankView, changeView
+	 * 
+	 * @param arg0
+	 *            ActionEvent for when the "EXIT" button is depressed.
 	 * 
 	 */
 	private class exitListener implements ActionListener {
@@ -212,14 +244,24 @@ public class TitleView extends MasterViewPanel {
 	 * @author Team Exception
 	 * 
 	 *         This allows the user to open up the LAN view for multiplayer when
-	 *         the LAN button is pressed.
+	 *         the LAN button is pressed. This is done by calling MasterView's
+	 *         "changeView" method.
+	 * 
+	 * @category inner class
+	 * 
+	 * @see TitleView, MasterView, TankView, changeView
+	 * 
+	 * @param arg0
+	 *            ActionEvent for when the "LAN" button is depressed.
 	 * 
 	 */
 	private class lanListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			m.changeView(Views.LAN,null);
+			m.changeView(Views.LAN,null);// calling MasterView's changeView
+			// method
+
 
 		}
 
