@@ -21,6 +21,7 @@ public class EnemyTank extends Observable {
 	private TankRectangle t;
 	private int health;
 	private Direction d;
+	private int human;
 	private Image img;
 	private boolean moveable, activeBoost, activeIceBlock;
 	private Map map;
@@ -28,6 +29,7 @@ public class EnemyTank extends Observable {
 	public EnemyTank(Point p, Map map) {
 		health = 1;
 		this.p = p;
+		human = 0;
 		this.map = map;
 		activeBoost = false;
 		d = Direction.NORTH;
@@ -39,9 +41,26 @@ public class EnemyTank extends Observable {
 		
 
 	}
+	public EnemyTank(Point p, Map map, int n) {
+		health = 1;
+		this.p = p;
+		human = n;
+		this.map = map;
+		activeBoost = false;
+		d = Direction.NORTH;
+		speed = 5;
+		activeIceBlock = false;
+		t = new TankRectangle(p.col - 25, p.row - 25);
+		img = new ImageIcon("images/tankEnemyEAST.png").getImage();
+		
+
+	}
 	public void startEnemyTank(){
 		EnemyThread et = new EnemyThread();
 		et.start();
+	}
+	public int getHuman() {
+		return human;
 	}
 
 	public Point getLocation() {
@@ -146,6 +165,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
+			if(human == 0) {
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
@@ -153,9 +173,10 @@ public class EnemyTank extends Observable {
 						t = new TankRectangle(p.col - 25, p.row - 25);
 						moveable = false;
 						return false;
-					
+				}
 				}
 			}
+			if(human == 0) {
 			if (o instanceof SpikePit) {
 				SpikePit c = (SpikePit) o;
 				if (c.getRectangle().intersects(t)) {
@@ -164,6 +185,7 @@ public class EnemyTank extends Observable {
 						moveable = false;
 						return false;
 				}
+			}
 			}
 
 		}
@@ -220,6 +242,7 @@ public class EnemyTank extends Observable {
 				}
 
 			}
+			if(human == 0) {
 			if (o instanceof SpikePit) {
 				SpikePit b = (SpikePit) o;
 				if (b.getRectangle().intersects(t)) {
@@ -228,6 +251,7 @@ public class EnemyTank extends Observable {
 					moveable = false;
 					return false;
 				}
+			}
 
 			}
 			if (o instanceof Crate) {
@@ -252,6 +276,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
+			if(human == 0) {
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
@@ -261,6 +286,7 @@ public class EnemyTank extends Observable {
 						moveable = false;
 						return false;
 					}
+				}
 				}
 			}
 		}
@@ -318,6 +344,7 @@ public class EnemyTank extends Observable {
 				}
 
 			}
+			if(human == 0) {
 			if (o instanceof SpikePit) {
 				SpikePit b = (SpikePit) o;
 				if (b.getRectangle().intersects(t)) {
@@ -326,6 +353,7 @@ public class EnemyTank extends Observable {
 					moveable = false;
 					return false;
 				}
+			}
 
 			}
 			if (o instanceof Crate) {
@@ -350,6 +378,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
+			if(human == 0) {
 			if (o instanceof FireRing) {
 				FireRing c = (FireRing) o;
 				if (c.getRectangle().intersects(t)) {
@@ -358,6 +387,7 @@ public class EnemyTank extends Observable {
 						t = new TankRectangle(p.col - 25, p.row - 25);
 						moveable = false;
 						return false;
+					}
 					}
 				}
 			}
@@ -417,6 +447,7 @@ public class EnemyTank extends Observable {
 				}
 
 			}
+			if(human == 0) {
 			if (o instanceof SpikePit) {
 				SpikePit b = (SpikePit) o;
 				if (b.getRectangle().intersects(t)) {
@@ -426,6 +457,7 @@ public class EnemyTank extends Observable {
 					return false;
 				}
 
+			}
 			}
 			if (o instanceof Crate) {
 				Crate c = (Crate) o;
@@ -449,6 +481,7 @@ public class EnemyTank extends Observable {
 					}
 				}
 			}
+				if(human == 0) {
 				if (o instanceof FireRing) {
 					FireRing c = (FireRing) o;
 					if (c.getRectangle().intersects(t)) {
@@ -459,6 +492,7 @@ public class EnemyTank extends Observable {
 							return false;
 						}
 					}
+				}
 			}
 
 		}

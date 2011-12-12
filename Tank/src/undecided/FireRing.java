@@ -104,12 +104,13 @@ public class FireRing extends Observable implements Obstacle {
 		if (d == Direction.EAST) {
 			location = new Point(location.row, location.col + 1);
 			rect = new FireRingRectangle(location.col - 25, location.row - 25);
-
+			if(enemy.getHuman() != 0) {
 			if(enemy.getRectangle().intersects(rect)) {
 				location = new Point(location.row, location.col - 1);
 				rect = new FireRingRectangle(location.col - 25, location.row - 25);
 				moveable = false;
 				return false;
+			}
 			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
@@ -172,12 +173,13 @@ public class FireRing extends Observable implements Obstacle {
 		if (d == Direction.WEST) {
 			location = new Point(location.row, location.col - 1);
 			rect = new FireRingRectangle(location.col - 25, location.row - 25);
-
+			if(enemy.getHuman() != 0) {
 			if(enemy.getRectangle().intersects(rect)) {
 				location = new Point(location.row, location.col + 1);
 				rect = new FireRingRectangle(location.col - 25, location.row - 25);
 				moveable = false;
 				return false;
+			}
 			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
@@ -235,12 +237,13 @@ public class FireRing extends Observable implements Obstacle {
 		if (d == Direction.NORTH) {
 			location = new Point(location.row - 1, location.col);
 			rect = new FireRingRectangle(location.col - 25, location.row - 25);
-
+			if(enemy.getHuman() != 0) {
 			if(enemy.getRectangle().intersects(rect)) {
 				location = new Point(location.row + 1, location.col);
 				rect = new FireRingRectangle(location.col - 25, location.row - 25);
 				moveable = false;
 				return false;
+			}
 			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);
@@ -301,12 +304,13 @@ public class FireRing extends Observable implements Obstacle {
 		if (d == Direction.SOUTH) {
 			location = new Point(location.row + 1, location.col);
 			rect = new FireRingRectangle(location.col - 25, location.row - 25);
-
+			if(enemy.getHuman() != 0) {
 			if(enemy.getRectangle().intersects(rect)) {
 				location = new Point(location.row - 1, location.col);
 				rect = new FireRingRectangle(location.col - 25, location.row - 25);
 				moveable = false;
 				return false;
+			}
 			}
 			for (int i = 0; i < obs.size(); i++) {
 				Obstacle o = obs.get(i);

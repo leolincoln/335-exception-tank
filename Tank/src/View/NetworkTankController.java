@@ -8,6 +8,7 @@ import rectangles.TankRectangle;
 import undecided.BubbleShield;
 import undecided.Crate;
 
+import undecided.Arena1;
 import undecided.EnemyProjectile;
 import undecided.EnemyTank;
 import undecided.Explosion;
@@ -33,6 +34,7 @@ public class NetworkTankController extends Observable implements Observer {
 	private LinkedList<Projectile> projectileList;
 	private LinkedList<EnemyTank> enemyList;
 	private LinkedList<Item> itemList;
+	private LinkedList<Explosion> explosionList;
 	private PlayerTank player;
 	EnemyTank enemy;
 	int i;
@@ -43,13 +45,33 @@ public class NetworkTankController extends Observable implements Observer {
 	public NetworkTankController(MasterView m, int i) {
 		this.m = m;
 		this.i = i;
-		obstacleList = new LinkedList<Obstacle>();
-		tankList = new LinkedList<PlayerTank>();
-		itemList = new LinkedList<Item>();
 		playerScore = 0;
 		enemyScore = 0;
-		map = new Level1();
-		map.projectileList = new LinkedList<Projectile>();
+		map = new Arena1();
+		obstacleList = map.getObstacles();
+		for(Obstacle o : obstacleList) {
+			if(o instanceof FireRing) {
+				FireRing fr = (FireRing)o;
+				fr.addObserver(this);
+			}
+			if(o instanceof TNT) {
+				TNT fr = (TNT)o;
+				fr.addObserver(this);
+			}
+			if(o instanceof SpikePit) {
+				SpikePit fr = (SpikePit)o;
+				fr.addObserver(this);
+			}
+			if(o instanceof Crate) {
+				Crate fr = (Crate)o;
+				fr.addObserver(this);
+			}
+
+		}
+		tankList = map.getPlayers();
+		itemList = map.getItems();
+		explosionList = map.getExplosions();
+		map.projectileList = map.getProjectiles();
 		this.projectileList = map.projectileList;
 		addPlayers();
 		map.addObserver(this);
@@ -80,7 +102,7 @@ public class NetworkTankController extends Observable implements Observer {
 
 	public void setEnemyStart(Point p) {
 
-		enemy = new EnemyTank(p, map);
+		enemy = new EnemyTank(p, map, 1);
 		enemy.addObserver(this);
 		map.enemyList.add(enemy);
 
@@ -90,6 +112,10 @@ public class NetworkTankController extends Observable implements Observer {
 		player = new PlayerTank(p, map);
 		player.addObserver(this);
 		map.tankList.add(player);
+	}
+	public void addExplosion(Explosion e) {
+		map.getExplosions().add(e);
+		e.addObserver(this);
 	}
 
 	public Map getMap() {
@@ -118,8 +144,9 @@ public class NetworkTankController extends Observable implements Observer {
 		
 		if (o instanceof Point) {
 			Point p = (Point)o;
-			Explosion e = new Explosion(p, getMap());
-			getMap().addExplosion(e);
+			notifyObservers(p);
+			setChanged();
+			
 		}
 		
 		
@@ -137,6 +164,7 @@ public class NetworkTankController extends Observable implements Observer {
 				setChanged();
 			}
 			if (s.equals("Boom")) {
+				System.out.println("?");
 				notifyObservers();
 				setChanged();
 			}
@@ -503,7 +531,9 @@ public class NetworkTankController extends Observable implements Observer {
 				if (obs instanceof FireRing) {
 					FireRing c = (FireRing) obs;
 					if (rect.intersects(c.getRectangle())) {
-						p.recieveDamage(0);
+						p.recieveDamage(1);
+						notifyObservers();
+						setChanged();
 						
 					}
 				}
@@ -511,7 +541,9 @@ public class NetworkTankController extends Observable implements Observer {
 				if (obs instanceof SpikePit) {
 					SpikePit c = (SpikePit) obs;
 					if (rect.intersects(c.getRectangle())) {
-						p.recieveDamage(0);
+						p.recieveDamage(1);
+						notifyObservers();
+						setChanged();
 					}
 				}
 			}

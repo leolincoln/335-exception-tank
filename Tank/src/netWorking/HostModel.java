@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -28,12 +29,14 @@ public class HostModel extends Observable implements Observer{
 	private ObjectOutputStream out;
 	public static ArrayList<String> ipList;
 	private Socket client;
+	private HostModel thisModel;
 
 	public HostView hv;
 	public MasterView m;
 	// dont forget to set the p after changing to network tank view.
 	public PlayerTank p;
 	public EnemyTank e;
+	private ReceivingThread receiver;
 	public boolean connected = false;
 
 	public HostModel(HostView hv, MasterView m) {
@@ -48,14 +51,17 @@ public class HostModel extends Observable implements Observer{
 			in = new ObjectInputStream(client.getInputStream());
 			connected = true;
 			sendObject("Welcome!");
-			Thread receiver = new ReceivingThread();
+			receiver = new ReceivingThread();
 			receiver.start();
 			hv.hm=this;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		thisModel = this;
+	}
+	public void setHostView(HostView hv) {
+		this.hv = hv;
 	}
 	
 	public void setPlayer(PlayerTank p) {
@@ -64,8 +70,24 @@ public class HostModel extends Observable implements Observer{
 	public void setEnemy(EnemyTank e) {
 		this.e = e;
 	}
+	public void setThisModel() {
+		thisModel = this;
+	}
+	public void closeConnection() {
+		try {
+			sendObject("close");
+			connected = false;
+			receiver.interrupt();
+			client.close();
+			host.close();
+			
+	
+		} catch(Exception e) {
+			
+		}
+	}
 
-	public class ReceivingThread extends Thread {
+	private class ReceivingThread extends Thread {
 		public void run() {
 			while (connected) {
 				try {
@@ -73,7 +95,19 @@ public class HostModel extends Observable implements Observer{
 					if (o instanceof String) {
 						String s = (String) o;
 						if (s.equals("ready")) {
+							
 							hv.start.setEnabled(true);
+						}
+						if(s.equals("close")) {
+							closeConnection();
+						}
+						if(s.equals("won")) {
+							setThisModel();
+							m.changeView(Views.HOST, thisModel);
+						}
+						if(s.equals("lost")) {
+							setThisModel();
+							m.changeView(Views.HOST, thisModel);
 						}
 						if (s.equals("up")) {
 							e.moveUp();
@@ -103,13 +137,20 @@ public class HostModel extends Observable implements Observer{
 						notifyObservers();
 						setChanged();
 					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (SocketException e) {
+					System.out.println("Socket Exception, connection lost");
+					m.changeView(Views.TITLE, null);
+					break;
 				}
+				catch (IOException e) {
+					JOptionPane.showMessageDialog(m, "Remote Client disconnected");
+					m.changeView(Views.LAN, null);
+					break;
+				} catch (ClassNotFoundException e) {
+					JOptionPane.showMessageDialog(m, "Remote Client disconnected");
+					m.changeView(Views.LAN, null);
+					break;
+				} 
 
 			}
 		}
@@ -119,8 +160,8 @@ public class HostModel extends Observable implements Observer{
 		try {
 			out.writeObject(o);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(m, "Remote Client disconnected");
+			m.changeView(Views.LAN, null);
 		}
 
 	}

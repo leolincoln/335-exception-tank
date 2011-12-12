@@ -10,10 +10,12 @@ public class Level2 extends Map implements Observer {
 	
 	public Level2() {
 		super();
+		
+	}
+	public void startCreator(){
 		creator = new ItemCreator(this);
 		creator.start();
 	}
-	
 	public void setUpMap() {
 		for (int i = 0; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 25), this);

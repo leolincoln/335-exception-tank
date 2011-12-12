@@ -32,6 +32,7 @@ public class PlayerTank extends Observable {
 	private int health;
 	private Direction d;
 	private Image img;
+	private int determiner;
 	private Map map;
 	private boolean activeShield, activeBoost, activeIceBlock;
 
@@ -55,6 +56,7 @@ public class PlayerTank extends Observable {
 		speed = 5;
 
 	}
+	
 
 	/**
 	 * 
@@ -453,6 +455,7 @@ public class PlayerTank extends Observable {
 		PlayerProjectile missle = new PlayerProjectile(p, x, y, this, map);
 			notifyObservers(missle);
 			setChanged();
+		
 	
 	}
 	

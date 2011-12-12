@@ -23,7 +23,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 	public JTextField hostNameText, clientNameText;
 	public String ip;
 	public ClientModel cm;
-	
+	public boolean connectivity;
 	/**
 	 * 
 	 */
@@ -32,10 +32,19 @@ public class ClientView extends MasterViewPanel implements Observer {
 
 	public ClientView(MasterView m,Object o) {
 		super(m);
-		cm = new ClientModel(this, m,o);
+		connectivity = true;
+		if(!(o instanceof ClientModel))cm = new ClientModel(this, m,o);
+		else {
+			cm = (ClientModel)o;
+			cm.setClientView(this);
+		}
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
+		if(!connectivity) {
+			this.removeAll();
+			this.add(new LanView(m));
+		}
 		// TODO Auto-generated constructor stub
 	}
 
@@ -111,6 +120,7 @@ public class ClientView extends MasterViewPanel implements Observer {
 		public void actionPerformed(ActionEvent arg0) {
 			ready.setEnabled(false);
 			cm.sendObject("ready");
+		
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -31,9 +32,11 @@ public class ClientModel extends Observable implements Observer {
 	// dont forget to set the p after changing to network tank view.
 	public PlayerTank p;
 	public EnemyTank e;
+	private GameListener listener;
 	public boolean connected = false;
 	private ClientModel thisModel;
 	private ClientView cv;
+
 	/**
 	 * 
 	 * @param m
@@ -43,9 +46,10 @@ public class ClientModel extends Observable implements Observer {
 	 *            a new socket it then call listenStart() to start listening to
 	 *            socket. getting input stream if not null
 	 */
-	public ClientModel(ClientView cv,MasterView m, Object o) {
+	public ClientModel(ClientView cv, MasterView m, Object o) {
 		ip = "127.0.0.1";
 		this.m = m;
+
 		p = new PlayerTank(new Point(-100, -100), new Level1());
 		e = new EnemyTank(new Point(-100, -100), new Level1());
 		if (o instanceof String) {
@@ -57,36 +61,57 @@ public class ClientModel extends Observable implements Observer {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			connected = true;
-			Thread listen = new GameListener(this);
-			cv.cm=this;
-			listen.start();
+			listener = new GameListener(this);
+			cv.cm = this;
+			listener.start();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ConnectException e) {
+
+			JOptionPane.showMessageDialog(m, "Remote host not responding");
+			cv.connectivity = false;
+
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(m, "Remote Host disconnected");
+			m.changeView(Views.LAN, null);
 		}
 		thisModel = this;
 
 	}
-	
+
 	public void setPlayer(PlayerTank p) {
 		this.p = p;
 	}
+
 	public void setEnemy(EnemyTank e) {
 		this.e = e;
 	}
 
+	public void setThisModel() {
+		thisModel = this;
+	}
 
+	public void setClientView(ClientView cv) {
+		this.cv = cv;
+	}
 
+	public void closeConnection() {
+		try {
+			sendObject("close");
+			connected = false;
+			listener.interrupt();
+			socket.close();
+		} catch (Exception e) {
+
+		}
+	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 
 	}
-
 
 	/**
 	 * 
@@ -121,35 +146,53 @@ public class ClientModel extends Observable implements Observer {
 					Object o = in.readObject();
 					System.out.println(o);
 					if (o instanceof String) {
-						String s = (String)o;
+						String s = (String) o;
 						if (s.equals("Welcome!")) {
 							if (first) {
 								JOptionPane.showMessageDialog(null,
 										"Connected to host!");
 								first = false;
 							}
-						}  if (s.equals("start")) {
-							JOptionPane.showMessageDialog(null,
-									"Changing to game view");
+						}
+						if (s.equals("start")) {
+
 							m.changeView(Views.NETWORKTANKVIEW, thisModel);
-						}  if (s.equals("up")) {
+						}
+						if (s.equals("won")) {
+							System.out.println("won");
+							setThisModel();
+							m.changeView(Views.CLIENT, thisModel);
+						}
+						if (s.equals("close")) {
+							closeConnection();
+						}
+						if (s.equals("lost")) {
+							System.out.println("lost");
+							setThisModel();
+							m.changeView(Views.CLIENT, thisModel);
+						}
+						if (s.equals("up")) {
 							e.moveUp();
 							notifyObservers(p);
 							setChanged();
-						}  if (s.equals("down")) {
+						}
+						if (s.equals("down")) {
 							e.moveDown();
 							notifyObservers(p);
 							setChanged();
-						}  if (s.equals("left")) {
+						}
+						if (s.equals("left")) {
 							e.moveLeft();
 							notifyObservers(p);
 							setChanged();
-						}  if (s.equals("right")) {
+						}
+						if (s.equals("right")) {
 							e.moveRight();
 							notifyObservers(p);
 							setChanged();
 						}
-					} if(o instanceof SimpleShoot) {
+					}
+					if (o instanceof SimpleShoot) {
 						SimpleShoot ss = (SimpleShoot) o;
 						e.shoot(new Point(ss.c, ss.r), ss.x, ss.y);
 
@@ -158,19 +201,25 @@ public class ClientModel extends Observable implements Observer {
 
 				catch (SocketException e) {
 					System.out.println("Socket Exception, connection lost");
-					m.changeView(Views.TITLE, null);
+					JOptionPane
+							.showMessageDialog(m, "Remote Host disconnected");
+					m.changeView(Views.LAN, null);
+					break;
+
 				}
 
 				catch (IOException e) {
-					System.out.println("IOException");
-					e.printStackTrace();
+					JOptionPane
+							.showMessageDialog(m, "Remote Host disconnected");
+					m.changeView(Views.LAN, null);
 					break;
 
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-					m.changeView(Views.TITLE, null);
-
+					JOptionPane
+							.showMessageDialog(m, "Remote Host disconnected");
+					m.changeView(Views.LAN, null);
+					break;
 				}
 
 			}
@@ -194,13 +243,12 @@ public class ClientModel extends Observable implements Observer {
 	public void sendObject(Object o) {
 		try {
 			out.writeObject(o);
+			System.out.println("sendObject is working!!!!!!!!!");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(m, "Remote Host disconnected");
+			m.changeView(Views.LAN, null);
 		}
 
 	}
-
-
 
 }

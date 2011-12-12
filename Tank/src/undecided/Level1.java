@@ -13,10 +13,13 @@ public class Level1 extends Map implements Observer {
 	
 	public Level1() {
 		super();
+		
+		
+		
+	}
+	public void startCreator(){
 		creator = new ItemCreator(this);
 		creator.start();
-		
-		
 	}
 	public void interruptCreator(){
 		if(creator.isAlive()) creator.interrupt();

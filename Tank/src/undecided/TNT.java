@@ -75,6 +75,17 @@ public class TNT extends Observable implements Obstacle {
 					}
 				}
 			}
+			for(int i = 0; i < enemies.size(); i++) {
+				EnemyTank t = enemies.get(i);
+				if(t.getHuman() != 0) {
+				if(t.getRectangle().intersects(b)) {
+					notifyObservers(new Point(t.getLocation().row - 12, t.getLocation().col - 12));
+					setChanged();
+					t.recieveDamage(1);
+					i = 0;
+				}
+				}
+			}
 			for(int i = 0; i < tank.size(); i++) {
 				PlayerTank t = tank.get(i);
 				if(t.getRectangle().intersects(b)) {
