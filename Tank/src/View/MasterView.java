@@ -32,9 +32,17 @@ import undecided.TankView;
  * @author Team Exception
  * 
  *         This class extends JFrame and is the view which will contain all the
- *         panels of all the views for this tanks game.
+ *         panels of all the views for this tanks game.It contains the method
+ *         "changeView" which is the driving method to switch between the
+ *         different views in the game.
  * 
+ * @extends JFrame
+ * 
+ * @see TitleView, TankView, LanView
+ * 
+ * @serial 5104052475766337179L
  */
+
 public class MasterView extends JFrame {
 	public static int currentLevel, playerLives, playerScore, enemyScore;
 	public JPanel body, currentPane, previousPane;
@@ -42,10 +50,12 @@ public class MasterView extends JFrame {
 	JFrame m;
 	private static final long serialVersionUID = 5104052475766337179L;
 
+
 	/**
-	 * Main thread
+	 * Main thread for the MasterView
 	 * 
 	 * @param args
+	 *            String parameter to begin this main thread
 	 */
 	public static void main(String args[]) {
 		new MasterView();
@@ -53,7 +63,15 @@ public class MasterView extends JFrame {
 	}
 
 	/**
-	 * Class constructor
+	 * Class constructor for the class MasterView. It will essentially create a
+	 * JFrame to which all the views (which will be in the form of JPanels) can
+	 * be added. It also include a JMenu file with four JMenu Items: MainMenu,
+	 * Campaign, LAN, and EXIT.
+	 * 
+	 * @category constructor
+	 * 
+	 * @see JFrame, JPanel, JMenu File, JMenu Item
+	 * 
 	 */
 	public MasterView() {
 		playerScore = 0;
@@ -70,18 +88,25 @@ public class MasterView extends JFrame {
 	/**
 	 * This is the method that builds and locates the frame of the tanks
 	 * application which holds all the sub views.
+	 * 
+	 * @category method
+	 * 
 	 */
+	
 	public void buildFrame() {
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(640, 400);
+		this.setSize(screen);
 		this.setBackground(Color.black);
 		this.setLocationRelativeTo(null);
 	}
 
 	/**
-	 * This method creates all the JMenu items and the JMenu bar for all the
-	 * items. The items include main menu, single game, LAN, and exit.
+	 * This method creates all the JMenu items and the JMenu bar and file for
+	 * all the items. The items include Main Menu, campaign, LAN, and Exit.
+	 * 
+	 * @category method
+	 * 
 	 */
 	public void buildMenu() {
 		JMenuBar menuBar = new JMenuBar();
@@ -107,12 +132,16 @@ public class MasterView extends JFrame {
 	}
 
 	/**
-	 * This method simply sets the default pane for the JFrame masterview which
-	 * is titleview.
+	 * This method simply sets the default pane for the JFrame MasterView which
+	 * is its TitleView.
+	 * 
+	 * @category method
+	 * 
 	 */
 	public void setDefaultPane() {
 		body = new JPanel();
 		body.setLayout(new CardLayout());
+		setSize(640,600);
 		this.add(body, BorderLayout.CENTER);
 		currentPane = new TitleView(this);
 		body.add(currentPane, "TITLE");
@@ -125,6 +154,8 @@ public class MasterView extends JFrame {
 	 * 
 	 * @param v
 	 *            this is the view that is to be switched to.
+	 * @param o
+	 *            this is an Object which is used for transferring to the networking related panels.
 	 */
 	public void changeView(Views v, Object o) {
 		switch (v) {
@@ -264,14 +295,22 @@ public class MasterView extends JFrame {
 
 	}
 
-	/**
-	 * 
-	 * @author Team Exception
-	 * 
-	 *         This private class creates the action listener that causes the
-	 *         tanks view to show up when the user clicks on new game.
-	 * 
-	 */
+	 /**
+		 * 
+		 * @author Team Exception
+		 * 
+		 *         This allows the user to exit the application when the exit button
+		 *         is pressed. This is done by calling MasterView's "changeView"
+		 *         method.
+		 * 
+		 * @category inner class
+		 * 
+		 * @see TitleView, MasterView, TankView, changeView
+		 * 
+		 * @param arg0
+		 *            ActionEvent for when the "EXIT" button is depressed.
+		 * 
+		 */
 	private class newGameMenListener implements ActionListener {
 
 		@Override
@@ -283,13 +322,20 @@ public class MasterView extends JFrame {
 		}
 
 	}
-
 	/**
 	 * 
 	 * @author Team Exception
 	 * 
-	 *         This private class allows the user to close the application when
-	 *         the exit button is pressed.
+	 *         This allows the user to open up the LAN view for multiplayer when
+	 *         the LAN button is pressed. This is done by calling MasterView's
+	 *         "changeView" method.
+	 * 
+	 * @category inner class
+	 * 
+	 * @see TitleView, MasterView, TankView, changeView
+	 * 
+	 * @param arg0
+	 *            ActionEvent for when the "LAN" button is depressed.
 	 * 
 	 */
 	private class exitMenListener implements ActionListener {
@@ -305,8 +351,8 @@ public class MasterView extends JFrame {
 	 * 
 	 * @author Team Exception
 	 * 
-	 *         This private class allos the LAN view to show up when the LAN
-	 *         button is pressed.
+	 *         This private class allows the title view to show up when the
+	 *         title view button is pressed
 	 * 
 	 */
 	private class lanGameMenListener implements ActionListener {

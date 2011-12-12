@@ -1,11 +1,28 @@
 package undecided;
 
 import java.util.Observer;
-
+/**
+ * This class is the "level3" map for the campaign mode of tanks. It contains a
+ * unique ItemCreator and a preset locations to place the obstacles, PlayerTank,
+ * and the EnemyTank.
+ * 
+ * @author Team Exception
+ * 
+ * @extends Map
+ * 
+ * @implements Observer
+ * 
+ * @see ItemCreator, TankView, PlayerTank, EnemyTank
+ */
 public class Level3 extends Map implements Observer {
 
 	private ItemCreator creator;
-
+	/**
+	 * This is the Level1 class constructor and simply creates an ItemCreator
+	 * and starts the ItemCreator thread to begin spawning items onto the field.
+	 * 
+	 * @category constructor
+	 */
 	public Level3() {
 		super();
 
@@ -15,7 +32,14 @@ public class Level3 extends Map implements Observer {
 		creator = new ItemCreator(this);
 		creator.start();
 	}
-
+	/**
+	 * This method actually sets up the predetermined map that has been designed
+	 * as seen below. It will include adding all the five different obstacles
+	 * onto the map including immovable blocks, crates, fire rings, TNT, and
+	 * spike pits.
+	 * 
+	 * @see Crate, FireRing,ImmovableBlock, SpikePit, TNT
+	 */
 	public void setUpMap() {
 		for (int i = 0; i < 750; i = i + 50) {
 			ImmovableBlock b = new ImmovableBlock(new Point(i, 25), this);
@@ -103,17 +127,31 @@ public class Level3 extends Map implements Observer {
 			}
 		}
 	}
-
+	/**
+	 * This method returns the location that the PlayerTank is to start.
+	 * 
+	 * @return starting location of the PlayerTank
+	 */
 	@Override
 	public Point playerStart() {
 		return new Point(75, 85);
 	}
 
+	/**
+	 * This method returns the location that the EnemyTank is to start.
+	 * 
+	 * @return starting location of the EnemyTank
+	 */
 	@Override
 	public Point enemyStart() {
 		return new Point(75, 285);
 	}
 
+	/**
+	 * This method returns the number of the current level.
+	 * 
+	 * return level number of current level
+	 */
 	@Override
 	public int getLevelNumber() {
 		// TODO Auto-generated method stub

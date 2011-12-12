@@ -6,6 +6,19 @@ import java.util.Observable;
 import rectangles.BlastRadiusRectangle;
 import rectangles.TNTRectangle;
 
+/**
+ * This class is the TNT object which essentially when destroyed, will deal
+ * damage to a certain radius around it.
+ * 
+ * @author Team Exception
+ * 
+ * @see Item, TankView, PlayerTank, SpikePit, FireRing,Crate, ImmovableBlock
+ * 
+ * @extends Observable
+ * 
+ * @implements Obstacle
+ * 
+ */
 
 
 public class TNT extends Observable implements Obstacle {
@@ -19,12 +32,17 @@ public class TNT extends Observable implements Obstacle {
 	private Point location;// location of the TNT
 	private Map map;
 	private PlayerTank player;
-
 	/**
-	 * Class constructor
+	 * This is the class constructor for the TNT class. The TNT is an object
+	 * that does contain health and will detonate when damage is dealt to it.
+	 * 
+	 * @category constructor
 	 * 
 	 * @param p
-	 *            location that the TNT is to be set
+	 *            point of the location at which the TNT is to be created.
+	 * @param map
+	 *            map on which this TNT is to be created.
+	 * 
 	 */
 	public TNT(Point p, Map map) {
 		this.map = map;
@@ -103,6 +121,17 @@ public class TNT extends Observable implements Obstacle {
 		setChanged();
 		map.getObstacles().remove(this);
 	}
+	/**
+	 * This method will control how the TNT box is moved; tanks can run into
+	 * this obstacle and move it accordingly without detonating this object. It
+	 * will only detonate when hit with a projectile or by the blast of another
+	 * TNT.
+	 * 
+	 * @param d
+	 *            direction it is to be moved
+	 * 
+	 * @return if it has successfully moved or not
+	 */
 	public boolean move(Direction d) {
 		LinkedList<Obstacle> obs = map.getObstacles();
 		LinkedList<PlayerTank> players = map.getPlayers();
@@ -364,8 +393,10 @@ public class TNT extends Observable implements Obstacle {
 	}
 
 	/**
-	 * @return boolean returns whether the obstacle is dead or not and needs to
-	 *         be removed
+	 * This method returns whether this obstacle is to be removed from the
+	 * field.
+	 * 
+	 * @return whether the obstacle is dead or not and needs to be removed
 	 */
 	public boolean removeObstacle() {
 		if (health == 0) {// if health is 0
@@ -376,14 +407,18 @@ public class TNT extends Observable implements Obstacle {
 	}
 
 	/**
-	 * @return int returns the health of the TNT
+	 * This method returns the current health of this TNT
+	 * 
+	 * @return the health of the TNT
 	 */
 	public int getHealth() {
 		return this.health;
 	}
 
 	/**
-	 * @return Point returns the location of the TNT
+	 * This method returns the current location of this TNT
+	 * 
+	 * @return the location of the TNT
 	 */
 	public Point getLocation() {
 		return this.location;
@@ -391,8 +426,9 @@ public class TNT extends Observable implements Obstacle {
 
 	
 	/**
-	 * @return TNTRectangle returns the rectangle object that will represent
-	 *         the collisions for the TNT
+	 * This method returns the collision rectangle for this TNT
+	 * 
+	 * @return collision rectangle for this TNT
 	 */
 	public TNTRectangle getRectangle() {
 		return rect;
@@ -404,8 +440,11 @@ public class TNT extends Observable implements Obstacle {
 	
 	/**
 	 * 
+	 * This method sets the damage that this TNT will deal to surrounding
+	 * objects.
+	 * 
 	 * @param dmg
-	 *            this is the damage that the TNT is to inflict when destroyed.
+	 *            damage that the TNT is to inflict when destroyed.
 	 */
 	public void setDamage(int dmg) {
 

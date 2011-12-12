@@ -10,7 +10,12 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 
 import undecided.PlayerTank;
-
+/**
+ * this class will be monitoring the lanView. 
+ *
+ * @author TeamException
+ * 
+ */
 public class LanModel  {
 	ArrayList<String> hostList;
 	private ServerSocket Socket;
@@ -23,7 +28,6 @@ public class LanModel  {
 		this.m = m;
 		hostList = new ArrayList<String>();
 		System.out.println("hostList set to null");
-		initializeSocket();
 
 	}
 
@@ -38,16 +42,4 @@ public class LanModel  {
 		}
 		return ipAddr;
 	}
-
-	private void initializeSocket() {
-		try {
-			Socket = new ServerSocket(4000);
-		} catch (Exception e) {
-
-		}
-
-	}
-
-	private class scanHosts extends Thread {}
-
 }

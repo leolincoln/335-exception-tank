@@ -52,12 +52,17 @@ import undecided.Projectile;
 import undecided.SpeedBoost;
 import undecided.SpikePit;
 import undecided.TNT;
-
+/**
+ * this is the class controlling the networkview. 
+ * it works like map, but not quite. 
+ * 
+ * @author TeamException
+ * @extends MasterviewPanel
+ * @implements Observer
+ */
 public class NetworkTankView extends MasterViewPanel implements Observer {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	public NetworkTankController model;
 	private Image dbImage;
@@ -136,7 +141,10 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		
 		 repaint();
 	}
-
+	/**
+	 * update for explosion
+	 * 
+	 */
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (arg1 == null) {
@@ -153,7 +161,9 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 			
 		}
 	}
-
+/**
+ * paint graphs
+ */
 	public void paint(Graphics g) {
 		try {
 			dbImage = createImage(getWidth(), getHeight());
@@ -164,6 +174,13 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 
 		}
 	}
+	
+	/**
+	 * this class detects if a game is over or needs to change view. 
+	 * @catagory innerclass
+	 * 
+	 *
+	 */
 
 	private class GameThread extends Thread {
 
@@ -508,6 +525,8 @@ public class NetworkTankView extends MasterViewPanel implements Observer {
 		}
 
 		/**
+		 * 
+		 * records the shooting event from the player
 		 * @param arg0
 		 *            mouse event argument
 		 * 

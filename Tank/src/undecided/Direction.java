@@ -1,10 +1,12 @@
 package undecided;
+
 /**
+ * This is an enum class that contains the constants NORTH, EAST, SOUTH, and
+ * WEST.
  * 
  * @author Team Exception
  * 
- *         This is an enum class that contains the constants NORTH, EAST, SOUTH,
- *         and WEST.
+ * @category enum
  * 
  */
 public enum Direction {
