@@ -101,6 +101,7 @@ public class Explosion extends Observable  {
 			
 			if(timePassed == 14) {
 				location = new Point(-200, -200);
+				img = new ImageIcon("images/phony.png").getImage();
 				map.getExplosions().remove(this);
 			}
 			try {

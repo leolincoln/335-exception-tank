@@ -45,9 +45,12 @@ public abstract class Map extends Observable implements Observer {
 		setPlayerStart(playerStart());
 		setEnemyStart(enemyStart());
 		setUpMap();
+//		startCreator();
+		
 		
 	
 	}
+	public abstract void startCreator();
 	
 	/**
 	 * @param Item i

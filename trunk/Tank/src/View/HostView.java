@@ -30,13 +30,19 @@ public class HostView extends MasterViewPanel implements Observer {
 
 	private static final long serialVersionUID = 1L;
 
-	public HostView(MasterView m) {
+	public HostView(MasterView m,Object o) {
+		
 		super(m);
 		buildMain();
 		buildHostPanel();
 		buildClientPanel();
 		this.setVisible(true);
-		HostModel hm = new HostModel(this, m);
+		if(!(o instanceof HostModel))  hm = new HostModel(this, m);
+		else {
+			hm = (HostModel)o;
+			hm.setHostView(this);
+			System.out.println("hm refered?");
+		}
 		System.out.println(hm);
 		// TODO Auto-generated constructor stub
 	}

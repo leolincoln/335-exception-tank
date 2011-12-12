@@ -12,6 +12,7 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,7 +28,7 @@ import netWorking.HostModel;
  * 
  */
 public class LanView extends MasterViewPanel {
-	private String ip = "192.168.1.10";
+	String ip;
 
 	private static final long serialVersionUID = 1L;
 	private JPanel northPane, buttonPane, centerPane;
@@ -75,7 +76,6 @@ public class LanView extends MasterViewPanel {
 		 * for(String ip : HostModel.ipList) { hostsInfo.addElement(); }
 		 */
 		hostsInfo = new DefaultListModel();
-		hostsInfo.addElement(ip);
 		hostsInfo.addElement("127.0.0.1");
 
 		
@@ -105,7 +105,7 @@ public class LanView extends MasterViewPanel {
 		create = new JButton("HostGame");
 		create.addActionListener(new createListener());
 
-		search = new JButton("SearchForHosts");
+		search = new JButton("Enter a remote Ip Address");
 		search.addActionListener(new searchListener());
 
 		join = new JButton("JoinGame");
@@ -164,8 +164,13 @@ public class LanView extends MasterViewPanel {
 	private class joinListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+		
 			System.out.println("IP sent is: " + ip);
-			m.changeView(Views.CLIENT, ip);
+			if(ip!=null) m.changeView(Views.CLIENT, ip);
+			else{
+				JOptionPane.showMessageDialog(m, "Please choose a valid Ip");
+				
+			}
 		}
 
 	}
@@ -174,7 +179,8 @@ public class LanView extends MasterViewPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-
+		String ip = JOptionPane.showInputDialog("Please enter IP");
+		hostsInfo.addElement(ip);
 		}
 
 	}

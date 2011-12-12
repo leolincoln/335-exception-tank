@@ -36,7 +36,7 @@ import undecided.TankView;
  * 
  */
 public class MasterView extends JFrame {
-	public static int currentLevel, playerLives,playerScore,enemyScore;
+	public static int currentLevel, playerLives, playerScore, enemyScore;
 	public JPanel body, currentPane, previousPane;
 	Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	JFrame m;
@@ -56,6 +56,8 @@ public class MasterView extends JFrame {
 	 * Class constructor
 	 */
 	public MasterView() {
+		playerScore = 0;
+		enemyScore = 0;
 		currentLevel = 1;
 		playerLives = 3;
 		buildFrame();
@@ -128,21 +130,25 @@ public class MasterView extends JFrame {
 		switch (v) {
 
 		case CLIENT:
+
 			this.setBackground(Color.white);
 			previousPane = currentPane;
 			currentPane = new ClientView(this, o);
+
 			body.removeAll();
 			body.add(currentPane, "CLIENT");
 			this.setLocation(50, 50);
 			this.setSize(600, 400);
 			repaint();
+
 			break;
 
 		case HOST:
+
 			this.setBackground(Color.white);
 			System.out.println("HostviewWorking");
 			previousPane = currentPane;
-			currentPane = new HostView(this);
+			currentPane = new HostView(this, o);
 			body.removeAll();
 			body.add(currentPane, "HOST");
 			this.setLocationRelativeTo(null);
@@ -151,24 +157,27 @@ public class MasterView extends JFrame {
 
 		case NETWORKTANKVIEW:
 			previousPane = currentPane;
-			int n = 0;
-			if(o instanceof ClientModel) {
-				ClientModel c = (ClientModel)o;
-				n = 1;
-				currentPane = new NetworkTankView(this, n, c);
+			if (o instanceof ClientModel) {
+				ClientModel c = (ClientModel) o;
+				currentPane = new NetworkTankView(this, 1, c);
 			}
-			if(o instanceof HostModel) {
-			HostModel c = (HostModel)o;
-				n = 0;
-				currentPane = new NetworkTankView(this, n, c);
+			if (o instanceof HostModel) {
+				HostModel c = (HostModel) o;
+				currentPane = new NetworkTankView(this, 0, c);
 			}
-			
-			System.out.println("changeview with o:"+o);
+
+			System.out.println("changeview with o:" + o);
 			body.removeAll();
 			body.add(currentPane, "NETWORKTANKVIEW");
-			currentPane.requestFocusInWindow();
+			CardLayout c1 = (CardLayout) body.getLayout();
+			c1.show(body, "NETWORKTANKVIEW");
+			for (Component co : body.getComponents()) {
+				if (co == currentPane) {
+					currentPane.requestFocusInWindow();
+				}
+			}
 			this.setBackground(Color.black);
-			this.setSize(1000, 750);
+			this.setSize(1180, 750);
 			this.setLocationRelativeTo(null);
 			// this.setExtendedState(this.MAXIMIZED_BOTH);
 
@@ -202,7 +211,7 @@ public class MasterView extends JFrame {
 				this.setLocation(50, 50);
 				this.setSize(640, 400);
 			}
-			repaint();  
+			repaint();
 			break;
 		case TANKVIEW:
 			if (currentLevel == 1) {
