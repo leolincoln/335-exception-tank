@@ -4,28 +4,29 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
-import rectangles.TankRectangle;
-import undecided.BubbleShield;
-import undecided.Crate;
+import battleTank.Arena1;
+import battleTank.BubbleShield;
+import battleTank.Crate;
+import battleTank.EnemyProjectile;
+import battleTank.EnemyTank;
+import battleTank.Explosion;
+import battleTank.FireRing;
+import battleTank.IceBlock;
+import battleTank.ImmovableBlock;
+import battleTank.Item;
+import battleTank.Level1;
+import battleTank.Map;
+import battleTank.Obstacle;
+import battleTank.PlayerProjectile;
+import battleTank.PlayerTank;
+import battleTank.Point;
+import battleTank.Projectile;
+import battleTank.SpeedBoost;
+import battleTank.SpikePit;
+import battleTank.TNT;
 
-import undecided.Arena1;
-import undecided.EnemyProjectile;
-import undecided.EnemyTank;
-import undecided.Explosion;
-import undecided.FireRing;
-import undecided.IceBlock;
-import undecided.ImmovableBlock;
-import undecided.Item;
-import undecided.Level1;
-import undecided.Map;
-import undecided.Obstacle;
-import undecided.PlayerProjectile;
-import undecided.PlayerTank;
-import undecided.Point;
-import undecided.Projectile;
-import undecided.SpeedBoost;
-import undecided.SpikePit;
-import undecided.TNT;
+import rectangles.TankRectangle;
+
 /**
  * this is the class controlling the networkview. 
  * it works like map, but not quite. 

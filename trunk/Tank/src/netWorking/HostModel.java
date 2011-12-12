@@ -13,10 +13,11 @@ import java.util.Observer;
 
 import javax.swing.JOptionPane;
 
-import undecided.EnemyTank;
-import undecided.Level1;
-import undecided.PlayerTank;
-import undecided.Point;
+import battleTank.EnemyTank;
+import battleTank.Level1;
+import battleTank.PlayerTank;
+import battleTank.Point;
+
 
 import View.HostView;
 import View.MasterView;
