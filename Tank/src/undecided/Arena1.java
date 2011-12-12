@@ -1,5 +1,7 @@
 package undecided;
 
+
+
 public class Arena1 extends Map{
 	
 
@@ -69,7 +71,7 @@ private ItemCreator creator;
 				SpikePit s = new SpikePit(new Point(615, i), this);
 				addObstacle(s);
 			}
-			
+	
 			
 			
 		}
