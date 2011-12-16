@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,7 +33,7 @@ public class HostView extends MasterViewPanel implements Observer {
 	private JLabel hostTop, clientTop, hostName, clientName, hostTankType,
 			clientTankType, waitForClient;
 	public JButton ready, start;
-	public JTextField hostNameText, clientNameText;
+	public JLabel hostNameText, clientNameText;
 	public HostModel hm;
 
 	/**
@@ -77,14 +78,14 @@ public class HostView extends MasterViewPanel implements Observer {
 		host = new JPanel(new GridLayout(4, 1));
 		hostTop = new JLabel("HOST");
 		hostNamePane = new JPanel(new GridLayout(1, 2));
-		hostName = new JLabel("HostName: ");
-		hostNameText = new JTextField();
-		hostNameText.setText("Enter Name here");
+		hostName = new JLabel("Host: ");
+		hostNameText = new JLabel(new ImageIcon("images/tankEAST.png"));
+		
 		hostNamePane.add(hostName);
 		hostNamePane.add(hostNameText);
 
 		hostTankPane = new JPanel(new GridLayout(1, 2));
-		hostTankType = new JLabel("Host Tank Type: ");
+		hostTankType = new JLabel("Host Tank ");
 		hostTankPane.add(hostTankType);
 
 		start = new JButton("Start");
@@ -105,16 +106,16 @@ public class HostView extends MasterViewPanel implements Observer {
 		clientNamePane = new JPanel(new GridLayout(1, 2));
 		clientName = new JLabel("clientName: ");
 
-		clientNameText = new JTextField();
-		clientNameText.setText("Enter Name here");
-		clientNameText.setSize(10, 10);
+		clientNameText = new JLabel(new ImageIcon("images/tankEnemyEAST.png"));
+		
+		
 
 		clientNamePane.add(clientName);
 		clientNamePane.add(clientNameText);
 
 		clientTankPane = new JPanel(new GridLayout(1, 2));
 		clientTankType = new JLabel("Client Tank Type: ");
-		clientTankPane.add(clientTankType);
+		
 		ready = new JButton("Ready!");
 		ready.addActionListener(new readyListener());
 		ready.setEnabled(false);
