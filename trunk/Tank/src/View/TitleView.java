@@ -24,6 +24,8 @@ import javax.swing.JPanel;
  * 
  * 
  */
+
+
 public class TitleView extends MasterViewPanel {
 
 	private static final long serialVersionUID = 1L;
